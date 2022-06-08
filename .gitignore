@@ -134,10 +134,29 @@ dask-worker-space/
 # mac file
 DS_Store
 
-# keep folder, ignore contents
-data/*/*
-!data/*/*.gitkeep
+# keep folders, ignore contents
+data/crop_yield/*
+!data/crop_yield/*.gitkeep
 
-# keep folder, ignore contents
-data/*/*/*
-!data/*/*/*.gitkeep
+data/geo_boundaries/*
+!data/geo_boundaries/*.gitkeep
+
+data/land_cover/*
+!data/land_cover/*.gitkeep
+
+data/random_features/landsat-8-c2-l2/*
+!data/random_features/landsat-8-c2-l2/.gitkeep
+
+data/random_features/landsat-c2-l2/*
+!data/random_features/landsat-c2-l2/.gitkeep
+
+data/random_features/sentinel-2-l2a/*
+!data/random_features/sentinel-2-l2a/.gitkeep
+
+
+
+
+
+
+
+
