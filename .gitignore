@@ -135,6 +135,9 @@ dask-worker-space/
 DS_Store
 
 # keep folder, ignore contents
-data/*
+data/*/*
 !data/*/*.gitkeep
+
+# keep folder, ignore contents
+data/*/*/*
 !data/*/*/*.gitkeep
