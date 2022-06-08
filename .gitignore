@@ -127,3 +127,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# dask workers
+dask-worker-space/
+
+# mac file
+DS_Store
+
+# keep folder, ignore contents
+data/*
+!data/*.gitkeep
