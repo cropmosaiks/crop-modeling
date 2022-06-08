@@ -1,0 +1,62 @@
+name: mosaiks-env
+channels:
+  - conda-forge
+  - pytorch
+  - defaults
+dependencies:
+  - python=3.8*
+  - pip=20
+  - dask-geopandas
+  - dask[complete]
+  - dask-ml
+  - geopandas
+  - jupyterlab
+  - jupyterlab-geojson
+  - jupyter-resource-usage
+  - ipywidgets
+  - lz4
+  - matplotlib-base
+  - nb_conda_kernels
+  - numcodecs
+  - numpy
+  - pandas
+  - planetary-computer>=0.4.6
+  - pyarrow
+  - pydap
+  - pyepsg
+  - pygeos
+  - pystac-client>=0.3.2
+  - pystac>=1.1.0
+  - python-blosc
+  - python-gist
+  - python-graphviz
+  - python-pdal>=3.1.2
+  - scikit-image
+  - scikit-learn
+  - scipy
+  - seaborn
+  - stac-vrt
+  - stackstac>=0.2.2
+  - xarray-sentinel
+  - xarray-spatial>=0.2.9
+  - xarray>=0.18.0
+  - xarrayutils
+  - cupy
+  - efficientnet-pytorch
+  - hvplot==0.7.0  # https://github.com/holoviz/hvplot/issues/576
+  - pytorch
+  - pytorch-lightning
+  - segmentation-models-pytorch
+  - shapely
+  - timm
+  - torchgeo
+  - torchvision=0.11.3
+  - contextily
+  - rasterio
+  - cartopy
+  - netcdf4
+  - statsmodels
+  - pyprojroot 
+  - pip:
+    - -r requirements.txt
+
