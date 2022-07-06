@@ -153,6 +153,9 @@ data/random_features/landsat-c2-l2/*
 data/random_features/sentinel-2-l2a/*
 !data/random_features/sentinel-2-l2a/.gitkeep
 
+data/random_features/full_files/*
+!data/random_features/full_files/.gitkeep
+
 
 
 
