@@ -1,0 +1,73 @@
+---
+format: html
+---
+```{r echo =FALSE, message=F, warning=F}
+library(tidyverse)
+library(here)
+library(plotly)
+
+df <- read_csv(here::here("data", "results", "results.csv"), show_col_types = FALSE) %>% 
+  mutate(
+    month_range = stringr::str_replace_all(
+      month_range, pattern = "range\\(4, 10\\)", replacement = "4-9"),
+    month_range = stringr::str_replace_all(
+      month_range, pattern = "range\\(1, 13\\)", replacement = "1-12"),
+    points = case_when(
+      points %in% c(8306, 8150, 11239, 14465, 14732) ~ 14955, 
+      points %in% c(3440, 4659, 4697) ~ 4749, 
+      points %in% c(18904) ~ 19598,
+      T ~ points)) %>% 
+  filter(points != 19598 | crop_mask == T)
+```
+
+## Validation R$^2$
+
+### Hot Encoding
+
+```{r}
+ggplot(data = df, aes(y = val_R2, x = hot_encode, color = month_range)) +
+  geom_boxplot() +
+  facet_wrap(~satellite) 
+```
+
+### Crop Mask
+
+```{r}
+ggplot(data = df, aes(y = val_R2, x = crop_mask, color = month_range)) +
+  geom_boxplot() +
+  facet_wrap(~satellite) 
+```
+
+### Weighted Average
+
+```{r}
+ggplot(data = df, aes(y = val_R2, x = weighted_avg, color = month_range)) +
+  geom_boxplot() +
+  facet_wrap(~satellite) 
+```
+
+## Demeaned R$^2$
+
+### Hot Encoding
+
+```{r}
+ggplot(data = df, aes(y = demean_R2, x = hot_encode, color = month_range)) +
+  geom_boxplot() +
+  facet_wrap(~satellite) 
+```
+
+### Crop Mask 
+
+```{r}
+ggplot(data = df, aes(y = demean_R2, x = crop_mask, color = month_range)) +
+  geom_boxplot() +
+  facet_wrap(~satellite) 
+```
+
+### Weighted Average 
+
+```{r}
+ggplot(data = df, aes(y = demean_R2, x = weighted_avg, color = month_range)) +
+  geom_boxplot() +
+  facet_wrap(~satellite) 
+```

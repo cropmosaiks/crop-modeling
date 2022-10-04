@@ -134,6 +134,9 @@ dask-worker-space/
 # mac file
 DS_Store
 
+# quarto files
+# code/5_visualize_results/results_files
+
 # keep folders, ignore contents
 data/crop_yield/*
 !data/crop_yield/*.gitkeep
