@@ -159,7 +159,8 @@ data/random_features/sentinel-2-l2a/*
 data/random_features/full_files/*
 !data/random_features/full_files/.gitkeep
 
-
+data/random_features/partial_features/*
+!data/random_features/partial_features/.gitkeep
 
 
 
