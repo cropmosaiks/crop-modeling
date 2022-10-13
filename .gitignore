@@ -163,6 +163,11 @@ data/random_features/partial_features/*
 !data/random_features/partial_features/.gitkeep
 
 
+data/random_features/partial_meta/*
+!data/random_features/partial_meta/.gitkeep
+
+data/random_features/feature_meta_data/*
+!data/random_features/feature_meta_data/.gitkeep
 
 
 
