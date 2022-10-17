@@ -74,6 +74,10 @@ custom_plot <- function(data, x, y, clr, p_type = "scatter") {
 
 This script produces graphics to explore the results of the statistics gathered as a result of iteratively modeling crop yield on random convolutional features created from satellite imagery. Each model iteration represents a combination of unique inputs, described in detail below.   
 
+## TODO: 
+
+1. Model with 2 sensors
+
 # Data
 
 **Zambian crop yield**: Maize crop forecast survey (CFS) data summarized to the district level for 2009 to 2022. The Zambian Maize growing season spans the calendar year with planting typically done in November and harvest in June through August of the following year. A crop year of 2009 therefore spans 2008-2009. Crop forecast surveys are conducted in May of the harvest year to aid in national level post harvest planning. Data is provided by the Baylis lab of University of California, Santa Barbara and University of Chicago. [Link](https://baylislab.ace.illinois.edu/).
