@@ -1,73 +1,329 @@
 ---
-format: html
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+    toc: true
+    toc-title: Contents
+    toc-depth: 4
+    number-sections: false
 ---
-```{r echo =FALSE, message=F, warning=F}
-library(tidyverse)
-library(here)
-library(plotly)
 
-df <- read_csv(here::here("data", "results", "results.csv"), show_col_types = FALSE) %>% 
-  mutate(
-    month_range = stringr::str_replace_all(
-      month_range, pattern = "range\\(4, 10\\)", replacement = "4-9"),
-    month_range = stringr::str_replace_all(
-      month_range, pattern = "range\\(1, 13\\)", replacement = "1-12"),
-    points = case_when(
-      points %in% c(8306, 8150, 11239, 14465, 14732) ~ 14955, 
-      points %in% c(3440, 4659, 4697) ~ 4749, 
-      points %in% c(18904) ~ 19598,
-      T ~ points)) %>% 
-  filter(points != 19598 | crop_mask == T)
+```{r echo=F,message=F, warning=F}
+if (!require(librarian,quietly = T)){
+  install.packages('librarian')
+}
+
+librarian::shelf(
+  plotly,
+  tidyverse,
+  here,
+  rlang,
+  quiet = T
+)
+
+result_date <- "2022-10-12"
+file_name <- paste0("results_", result_date, ".csv")
+
+theme_set(theme_bw())
+theme_update()
+
+df <- here::here("data", "results", file_name) %>% 
+  read_csv(show_col_types = FALSE) %>% 
+  filter(points != 20 | crop_mask == T)
+
+colors <- c("TRUE" = 'dodgerblue', "FALSE" = "firebrick",
+            "4-9" = 'dodgerblue', "1-12" = "firebrick")
+
+expand_fld <- function(fld) {
+  fld <- as_name(fld)
+  switch(
+    fld,  
+    'val_R2'       = 'Validation Score (R2)',
+    'demean_R2'    = 'De-meaned Score (R2)',
+    'month_range'  = 'Month\nRange',
+    'hot_encode'   = 'One Hot Encoding',
+    'crop_mask'    = 'Crop Mask',
+    'weighted_avg' = 'Weighted Average',
+    fld
+  )
+}
+
+custom_plot <- function(data, x, y, clr, p_type = "scatter") {
+  x     <- enquo(x)
+  y     <- enquo(y)
+  clr   <- enquo(clr)
+  x_lab <- expand_fld(x)
+  y_lab <- expand_fld(y)
+  c_lab <- expand_fld(clr)
+  jd    <- position_jitterdodge(.2)
+  base  <- ggplot(data) +
+    aes(!!x, !!y, color = !!clr) +
+    facet_wrap(~satellite) +
+    scale_color_manual(values = colors, limits = force) +
+    labs(x = x_lab, y = y_lab, color = c_lab) 
+  if (p_type == "scatter") {
+    base + geom_point(position = jd) 
+  } else {
+    base + geom_boxplot()
+  }
+}
 ```
 
-## Validation R$^2$
+# Summary
 
-### Hot Encoding
+This script produces graphics to explore the results of the statistics gathered as a result of iteratively modeling crop yield on random convolutional features created from satellite imagery. Each model iteration represents a combination of unique inputs, described in detail below.   
+
+## TODO: 
+
+1. Model with 2 sensors
+
+# Data
+
+**Zambian crop yield**: Maize crop forecast survey (CFS) data summarized to the district level for 2009 to 2022. The Zambian Maize growing season spans the calendar year with planting typically done in November and harvest in June through August of the following year. A crop year of 2009 therefore spans 2008-2009. Crop forecast surveys are conducted in May of the harvest year to aid in national level post harvest planning. Data is provided by the Baylis lab of University of California, Santa Barbara and University of Chicago. [Link](https://baylislab.ace.illinois.edu/).
+
+**sentinel-2-l2a (S2)**: Imagery from the Sentinel constellation of satellites including Sentinel-2A and Sentinel-2B. [Link](https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a).
+
+**landsat-8-c2-l2 (LS8)**: Imagery from Landsat 8. [Link](https://www.usgs.gov/landsat-missions/landsat-8).
+
+**landsat-c2-l2 (LSC)**: Imagery from the Landsat constellation of satellites including Landsat 5, Landsat 7, and Landsat 8 (if we go into 2022, then also Landsat 9). [Link](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2).
+
+Landsat 7 suffered a [scan line correction failure](https://www.usgs.gov/landsat-missions/landsat-7?qt-science_support_page_related_con=0#qt-science_support_page_related_con) in 2003. All imagery thereafter contains striping with missing data, which is typically worse at the eastern and western edges of the image. There is a center strip from north to south that is unaffected. We use patches of a full  satellite scene, and patches with striping are unsuitable for convolution directly. Therefore, all Landsat 7 imagery used has been corrected with simple imputation through a nearest neighbor approach to approximate the missing pixel values. We keep track of the amount of percent of missing pixels. 
+
+The nearest neighbor is a simple imputation method and was selected due to Landsat pass-over rate of 16 days. This means many months there is only a single image over a given point. We use monthly imagery rather than aggregate across months, thus nearest neighbor is the simplest method. 
+
+**Time range**:
+
+-   Crop yield - 2009 to 2022
+-   S2 - June 2015 to Current
+-   LS8 - April 2013 to Current
+-   LSC - October 2008 to Current (Begins in 1982, limited to useful range)
+
+**Resolution**:  
+
+-   Crop yield - Administrative boundary level 2, Zambian districts  
+-   S2 - 10 m ground sample distance  
+-   LS8 - 30 m ground sample distance  
+-   LSC - 30 m ground sample distance  
+
+**Data access**: Satellite imagery is all publicly available. All imagery was accessed and processed through the Microsoft Planetary Computer in this project. Crop forecast survey data  
+
+**Note**: Crop data is not yet publicly available. 
+
+# Methods
+
+The core modeling of this project is done in other notebooks. A brief description of the modeling process is provided below
+
+## Modeling
+
+All models use ridge regression on data summarized to the district level (both yield and features) and split into a training set (80%) and a test set (20%). The model is trained using 5-fold cross validation. This means the training data is split into five folds, each with 20% of the available training data and the model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for each iteration. The performance measures are calculated by taking the average of the 5 iterations.    
+
+![](../../figures/data_split.png)
+
+## Model inputs
+
+The following variables were either included or excluded to test their affect on model performance. 
+
+1.    **One hot encoding**: when true, the Zambian districts were used as dummy variables. Each district becomes a column with either inside district (1) or outside district (0). This is equivalent to a spatial fixed effects model. When false, 
+
+2.    **Crop mask**: when true, only points with cropland are retained. In some iterations, this becomes redundant as only points with cropland were featurized, rather than including a random selection of points (targeted vs non-targeted approach). When false, all points are retained.   
+
+3.    **Weighted average**: when true, a weighted average was used in summarizing the features to the district level. Weights are the calculated proportion of cropland over the area where the features were calculated. When false, a simple mean is used in summarizing the features to the district level.  
+
+4.    **Limiting month range**: whether the months were limited to the dry season (from April to October, or using the full year range. Limiting month ranges to the dry season results in more high quality imagery (i.e., low cloud cover). 
+
+5.    **Allowable cloud cover**: the percentage of cloud cover in a satellite scene that was allowed. Set as a threshold.
+
+6.    **Allowable missing pixels**: the percentage of missing pixels due to either scan line corrector failure in Landsat 7, or due to a point being near the edge of an image.
+
+# Results 
+
+Here we break the results into two sections based on the statistic we are interested in evaluating. We collect the statistics from running each model with varied inputs described in the methods section. The distribution of these statistics are used to visualize the outcome of manipulating those model inputs. 
+
+## Validation score (R$^2$)
+
+The first statistic we evaluate is the coefficient of determination (R$^2$) calculated as the average R$^2$ of the 5 validation sets. 
+
+### Hot encoding
+
+::: {.panel-tabset}
+
+## Boxplot
 
 ```{r}
-ggplot(data = df, aes(y = val_R2, x = hot_encode, color = month_range)) +
-  geom_boxplot() +
-  facet_wrap(~satellite) 
+custom_plot(
+  data = df, 
+  x = hot_encode, 
+  y = val_R2,
+  clr = month_range,
+  p_type = "box"
+)
 ```
 
-### Crop Mask
+## Scatter plot
 
 ```{r}
-ggplot(data = df, aes(y = val_R2, x = crop_mask, color = month_range)) +
-  geom_boxplot() +
-  facet_wrap(~satellite) 
+custom_plot(
+  data = df, 
+  x = hot_encode, 
+  y = val_R2,
+  clr = month_range,
+  p_type = "scatter"
+)
 ```
 
-### Weighted Average
+:::
+
+### Crop mask
+
+::: {.panel-tabset}
+
+## Boxplot
 
 ```{r}
-ggplot(data = df, aes(y = val_R2, x = weighted_avg, color = month_range)) +
-  geom_boxplot() +
-  facet_wrap(~satellite) 
+custom_plot(
+  data = df, 
+  x = crop_mask, 
+  y = val_R2,
+  clr = month_range,
+  p_type = "box"
+)
 ```
 
-## Demeaned R$^2$
-
-### Hot Encoding
+## Scatter plot
 
 ```{r}
-ggplot(data = df, aes(y = demean_R2, x = hot_encode, color = month_range)) +
-  geom_boxplot() +
-  facet_wrap(~satellite) 
+custom_plot(
+  data = df, 
+  x = crop_mask, 
+  y = val_R2,
+  clr = month_range,
+  p_type = "scatter"
+)
 ```
 
-### Crop Mask 
+:::
+
+### Weighted average
+
+::: {.panel-tabset}
+
+## Boxplot
 
 ```{r}
-ggplot(data = df, aes(y = demean_R2, x = crop_mask, color = month_range)) +
-  geom_boxplot() +
-  facet_wrap(~satellite) 
+custom_plot(
+  data = df, 
+  x = weighted_avg, 
+  y = val_R2,
+  clr = month_range,
+  p_type = "box"
+)
 ```
 
-### Weighted Average 
+## Scatter plot
 
 ```{r}
-ggplot(data = df, aes(y = demean_R2, x = weighted_avg, color = month_range)) +
-  geom_boxplot() +
-  facet_wrap(~satellite) 
+custom_plot(
+  data = df, 
+  x = weighted_avg, 
+  y = val_R2,
+  clr = month_range,
+  p_type = "scatter"
+)
 ```
+
+:::
+
+## De-meaned score (R$^2$)
+
+To get an idea of the each models ability to predict crop yield over time, we remove spatial variability by subtracting the district means from both observed and predicted yields. These de-meaned values are then evaluated by calculating the coefficient of determination. A high score indicates the model is able to predict well over time, while a low score indicates it performed this task poorly. 
+
+### Hot encoding
+
+::: {.panel-tabset}
+
+## Boxplot
+
+```{r}
+custom_plot(
+  data = df, 
+  x = hot_encode, 
+  y = demean_R2,
+  clr = month_range,
+  p_type = "box"
+)
+```
+
+## Scatter plot
+
+```{r}
+custom_plot(
+  data = df, 
+  x = hot_encode, 
+  y = demean_R2,
+  clr = month_range,
+  p_type = "scatter"
+)
+```
+
+:::
+
+### Crop mask
+
+::: {.panel-tabset}
+
+## Boxplot
+
+```{r}
+custom_plot(
+  data = df, 
+  x = crop_mask, 
+  y = demean_R2,
+  clr = month_range,
+  p_type = "box"
+)
+```
+
+## Scatter plot
+
+```{r}
+custom_plot(
+  data = df, 
+  x = crop_mask, 
+  y = demean_R2,
+  clr = month_range,
+  p_type = "scatter"
+)
+```
+
+:::
+
+### Weighted average
+
+::: {.panel-tabset}
+
+## Boxplot
+
+```{r}
+custom_plot(
+  data = df, 
+  x = weighted_avg, 
+  y = demean_R2,
+  clr = month_range,
+  p_type = "box"
+)
+```
+
+## Scatter plot
+
+```{r}
+custom_plot(
+  data = df, 
+  x = weighted_avg, 
+  y = demean_R2,
+  clr = month_range,
+  p_type = "scatter"
+)
+```
+
+:::

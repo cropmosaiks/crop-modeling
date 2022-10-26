@@ -91,87 +91,369 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
 </head>
-<body class="fullcontent">
+<body>
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
 <div id="quarto-sidebar-toc-left" class="sidebar toc-left">
-  
+  <nav id="TOC" role="doc-toc">
+<h2 id="toc-title">Contents</h2>
+<ul>
+<li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a>
+<ul class="collapse">
+<li><a href="#todo" id="toc-todo" class="nav-link" data-scroll-target="#todo">TODO:</a></li>
+</ul></li>
+<li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">Data</a></li>
+<li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+<ul class="collapse">
+<li><a href="#modeling" id="toc-modeling" class="nav-link" data-scroll-target="#modeling">Modeling</a></li>
+<li><a href="#model-inputs" id="toc-model-inputs" class="nav-link" data-scroll-target="#model-inputs">Model inputs</a></li>
+</ul></li>
+<li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
+<ul class="collapse">
+<li><a href="#validation-score-r2" id="toc-validation-score-r2" class="nav-link" data-scroll-target="#validation-score-r2">Validation score (R<span class="math inline">\(^2\)</span>)</a>
+<ul class="collapse">
+<li><a href="#hot-encoding" id="toc-hot-encoding" class="nav-link" data-scroll-target="#hot-encoding">Hot encoding</a></li>
+<li><a href="#crop-mask" id="toc-crop-mask" class="nav-link" data-scroll-target="#crop-mask">Crop mask</a></li>
+<li><a href="#weighted-average" id="toc-weighted-average" class="nav-link" data-scroll-target="#weighted-average">Weighted average</a></li>
+</ul></li>
+<li><a href="#de-meaned-score-r2" id="toc-de-meaned-score-r2" class="nav-link" data-scroll-target="#de-meaned-score-r2">De-meaned score (R<span class="math inline">\(^2\)</span>)</a>
+<ul class="collapse">
+<li><a href="#hot-encoding-1" id="toc-hot-encoding-1" class="nav-link" data-scroll-target="#hot-encoding-1">Hot encoding</a></li>
+<li><a href="#crop-mask-1" id="toc-crop-mask-1" class="nav-link" data-scroll-target="#crop-mask-1">Crop mask</a></li>
+<li><a href="#weighted-average-1" id="toc-weighted-average-1" class="nav-link" data-scroll-target="#weighted-average-1">Weighted average</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
 </div>
-
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
 <main class="content" id="quarto-document-content">
+
 <div class="cell">
 
 </div>
-<section id="validation-r2" class="level2">
-<h2 class="anchored" data-anchor-id="validation-r2">Validation R<span class="math inline">\(^2\)</span></h2>
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>This script produces graphics to explore the results of the statistics gathered as a result of iteratively modeling crop yield on random convolutional features created from satellite imagery. Each model iteration represents a combination of unique inputs, described in detail below.</p>
+<section id="todo" class="level2">
+<h2 class="anchored" data-anchor-id="todo">TODO:</h2>
+<ol type="1">
+<li>Model with 2 sensors</li>
+</ol>
+</section>
+</section>
+<section id="data" class="level1">
+<h1>Data</h1>
+<p><strong>Zambian crop yield</strong>: Maize crop forecast survey (CFS) data summarized to the district level for 2009 to 2022. The Zambian Maize growing season spans the calendar year with planting typically done in November and harvest in June through August of the following year. A crop year of 2009 therefore spans 2008-2009. Crop forecast surveys are conducted in May of the harvest year to aid in national level post harvest planning. Data is provided by the Baylis lab of University of California, Santa Barbara and University of Chicago. <a href="https://baylislab.ace.illinois.edu/">Link</a>.</p>
+<p><strong>sentinel-2-l2a (S2)</strong>: Imagery from the Sentinel constellation of satellites including Sentinel-2A and Sentinel-2B. <a href="https://planetarycomputer.microsoft.com/dataset/sentinel-2-l2a">Link</a>.</p>
+<p><strong>landsat-8-c2-l2 (LS8)</strong>: Imagery from Landsat 8. <a href="https://www.usgs.gov/landsat-missions/landsat-8">Link</a>.</p>
+<p><strong>landsat-c2-l2 (LSC)</strong>: Imagery from the Landsat constellation of satellites including Landsat 5, Landsat 7, and Landsat 8 (if we go into 2022, then also Landsat 9). <a href="https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2">Link</a>.</p>
+<p>Landsat 7 suffered a <a href="https://www.usgs.gov/landsat-missions/landsat-7?qt-science_support_page_related_con=0#qt-science_support_page_related_con">scan line correction failure</a> in 2003. All imagery thereafter contains striping with missing data, which is typically worse at the eastern and western edges of the image. There is a center strip from north to south that is unaffected. We use patches of a full satellite scene, and patches with striping are unsuitable for convolution directly. Therefore, all Landsat 7 imagery used has been corrected with simple imputation through a nearest neighbor approach to approximate the missing pixel values. We keep track of the amount of percent of missing pixels.</p>
+<p>The nearest neighbor is a simple imputation method and was selected due to Landsat pass-over rate of 16 days. This means many months there is only a single image over a given point. We use monthly imagery rather than aggregate across months, thus nearest neighbor is the simplest method.</p>
+<p><strong>Time range</strong>:</p>
+<ul>
+<li>Crop yield - 2009 to 2022</li>
+<li>S2 - June 2015 to Current</li>
+<li>LS8 - April 2013 to Current</li>
+<li>LSC - October 2008 to Current (Begins in 1982, limited to useful range)</li>
+</ul>
+<p><strong>Resolution</strong>:</p>
+<ul>
+<li>Crop yield - Administrative boundary level 2, Zambian districts<br>
+</li>
+<li>S2 - 10 m ground sample distance<br>
+</li>
+<li>LS8 - 30 m ground sample distance<br>
+</li>
+<li>LSC - 30 m ground sample distance</li>
+</ul>
+<p><strong>Data access</strong>: Satellite imagery is all publicly available. All imagery was accessed and processed through the Microsoft Planetary Computer in this project. Crop forecast survey data</p>
+<p><strong>Note</strong>: Crop data is not yet publicly available.</p>
+</section>
+<section id="methods" class="level1">
+<h1>Methods</h1>
+<p>The core modeling of this project is done in other notebooks. A brief description of the modeling process is provided below</p>
+<section id="modeling" class="level2">
+<h2 class="anchored" data-anchor-id="modeling">Modeling</h2>
+<p>All models use ridge regression on data summarized to the district level (both yield and features) and split into a training set (80%) and a test set (20%). The model is trained using 5-fold cross validation. This means the training data is split into five folds, each with 20% of the available training data and the model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for each iteration. The performance measures are calculated by taking the average of the 5 iterations.</p>
+<p><img src="../../figures/data_split.png" class="img-fluid"></p>
+</section>
+<section id="model-inputs" class="level2">
+<h2 class="anchored" data-anchor-id="model-inputs">Model inputs</h2>
+<p>The following variables were either included or excluded to test their affect on model performance.</p>
+<ol type="1">
+<li><p><strong>One hot encoding</strong>: when true, the Zambian districts were used as dummy variables. Each district becomes a column with either inside district (1) or outside district (0). This is equivalent to a spatial fixed effects model. When false,</p></li>
+<li><p><strong>Crop mask</strong>: when true, only points with cropland are retained. In some iterations, this becomes redundant as only points with cropland were featurized, rather than including a random selection of points (targeted vs non-targeted approach). When false, all points are retained.</p></li>
+<li><p><strong>Weighted average</strong>: when true, a weighted average was used in summarizing the features to the district level. Weights are the calculated proportion of cropland over the area where the features were calculated. When false, a simple mean is used in summarizing the features to the district level.</p></li>
+<li><p><strong>Limiting month range</strong>: whether the months were limited to the dry season (from April to October, or using the full year range. Limiting month ranges to the dry season results in more high quality imagery (i.e., low cloud cover).</p></li>
+<li><p><strong>Allowable cloud cover</strong>: the percentage of cloud cover in a satellite scene that was allowed. Set as a threshold.</p></li>
+<li><p><strong>Allowable missing pixels</strong>: the percentage of missing pixels due to either scan line corrector failure in Landsat 7, or due to a point being near the edge of an image.</p></li>
+</ol>
+</section>
+</section>
+<section id="results" class="level1">
+<h1>Results</h1>
+<p>Here we break the results into two sections based on the statistic we are interested in evaluating. We collect the statistics from running each model with varied inputs described in the methods section. The distribution of these statistics are used to visualize the outcome of manipulating those model inputs.</p>
+<section id="validation-score-r2" class="level2">
+<h2 class="anchored" data-anchor-id="validation-score-r2">Validation score (R<span class="math inline">\(^2\)</span>)</h2>
+<p>The first statistic we evaluate is the coefficient of determination (R<span class="math inline">\(^2\)</span>) calculated as the average R<span class="math inline">\(^2\)</span> of the 5 validation sets.</p>
 <section id="hot-encoding" class="level3">
-<h3 class="anchored" data-anchor-id="hot-encoding">Hot Encoding</h3>
+<h3 class="anchored" data-anchor-id="hot-encoding">Hot encoding</h3>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Boxplot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Scatter plot</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-1-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">y =</span> val_R2, <span class="at">x =</span> hot_encode, <span class="at">color =</span> month_range)) <span class="sc">+</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>satellite) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> hot_encode, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> val_R2,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"box"</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</section>
-<section id="crop-mask" class="level3">
-<h3 class="anchored" data-anchor-id="crop-mask">Crop Mask</h3>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-1-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">y =</span> val_R2, <span class="at">x =</span> crop_mask, <span class="at">color =</span> month_range)) <span class="sc">+</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>satellite) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> hot_encode, </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> val_R2,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"scatter"</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+</div>
+</div>
+</div>
 </section>
-<section id="weighted-average" class="level3">
-<h3 class="anchored" data-anchor-id="weighted-average">Weighted Average</h3>
+<section id="crop-mask" class="level3">
+<h3 class="anchored" data-anchor-id="crop-mask">Crop mask</h3>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Boxplot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Scatter plot</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-2-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">y =</span> val_R2, <span class="at">x =</span> weighted_avg, <span class="at">color =</span> month_range)) <span class="sc">+</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>satellite) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> crop_mask, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> val_R2,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"box"</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</section>
-</section>
-<section id="demeaned-r2" class="level2">
-<h2 class="anchored" data-anchor-id="demeaned-r2">Demeaned R<span class="math inline">\(^2\)</span></h2>
-<section id="hot-encoding-1" class="level3">
-<h3 class="anchored" data-anchor-id="hot-encoding-1">Hot Encoding</h3>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-2-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">y =</span> demean_R2, <span class="at">x =</span> hot_encode, <span class="at">color =</span> month_range)) <span class="sc">+</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>satellite) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> crop_mask, </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> val_R2,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"scatter"</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+</div>
+</div>
+</div>
 </section>
-<section id="crop-mask-1" class="level3">
-<h3 class="anchored" data-anchor-id="crop-mask-1">Crop Mask</h3>
+<section id="weighted-average" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-average">Weighted average</h3>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Boxplot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Scatter plot</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-3-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">y =</span> demean_R2, <span class="at">x =</span> crop_mask, <span class="at">color =</span> month_range)) <span class="sc">+</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>satellite) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> weighted_avg, </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> val_R2,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"box"</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-</section>
-<section id="weighted-average-1" class="level3">
-<h3 class="anchored" data-anchor-id="weighted-average-1">Weighted Average</h3>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-3-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> df, <span class="fu">aes</span>(<span class="at">y =</span> demean_R2, <span class="at">x =</span> weighted_avg, <span class="at">color =</span> month_range)) <span class="sc">+</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>satellite) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> weighted_avg, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> val_R2,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"scatter"</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output-display">
 <p><img src="results_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="de-meaned-score-r2" class="level2">
+<h2 class="anchored" data-anchor-id="de-meaned-score-r2">De-meaned score (R<span class="math inline">\(^2\)</span>)</h2>
+<p>To get an idea of the each models ability to predict crop yield over time, we remove spatial variability by subtracting the district means from both observed and predicted yields. These de-meaned values are then evaluated by calculating the coefficient of determination. A high score indicates the model is able to predict well over time, while a low score indicates it performed this task poorly.</p>
+<section id="hot-encoding-1" class="level3">
+<h3 class="anchored" data-anchor-id="hot-encoding-1">Hot encoding</h3>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Boxplot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Scatter plot</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-4-1-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> hot_encode, </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> demean_R2,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"box"</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-4-2-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> hot_encode, </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> demean_R2,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"scatter"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="crop-mask-1" class="level3">
+<h3 class="anchored" data-anchor-id="crop-mask-1">Crop mask</h3>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Boxplot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Scatter plot</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-5-1-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> crop_mask, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> demean_R2,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"box"</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-5-2-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> crop_mask, </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> demean_R2,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"scatter"</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="weighted-average-1" class="level3">
+<h3 class="anchored" data-anchor-id="weighted-average-1">Weighted average</h3>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Boxplot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">Scatter plot</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-6-1-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> weighted_avg, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> demean_R2,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"box"</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-6-2-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">custom_plot</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> df, </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> weighted_avg, </span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> demean_R2,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">clr =</span> month_range,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">p_type =</span> <span class="st">"scatter"</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 
+</section>
 </section>
 </section>
 </main>
