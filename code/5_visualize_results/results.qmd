@@ -1,4 +1,29 @@
 ---
+title: CropMOSAIKS Model Results
+author: 
+  - name: Cullen Molitor
+    orcid: 0000-0001-8309-8821
+    url: https://github.com/cullen-molitor
+    affiliations:
+      - ref: ucsb
+  - name: Grace Lewin
+    url: https://github.com/gracelewin
+    affiliations:
+      - ref: ucsb
+  - name: Juliet Cohen
+    url: https://github.com/julietcohen
+    affiliations:
+      - ref: nceas
+affiliations:
+  - id: ucsb
+    name: University of California, Santa Barbara
+    city: Santa Barbara
+    state: CA
+  - id: nceas
+    name: National Center for Ecological Analysis and Synthesis
+    city: Santa Barbara
+    state: CA
+date: '`r Sys.Date()`'
 format:
   html:
     code-fold: true
@@ -19,10 +44,11 @@ librarian::shelf(
   tidyverse,
   here,
   rlang,
+  latex2exp,
   quiet = T
 )
 
-result_date <- "2022-10-12"
+result_date <- "2022-10-24"
 file_name <- paste0("results_", result_date, ".csv")
 
 theme_set(theme_bw())
@@ -36,17 +62,16 @@ colors <- c("TRUE" = 'dodgerblue', "FALSE" = "firebrick",
             "4-9" = 'dodgerblue', "1-12" = "firebrick")
 
 expand_fld <- function(fld) {
-  fld <- as_name(fld)
   switch(
-    fld,  
-    'val_R2'       = 'Validation Score (R2)',
-    'demean_R2'    = 'De-meaned Score (R2)',
+    as_name(fld),  
+    'val_R2'       = 'Validation Score (R$^2$)',
+    'demean_R2'    = 'De-meaned Score (R$^2$)',
     'month_range'  = 'Month\nRange',
     'hot_encode'   = 'One Hot Encoding',
     'crop_mask'    = 'Crop Mask',
     'weighted_avg' = 'Weighted Average',
     fld
-  )
+  ) %>% TeX()
 }
 
 custom_plot <- function(data, x, y, clr, p_type = "scatter") {
@@ -116,9 +141,9 @@ The core modeling of this project is done in other notebooks. A brief descriptio
 
 ## Modeling
 
-All models use ridge regression on data summarized to the district level (both yield and features) and split into a training set (80%) and a test set (20%). The model is trained using 5-fold cross validation. This means the training data is split into five folds, each with 20% of the available training data and the model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for each iteration. The performance measures are calculated by taking the average of the 5 iterations.    
+All models use ridge regression on data summarized to the district level (both yield and features) and split into a training set (80%) and a test set (20%). The model is trained using 5 fold cross validation. This means the training data is split into five folds, each with 20% of the available training data. The model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for validation on each iteration. The performance measures are calculated by taking the average of the 5 iterations.    
 
-![](../../figures/data_split.png)
+![](../../figures/kfold_cv_split.png)
 
 ## Model inputs
 
