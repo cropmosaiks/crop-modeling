@@ -114,13 +114,13 @@
 </ul></li>
 <li><a href="#results" id="toc-results" class="nav-link" data-scroll-target="#results">Results</a>
 <ul class="collapse">
-<li><a href="#validation-score-r2" id="toc-validation-score-r2" class="nav-link" data-scroll-target="#validation-score-r2">Validation score (R<span class="math inline">\(^2\)</span>)</a>
+<li><a href="#validation-score-r2" id="toc-validation-score-r2" class="nav-link" data-scroll-target="#validation-score-r2">Validation score (R<sup>2</sup>)</a>
 <ul class="collapse">
 <li><a href="#hot-encoding" id="toc-hot-encoding" class="nav-link" data-scroll-target="#hot-encoding">Hot encoding</a></li>
 <li><a href="#crop-mask" id="toc-crop-mask" class="nav-link" data-scroll-target="#crop-mask">Crop mask</a></li>
 <li><a href="#weighted-average" id="toc-weighted-average" class="nav-link" data-scroll-target="#weighted-average">Weighted average</a></li>
 </ul></li>
-<li><a href="#de-meaned-score-r2" id="toc-de-meaned-score-r2" class="nav-link" data-scroll-target="#de-meaned-score-r2">De-meaned score (R<span class="math inline">\(^2\)</span>)</a>
+<li><a href="#de-meaned-score-r2" id="toc-de-meaned-score-r2" class="nav-link" data-scroll-target="#de-meaned-score-r2">De-meaned score (R<sup>2</sup>)</a>
 <ul class="collapse">
 <li><a href="#hot-encoding-1" id="toc-hot-encoding-1" class="nav-link" data-scroll-target="#hot-encoding-1">Hot encoding</a></li>
 <li><a href="#crop-mask-1" id="toc-crop-mask-1" class="nav-link" data-scroll-target="#crop-mask-1">Crop mask</a></li>
@@ -234,8 +234,8 @@
 <h1>Results</h1>
 <p>Here we break the results into two sections based on the statistic we are interested in evaluating. We collect the statistics from running each model with varied inputs described in the methods section. The distribution of these statistics are used to visualize the outcome of manipulating those model inputs. There are 88 unique outcomes from the combinations of these model inputs from 1 sensor and 2426 from combining 2 sensors.</p>
 <section id="validation-score-r2" class="level2">
-<h2 class="anchored" data-anchor-id="validation-score-r2">Validation score (R<span class="math inline">\(^2\)</span>)</h2>
-<p>The first statistic we evaluate is the coefficient of determination (R<span class="math inline">\(^2\)</span>) calculated as the average R<span class="math inline">\(^2\)</span> of the 5 validation sets.</p>
+<h2 class="anchored" data-anchor-id="validation-score-r2">Validation score (R<sup>2</sup>)</h2>
+<p>The first statistic we evaluate is the coefficient of determination (R<sup>2</sup>) calculated as the average R<sup>2</sup> of the 5 validation sets.</p>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">One sensor</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Two sensor</a></li></ul>
 <div class="tab-content">
@@ -547,7 +547,7 @@
 </section>
 </section>
 <section id="de-meaned-score-r2" class="level2">
-<h2 class="anchored" data-anchor-id="de-meaned-score-r2">De-meaned score (R<span class="math inline">\(^2\)</span>)</h2>
+<h2 class="anchored" data-anchor-id="de-meaned-score-r2">De-meaned score (R<sup>2</sup>)</h2>
 <p>To get an idea of the each models ability to predict crop yield over time, we remove spatial variability by subtracting the district means from both observed and predicted yields. These de-meaned values are then evaluated by calculating the coefficient of determination. A high score indicates the model is able to predict well over time, while a low score indicates it performed this task poorly.</p>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true">One sensor</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false">Two sensor</a></li></ul>

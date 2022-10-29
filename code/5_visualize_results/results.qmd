@@ -227,9 +227,9 @@ The following variables were either included or excluded to test their affect on
 
 Here we break the results into two sections based on the statistic we are interested in evaluating. We collect the statistics from running each model with varied inputs described in the methods section. The distribution of these statistics are used to visualize the outcome of manipulating those model inputs. There are `r length(one_sensor_results$kfold_val_R2)` unique outcomes from the combinations of these model inputs from 1 sensor and `r length(two_sensor_results$kfold_val_R2)` from combining 2 sensors. 
 
-## Validation score (R$^2$)
+## Validation score (R<sup>2</sup>)
 
-The first statistic we evaluate is the coefficient of determination (R$^2$) calculated as the average R$^2$ of the 5 validation sets. 
+The first statistic we evaluate is the coefficient of determination (R<sup>2</sup>) calculated as the average R<sup>2</sup> of the 5 validation sets. 
 
 ::: {.panel-tabset}
 
@@ -457,7 +457,7 @@ custom_plot(
 
 :::
 
-## De-meaned score (R$^2$)
+## De-meaned score (R<sup>2</sup>)
 
 To get an idea of the each models ability to predict crop yield over time, we remove spatial variability by subtracting the district means from both observed and predicted yields. These de-meaned values are then evaluated by calculating the coefficient of determination. A high score indicates the model is able to predict well over time, while a low score indicates it performed this task poorly. 
 
