@@ -36,6 +36,8 @@ fig-cap-location: bottom
 ---
 
 ```{r echo=F,message=F, warning=F}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+
 if (!require(librarian,quietly = T)){
   install.packages('librarian')
 }
@@ -62,35 +64,24 @@ one_sensor_results <- here::here("data", "results", one_sensor_fn) %>%
   read_csv(show_col_types = FALSE) %>% 
   filter(points != 20 | crop_mask == T)
 
-# two_sensor_results <- here::here("data", "results", two_sensor_fn) %>% 
-#   read_csv(show_col_types = FALSE) %>% 
-#   mutate(
-#     sat_combo = paste0(satellite_1,' with ',satellite_2),
-#     month_combo = case_when(
-#       month_range_1 == '4-9' & month_range_2 == '4-9' ~ '4-9',
-#       month_range_1 == '1-12' & month_range_2 == '1-12' ~ '1-12',
-#       T ~ 'mixed')) %>% 
-#   filter((points_1 != 20 & points_2 != 20) | (crop_mask_1 == T & crop_mask_2 == T))
-
 two_sensor_results <- here::here("data", "results", two_sensor_fn) %>%
-  read_csv(show_col_types = FALSE) %>%
+  read_csv(show_col_types = FALSE) %>% 
+  distinct(across(18:41), .keep_all = TRUE) %>%
   mutate(
-    sat_combo = paste0(satellite_1,' with ',satellite_2),
-    month_combo = case_when(
+    satellite = paste0(satellite_1,' with ',satellite_2),
+    month_range = case_when(
       month_range_1 == '4-9' & month_range_2 == '4-9' ~ '4-9',
       month_range_1 == '1-12' & month_range_2 == '1-12' ~ '1-12',
       T ~ 'mixed'),
-    crop_combo = case_when(
+    crop_mask = case_when(
       crop_mask_1 == T & crop_mask_2 == T ~ 'TRUE',
       crop_mask_1 == F & crop_mask_2 == F ~ 'FALSE',
       T ~ 'mixed'),
-    wa_combo = case_when(
+    weighted_avg = case_when(
       weighted_avg_1 == T & weighted_avg_2 == T ~ 'TRUE',
       weighted_avg_1 == F & weighted_avg_2 == F ~ 'FALSE',
-      T ~ 'mixed')) %>% 
-  distinct(across(18:41), .keep_all = TRUE)
+      T ~ 'mixed'))
 ```
-
 
 ```{r echo=F,message=F, warning=F}
 colors <- c("TRUE" = 'dodgerblue', "FALSE" = "firebrick",
@@ -100,20 +91,18 @@ colors <- c("TRUE" = 'dodgerblue', "FALSE" = "firebrick",
 expand_fld <- function(fld) {
   switch(
     rlang::as_name(fld),
-    'kfold_val_R2'    = 'Validation Score (R$^2$)',
+    'kfold_val_R2'    = 'K-Fold Validation Score (R$^2$)',
+    'logo_val_R2'     = 'LOGO Validation Score (R$^2$)',
     'kfold_demean_R2' = 'De-meaned Score (R$^2$)',
-    'month_combo'     = 'Month\nRange',
     'month_range'     = 'Month\nRange',
     'hot_encode'      = 'One Hot Encoding',
-    'crop_combo'      = 'Crop Mask',
     'crop_mask'       = 'Crop Mask',
-    'wa_combo'        = 'Weighted Average',
     'weighted_avg'    = 'Weighted Average',
     rlang::as_name(fld)
   ) %>% TeX()
 }
 
-custom_plot <- function(data, x, y, clr, p_type = "scatter", n_sensor = 1) {
+custom_plot <- function(data, x, y, clr, p_type = "scatter", y_lims = NULL) {
   x     <- enquo(x)
   y     <- enquo(y)
   clr   <- enquo(clr)
@@ -125,14 +114,9 @@ custom_plot <- function(data, x, y, clr, p_type = "scatter", n_sensor = 1) {
   base  <- ggplot(data) +
     aes(!!x, !!y, color = !!clr) +
     scale_color_manual(values = colors, limits = force) +
-    labs(x = x_lab, y = y_lab, color = c_lab)
-  if (n_sensor == 1) {
-    base <- base + 
-    facet_wrap(~satellite) 
-  } else {
-    base <- base + 
-    facet_wrap(~sat_combo)
-  }
+    labs(x = x_lab, y = y_lab, color = c_lab) + 
+    facet_wrap(~satellite) +
+    scale_y_continuous(limits = y_lims, expand = expansion(mult = c(.01, .01)))
   
   if (p_type == "scatter") {
     base + geom_point(position = jd) 
@@ -148,7 +132,7 @@ This script produces graphics to explore the results of the statistics gathered 
 
 ## TODO: 
 
-1. Model with 2 sensors
+1. Fill in results with explanatory text
 
 # Data
 
@@ -192,16 +176,19 @@ Fill in later with summarized description of RCF.
 
 ## Task modeling
 
-All models use ridge regression on data summarized to the district level (both yield and features) and split into a training set (80%) and a test set (20%). Each combinations of model inputs are used to train 2 separate models, one with "k-fold" cross validation (CV), and one with "leave one group out" CV. The two strategies and their implications are described below. Additionally, each model uses a grid search method to identify and select the "best" regularization parameter by iterating the CV process over a set array of values, and selecting the value which provides the best performance. In our case we search over an array of 17 values between 0 and 100,000,000:
-`1.e-08, 1.e-07, 1.e-06, 1.e-05, 1.e-04, 1.e-03, 1.e-02, 1.e-01, 1`
-`1.e+01, 1.e+02, 1.e+03, 1.e+04, 1.e+05, 1.e+06, 1.e+07, 1.e+08`. The value which optimizes the solution is then used to train the model. 
+All models use ridge regression on data summarized to the district level (both yield and features) and split into a training set (80%) and a test set (20%). Each combinations of model inputs are used to train 2 separate models with different cross validation (CV) strategies. One uses "k-fold" CV, and one the other uses "leave one group out" CV. The two strategies and their implications are described below. Additionally, each model uses a grid search method to identify and select the "best" regularization parameter by iterating the CV process over an array of values, and selecting the value which provides the best performance. In our case we search over an array of 17 values between 0 and 100,000,000:
+`1.e-08, 1.e-07, 1.e-06, 1.e-05, 1.e-04, 1.e-03, 1.e-02, 1.e-01, 1,`
+`1.e+01, 1.e+02, 1.e+03, 1.e+04, 1.e+05, 1.e+06, 1.e+07, 1.e+08`. 
 
-The primary model in each iteration uses k-fold CV using 5 folds of data. This means the training data is split into five folds, each with 20% of the available data. The model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the 5 iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We chose 5-fold CV for its ability to predict over space as well as over  time... more on why later.     
+### K-fold cross validation 
+
+The primary model in each iteration uses k-fold cross validation using 5 folds of data. This means the training data is split into five folds, each with 20% of the available data. The model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the 5 iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We chose 5-fold CV for its ability to predict over space as well as over  time... more on why later.     
 
 ![Figure 1. Diagram representing k-fold cross validation data splitting strategy](../../figures/kfold_cv_split.png)
 
+### Leave one group out (LOGO) 
 
-As a secondary test, we also train a model in each iteration uses leave one group out (LOGO) CV using year as the grouping variable. This means the training data is split into $n$ groups, where $n$ is the number of years in the data, with each group containing $1/n^{th}$ of the available data. Each iteration of the model is trained using $n-1$ groups as training data, and is validated on the remaining group. This process is repeated $n$ times, using a different group for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the $n$ iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We use LOGO CV as a secondary test for it ability to evaluate how well these models are able to predict over time... More on why later..
+As a secondary test, we also train a model in each iteration uses leave one group out CV using year as the grouping variable. This means the training data is split into $n$ groups, where $n$ is the number of years in the data, with each group containing $1/n^{th}$ of the available data. Each iteration of the model is trained using $n-1$ groups as training data, and is validated on the remaining group. This process is repeated $n$ times, using a different group for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the $n$ iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We use LOGO CV as a secondary test for it ability to evaluate how well these models are able to predict over time... More on why later..
 
 ![Figure 2. Diagram representing leave one group out cross validation data splitting strategy](../../figures/logo_cv_split.png)
 
@@ -219,37 +206,92 @@ The following variables were either included or excluded to test their affect on
 
 4.    **Limiting month range**: whether the months were limited to the dry season (from April to October, or using the full year range. Limiting month ranges to the dry season results in more high quality imagery (i.e., low cloud cover). 
 
-5.    **Allowable cloud cover**: the percentage of cloud cover in a satellite scene that was allowed. Set as a threshold.
-
-6.    **Allowable missing pixels**: the percentage of missing pixels due to either scan line corrector failure in Landsat 7, or due to a point being near the edge of an image.
-
 # Results 
 
 Here we break the results into two sections based on the statistic we are interested in evaluating. We collect the statistics from running each model with varied inputs described in the methods section. The distribution of these statistics are used to visualize the outcome of manipulating those model inputs. There are `r length(one_sensor_results$kfold_val_R2)` unique outcomes from the combinations of these model inputs from 1 sensor and `r length(two_sensor_results$kfold_val_R2)` from combining 2 sensors. 
 
 ## Validation score (R<sup>2</sup>)
 
-The first statistic we evaluate is the coefficient of determination (R<sup>2</sup>) calculated as the average R<sup>2</sup> of the 5 validation sets. 
+The first statistic we evaluate is the coefficient of determination (R<sup>2</sup>) calculated as the average R<sup>2</sup> of the 5 validation sets. Here we see the distribution of all validation scores. 
+
+
+**Note**: The scales are forced to be the same between K-Fold and LOGO. The idea was to evaluate the relative difference in performance, but it makes some distributions harder to interpret. Would it help to make them independent?
 
 ::: {.panel-tabset}
 
 ## One sensor
 
+::: {.panel-tabset}
+
+## K-Fold
+
+```{r echo = FALSE}
+min_lim <- min(
+  min(one_sensor_results$kfold_val_R2), 
+  min(one_sensor_results$logo_val_R2)
+)
+max_lim <- max(
+  max(one_sensor_results$kfold_val_R2), 
+  max(one_sensor_results$logo_val_R2)
+)
+limits <- c(min_lim, max_lim)
+
+min_lim_two <- min(
+  min(two_sensor_results$kfold_val_R2), 
+  min(two_sensor_results$logo_val_R2)
+)
+max_lim_two <- max(
+  max(two_sensor_results$kfold_val_R2), 
+  max(two_sensor_results$logo_val_R2)
+)
+limits_two <- c(min_lim_two, max_lim_two)
+```
+
 ```{r}
 ggplot(data = one_sensor_results) +
   aes(x = kfold_val_R2) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_fld('kfold_val_R2'))
+  labs(x = expand_fld('kfold_val_R2')) +
+  scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
 ```
 
+## LOGO
+
+```{r}
+ggplot(data = one_sensor_results) +
+  aes(x = logo_val_R2) +
+  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
+  labs(x = expand_fld('logo_val_R2')) +
+  scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
+```
+
+:::
+
 ## Two sensor
+
+::: {.panel-tabset}
+
+## K-Fold
 
 ```{r}
 ggplot(data = two_sensor_results) +
   aes(x = kfold_val_R2) +
   geom_histogram(bins = 60, fill = 'darkorchid', color = 'black') +
-  labs(x = expand_fld('kfold_val_R2'))
+  labs(x = expand_fld('kfold_val_R2')) +
+  scale_x_continuous(limits = limits_two, expand = expansion(mult = c(.01, .01)))
 ```
+
+## LOGO
+
+```{r}
+ggplot(data = two_sensor_results) +
+  aes(x = logo_val_R2) +
+  geom_histogram(bins = 60, fill = 'darkorchid', color = 'black') +
+  labs(x = expand_fld('logo_val_R2')) +
+  scale_x_continuous(limits = limits_two, expand = expansion(mult = c(.01, .01)))
+```
+
+:::
 
 :::
 
@@ -261,7 +303,7 @@ ggplot(data = two_sensor_results) +
 
 ::: {.panel-tabset}
 
-## Boxplot
+## K-Fold
 
 ```{r}
 custom_plot(
@@ -269,19 +311,21 @@ custom_plot(
   x = hot_encode, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box"
+  p_type = "box",
+  y_lims = limits
 )
 ```
 
-## Scatter plot
+## LOGO
 
 ```{r}
 custom_plot(
   data = one_sensor_results, 
   x = hot_encode, 
-  y = kfold_val_R2,
+  y = logo_val_R2,
   clr = month_range,
-  p_type = "scatter"
+  p_type = "box",
+  y_lims = limits
 )
 ```
 
@@ -291,29 +335,29 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## Boxplot
+## K-Fold
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
   data = two_sensor_results, 
   x = hot_encode, 
   y = kfold_val_R2,
-  clr = month_combo,
+  clr = month_range,
   p_type = "box",
-  n_sensor = 2
+  y_lims = limits_two
 )
 ```
 
-## Scatter plot
+## LOGO
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
   data = two_sensor_results, 
   x = hot_encode, 
-  y = kfold_val_R2,
-  clr = month_combo,
-  p_type = "scatter",
-  n_sensor = 2
+  y = logo_val_R2,
+  clr = month_range,
+  p_type = "box",
+  y_lims = limits_two
 )
 ```
 
@@ -329,7 +373,7 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## Boxplot
+## K-Fold
 
 ```{r}
 custom_plot(
@@ -337,19 +381,21 @@ custom_plot(
   x = crop_mask, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box"
+  p_type = "box",
+  y_lims = limits
 )
 ```
 
-## Scatter plot
+## LOGO
 
 ```{r}
 custom_plot(
   data = one_sensor_results, 
   x = crop_mask, 
-  y = kfold_val_R2,
+  y = logo_val_R2,
   clr = month_range,
-  p_type = "scatter"
+  p_type = "box",
+  y_lims = limits
 )
 ```
 
@@ -359,29 +405,29 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## Boxplot
+## K-Fold
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
   data = two_sensor_results, 
-  x = crop_combo, 
+  x = crop_mask, 
   y = kfold_val_R2,
-  clr = month_combo,
+  clr = month_range,
   p_type = "box",
-  n_sensor = 2
+  y_lims = limits_two
 )
 ```
 
-## Scatter plot
+## LOGO
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
   data = two_sensor_results, 
-  x = crop_combo, 
-  y = kfold_val_R2,
-  clr = month_combo,
-  p_type = "scatter",
-  n_sensor = 2
+  x = crop_mask, 
+  y = logo_val_R2,
+  clr = month_range,
+  p_type = "box",
+  y_lims = limits_two
 )
 ```
 
@@ -397,7 +443,7 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## Boxplot
+## K-Fold
 
 ```{r }
 custom_plot(
@@ -405,19 +451,21 @@ custom_plot(
   x = weighted_avg, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box"
+  p_type = "box",
+  y_lims = limits
 )
 ```
 
-## Scatter plot
+## LOGO
 
 ```{r }
 custom_plot(
   data = one_sensor_results, 
   x = weighted_avg, 
-  y = kfold_val_R2,
+  y = logo_val_R2,
   clr = month_range,
-  p_type = "scatter"
+  p_type = "box",
+  y_lims = limits
 )
 ```
 
@@ -427,29 +475,29 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## Boxplot
+## K-Fold
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
   data = two_sensor_results, 
-  x = wa_combo, 
+  x = weighted_avg, 
   y = kfold_val_R2,
-  clr = month_combo,
+  clr = month_range,
   p_type = "box",
-  n_sensor = 2
+  y_lims = limits_two
 )
 ```
 
-## Scatter plot
+## LOGO
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
   data = two_sensor_results, 
-  x = wa_combo, 
-  y = kfold_val_R2,
-  clr = month_combo,
-  p_type = "scatter",
-  n_sensor = 2
+  x = weighted_avg, 
+  y = logo_val_R2,
+  clr = month_range,
+  p_type = "box",
+  y_lims = limits_two
 )
 ```
 
@@ -459,7 +507,7 @@ custom_plot(
 
 ## De-meaned score (R<sup>2</sup>)
 
-To get an idea of the each models ability to predict crop yield over time, we remove spatial variability by subtracting the district means from both observed and predicted yields. These de-meaned values are then evaluated by calculating the coefficient of determination. A high score indicates the model is able to predict well over time, while a low score indicates it performed this task poorly. 
+To get an idea of the each models ability to predict crop yield over time, we remove spatial variability by subtracting the district means from both observed and predicted yields. These de-meaned values are then evaluated by calculating the coefficient of determination. A high score indicates the model is able to predict well over time, while a low score indicates it performed this task poorly. Here we see the distribution of all de-meaned scores.
 
 ::: {.panel-tabset}
 
@@ -487,7 +535,7 @@ ggplot(data = two_sensor_results) +
 
 ::: {.panel-tabset}
 
-## Boxplot
+## One sensor
 
 ```{r}
 custom_plot(
@@ -499,15 +547,15 @@ custom_plot(
 )
 ```
 
-## Scatter plot
+## Two sensor
 
-```{r}
+```{r fig.height=8, fig.width=8}
 custom_plot(
-  data = one_sensor_results, 
+  data = two_sensor_results, 
   x = hot_encode, 
   y = kfold_demean_R2,
   clr = month_range,
-  p_type = "scatter"
+  p_type = "box"
 )
 ```
 
@@ -517,7 +565,7 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## Boxplot
+## One sensor
 
 ```{r}
 custom_plot(
@@ -529,15 +577,15 @@ custom_plot(
 )
 ```
 
-## Scatter plot
+## Two sensor
 
-```{r}
+```{r fig.height=8, fig.width=8}
 custom_plot(
-  data = one_sensor_results, 
+  data = two_sensor_results, 
   x = crop_mask, 
   y = kfold_demean_R2,
   clr = month_range,
-  p_type = "scatter"
+  p_type = "box"
 )
 ```
 
@@ -547,7 +595,7 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## Boxplot
+## One sensor
 
 ```{r}
 custom_plot(
@@ -559,15 +607,15 @@ custom_plot(
 )
 ```
 
-## Scatter plot
+## Two sensor
 
-```{r}
+```{r fig.height=8, fig.width=8}
 custom_plot(
-  data = one_sensor_results, 
+  data = two_sensor_results, 
   x = weighted_avg, 
   y = kfold_demean_R2,
   clr = month_range,
-  p_type = "scatter"
+  p_type = "box"
 )
 ```
 
