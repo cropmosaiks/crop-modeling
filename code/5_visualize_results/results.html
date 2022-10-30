@@ -186,14 +186,13 @@
 <ul>
 <li>Crop yield - Administrative boundary level 2, Zambian districts<br>
 </li>
-<li>S2 - 10 m ground sample distance<br>
+<li>S2 - 10 m ground sample distance (GSD)<br>
 </li>
-<li>LS8 - 30 m ground sample distance<br>
+<li>LS8 - 30 m GSD<br>
 </li>
-<li>LSC - 30 m ground sample distance</li>
+<li>LSC - 30 m GSD</li>
 </ul>
-<p><strong>Data access</strong>: Satellite imagery is all publicly available. All imagery was accessed and processed through the Microsoft Planetary Computer in this project. Crop forecast survey data</p>
-<p><strong>Note</strong>: Crop data is not yet publicly available.</p>
+<p><strong>Data access</strong>: Satellite imagery is all publicly available. All imagery was accessed and processed through the <a href="https://planetarycomputer.microsoft.com/">Microsoft Planetary Computer</a> in this project. Crop forecast survey data is not yet publicly available, but will be made available at the time of publication.</p>
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
@@ -204,7 +203,7 @@
 </section>
 <section id="task-modeling" class="level2">
 <h2 class="anchored" data-anchor-id="task-modeling">Task modeling</h2>
-<p>All models use ridge regression on data summarized to the district level (both yield and features) and split into a training set (80%) and a test set (20%). Each combinations of model inputs are used to train 2 separate models with different cross validation (CV) strategies. One uses “k-fold” CV, and one the other uses “leave one group out” CV. The two strategies and their implications are described below. Additionally, each model uses a grid search method to identify and select the “best” regularization parameter by iterating the CV process over an array of values, and selecting the value which provides the best performance. In our case we search over an array of 17 values between 0 and 100,000,000: <code>1.e-08, 1.e-07, 1.e-06, 1.e-05, 1.e-04, 1.e-03, 1.e-02, 1.e-01, 1</code> <code>1.e+01, 1.e+02, 1.e+03, 1.e+04, 1.e+05, 1.e+06, 1.e+07, 1.e+08</code>.</p>
+<p>All models use ridge regression on data summarized to the district level (both yield and features) and split into a training set (80%) and a test set (20%). Each combinations of model inputs are used to train 2 separate models with different cross validation (CV) strategies. One uses “k-fold” CV, and one the other uses “leave one group out” CV. The two strategies and their implications are described below. Additionally, each model uses a grid search method to identify and select the “best” regularization parameter by iterating the CV process over an array of values, and selecting the value which provides the best performance. In our case we search over an array of 17 values between 0 and 100,000,000: <code>1.e-08, 1.e-07, 1.e-06, 1.e-05, 1.e-04, 1.e-03, 1.e-02, 1.e-01, 1,</code> <code>1.e+01, 1.e+02, 1.e+03, 1.e+04, 1.e+05, 1.e+06, 1.e+07, 1.e+08</code>.</p>
 <section id="k-fold-cross-validation" class="level3">
 <h3 class="anchored" data-anchor-id="k-fold-cross-validation">K-fold cross validation</h3>
 <p>The primary model in each iteration uses k-fold cross validation using 5 folds of data. This means the training data is split into five folds, each with 20% of the available data. The model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the 5 iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We chose 5-fold CV for its ability to predict over space as well as over time… more on why later.</p>

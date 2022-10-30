@@ -157,14 +157,12 @@ The nearest neighbor is a simple imputation method and was selected due to Lands
 
 **Resolution**:  
 
--   Crop yield - Administrative boundary level 2, Zambian districts  
--   S2 - 10 m ground sample distance  
--   LS8 - 30 m ground sample distance  
--   LSC - 30 m ground sample distance  
+-   Crop yield - Administrative boundary level 2, Zambian districts    
+-   S2 - 10 m ground sample distance (GSD)  
+-   LS8 - 30 m GSD  
+-   LSC - 30 m GSD    
 
-**Data access**: Satellite imagery is all publicly available. All imagery was accessed and processed through the Microsoft Planetary Computer in this project. Crop forecast survey data  
-
-**Note**: Crop data is not yet publicly available. 
+**Data access**: Satellite imagery is all publicly available. All imagery was accessed and processed through the [Microsoft Planetary Computer](https://planetarycomputer.microsoft.com/) in this project. Crop forecast survey data is not yet publicly available, but will be made available at the time of publication. 
 
 # Methods
 
