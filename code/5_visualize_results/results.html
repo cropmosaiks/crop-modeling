@@ -111,8 +111,8 @@
 <li><a href="#random-convolution-feature-modeling" id="toc-random-convolution-feature-modeling" class="nav-link" data-scroll-target="#random-convolution-feature-modeling">Random convolution feature modeling</a></li>
 <li><a href="#task-modeling" id="toc-task-modeling" class="nav-link" data-scroll-target="#task-modeling">Task modeling</a>
 <ul class="collapse">
-<li><a href="#k-fold-cross-validation" id="toc-k-fold-cross-validation" class="nav-link" data-scroll-target="#k-fold-cross-validation">K-fold cross validation</a></li>
-<li><a href="#leave-one-group-out-logo" id="toc-leave-one-group-out-logo" class="nav-link" data-scroll-target="#leave-one-group-out-logo">Leave one group out (LOGO)</a></li>
+<li><a href="#k-fold-cv" id="toc-k-fold-cv" class="nav-link" data-scroll-target="#k-fold-cv">K-fold CV</a></li>
+<li><a href="#leave-one-group-out-logo-cv" id="toc-leave-one-group-out-logo-cv" class="nav-link" data-scroll-target="#leave-one-group-out-logo-cv">Leave one group out (LOGO) CV</a></li>
 </ul></li>
 <li><a href="#model-inputs" id="toc-model-inputs" class="nav-link" data-scroll-target="#model-inputs">Model inputs</a></li>
 </ul></li>
@@ -204,8 +204,8 @@
 <section id="task-modeling" class="level2">
 <h2 class="anchored" data-anchor-id="task-modeling">Task modeling</h2>
 <p>All models use ridge regression on data summarized to the district level (both yield and features) and split into a training set (80%) and a test set (20%). Each combinations of model inputs are used to train 2 separate models with different cross validation (CV) strategies. One uses “k-fold” CV, and one the other uses “leave one group out” CV. The two strategies and their implications are described below. Additionally, each model uses a grid search method to identify and select the “best” regularization parameter by iterating the CV process over an array of values, and selecting the value which provides the best performance. In our case we search over an array of 17 values between 0 and 100,000,000: <code>1.e-08, 1.e-07, 1.e-06, 1.e-05, 1.e-04, 1.e-03, 1.e-02, 1.e-01, 1,</code> <code>1.e+01, 1.e+02, 1.e+03, 1.e+04, 1.e+05, 1.e+06, 1.e+07, 1.e+08</code>.</p>
-<section id="k-fold-cross-validation" class="level3">
-<h3 class="anchored" data-anchor-id="k-fold-cross-validation">K-fold cross validation</h3>
+<section id="k-fold-cv" class="level3">
+<h3 class="anchored" data-anchor-id="k-fold-cv">K-fold CV</h3>
 <p>The primary model in each iteration uses k-fold cross validation using 5 folds of data. This means the training data is split into five folds, each with 20% of the available data. The model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the 5 iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We chose 5-fold CV for its ability to predict over space as well as over time… more on why later.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -214,8 +214,8 @@
 </figure>
 </div>
 </section>
-<section id="leave-one-group-out-logo" class="level3">
-<h3 class="anchored" data-anchor-id="leave-one-group-out-logo">Leave one group out (LOGO)</h3>
+<section id="leave-one-group-out-logo-cv" class="level3">
+<h3 class="anchored" data-anchor-id="leave-one-group-out-logo-cv">Leave one group out (LOGO) CV</h3>
 <p>As a secondary test, we also train a model in each iteration uses leave one group out CV using year as the grouping variable. This means the training data is split into <span class="math inline">\(n\)</span> groups, where <span class="math inline">\(n\)</span> is the number of years in the data, with each group containing <span class="math inline">\(1/n^{th}\)</span> of the available data. Each iteration of the model is trained using <span class="math inline">\(n-1\)</span> groups as training data, and is validated on the remaining group. This process is repeated <span class="math inline">\(n\)</span> times, using a different group for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the <span class="math inline">\(n\)</span> iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We use LOGO CV as a secondary test for it ability to evaluate how well these models are able to predict over time… More on why later..</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">

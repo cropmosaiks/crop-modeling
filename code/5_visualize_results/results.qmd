@@ -178,13 +178,13 @@ All models use ridge regression on data summarized to the district level (both y
 `1.e-08, 1.e-07, 1.e-06, 1.e-05, 1.e-04, 1.e-03, 1.e-02, 1.e-01, 1,`
 `1.e+01, 1.e+02, 1.e+03, 1.e+04, 1.e+05, 1.e+06, 1.e+07, 1.e+08`. 
 
-### K-fold cross validation 
+### K-fold CV 
 
 The primary model in each iteration uses k-fold cross validation using 5 folds of data. This means the training data is split into five folds, each with 20% of the available data. The model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the 5 iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We chose 5-fold CV for its ability to predict over space as well as over  time... more on why later.     
 
 ![Figure 1. Diagram representing k-fold cross validation data splitting strategy](../../figures/kfold_cv_split.png)
 
-### Leave one group out (LOGO) 
+### Leave one group out (LOGO) CV 
 
 As a secondary test, we also train a model in each iteration uses leave one group out CV using year as the grouping variable. This means the training data is split into $n$ groups, where $n$ is the number of years in the data, with each group containing $1/n^{th}$ of the available data. Each iteration of the model is trained using $n-1$ groups as training data, and is validated on the remaining group. This process is repeated $n$ times, using a different group for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the $n$ iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We use LOGO CV as a secondary test for it ability to evaluate how well these models are able to predict over time... More on why later..
 
