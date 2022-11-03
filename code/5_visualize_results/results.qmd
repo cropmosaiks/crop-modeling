@@ -202,25 +202,25 @@ As a secondary test, we also train a model in each iteration uses leave one grou
 
 The following variables were either included or excluded to test their affect on model performance. 
 
-1.    **Sensor platform**: the sensor platform which imagery was taken from. Options are:
+1) **Sensor platform**: the sensor platform which imagery was taken from. Options are:
 
-    - The Landsat satellite constellation including 5, 7, and 8  
-    - Landsat 8 only (this avoids the SLC failure)
-    - The Sentinel 2 satellite constellation including 2A and 2B
+    + The Landsat satellite constellation including 5, 7, and 8  
+    + Landsat 8 only (this avoids the SLC failure)
+    + The Sentinel 2 satellite constellation including 2A and 2B
 
-2.    **Spectral bandpass**: the combination of distinct spectral bandpass's collected by the electro-optical sensor and utilized in the convolutional neural network model.
+1) **Spectral bandpass**: the combination of distinct spectral bandpass's collected by the electro-optical sensor and utilized in the convolutional neural network model.
 
-3.    **Spatial resolution**: the number of 0.01 by 0.01 degree grid cells we targeted for featurization. These are represented as points in longitude and latitude, where the coordinates are the center of the grid cell. Exact area covered by each grid cell varies with latitude and elevation. 
+1) **Spatial resolution**: the number of 0.01 by 0.01 degree grid cells we targeted for featurization. These are represented as points in longitude and latitude, where the coordinates are the center of the grid cell. Exact area covered by each grid cell varies with latitude and elevation. 
 
-4.    **One hot encoding**: when true, the Zambian districts were used as dummy variables. Each district becomes a column with either inside district (1) or outside district (0). This is equivalent to a spatial fixed effects model. When false, district is dropped altogether. 
+1) **One hot encoding**: when true, the Zambian districts were used as dummy variables. Each district becomes a column with either inside district (1) or outside district (0). This is equivalent to a spatial fixed effects model. When false, district is dropped altogether. 
 
-5.    **Crop mask**: when true, only points with cropland are retained. In some iterations, this becomes redundant as only points with cropland were featurized, rather than including a random selection of points (targeted vs non-targeted approach). When false, all points are retained.   
+1) **Crop mask**: when true, only points with cropland are retained. In some iterations, this becomes redundant as only points with cropland were featurized, rather than including a random selection of points (targeted vs non-targeted approach). When false, all points are retained.   
 
-6.    **Weighted average**: when true, a weighted average was used in summarizing the features to the district level. Weights are the calculated proportion of cropland over the area where the features were calculated. When false, a simple mean is used in summarizing the features to the district level.  
+1) **Weighted average**: when true, a weighted average was used in summarizing the features to the district level. Weights are the calculated proportion of cropland over the area where the features were calculated. When false, a simple mean is used in summarizing the features to the district level.  
 
-7.    **Limiting month range**: whether the months were limited to the dry season (from April to October, or using the full year range. Limiting month ranges to the dry season results in more high quality imagery (i.e., low cloud cover). 
+1) **Limiting month range**: whether the months were limited to the dry season (from April to October, or using the full year range. Limiting month ranges to the dry season results in more high quality imagery (i.e., low cloud cover). 
 
-8.    **Available year range**: features are limited in overall time range by the launch date of the individual sensor platforms. 
+1) **Available year range**: features are limited in overall time range by the launch date of the individual sensor platforms. 
 
 # Results 
 
