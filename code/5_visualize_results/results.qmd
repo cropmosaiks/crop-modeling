@@ -53,12 +53,11 @@ librarian::shelf(
 
 one_sensor_date <- "2022-10-26"
 two_sensor_date <- "2022-10-28"
+anomaly_date    <- "2022-11-02"
 
 one_sensor_fn <- paste0("results_", one_sensor_date, ".csv")
 two_sensor_fn <- paste0("2_sensor_results_", two_sensor_date, ".csv")
-
-theme_set(theme_bw())
-theme_update()
+anomaly_fn <- paste0("anomaly_results_", anomaly_date, ".csv")
 
 one_sensor_results <- here::here("data", "results", one_sensor_fn) %>% 
   read_csv(show_col_types = FALSE) %>% 
@@ -81,6 +80,10 @@ two_sensor_results <- here::here("data", "results", two_sensor_fn) %>%
       weighted_avg_1 == T & weighted_avg_2 == T ~ 'TRUE',
       weighted_avg_1 == F & weighted_avg_2 == F ~ 'FALSE',
       T ~ 'mixed'))
+
+anomaly_results <- here::here("data", "results", anomaly_fn) %>% 
+  read_csv(show_col_types = FALSE) %>% 
+  filter(points != 20 | crop_mask == T)
 ```
 
 ```{r echo=F,message=F, warning=F}
@@ -102,6 +105,9 @@ expand_fld <- function(fld) {
   ) %>% TeX()
 }
 
+theme_set(theme_bw())
+theme_update()
+
 custom_plot <- function(data, x, y, clr, p_type = "scatter", y_lims = NULL) {
   x     <- enquo(x)
   y     <- enquo(y)
@@ -109,7 +115,6 @@ custom_plot <- function(data, x, y, clr, p_type = "scatter", y_lims = NULL) {
   x_lab <- expand_fld(x)
   y_lab <- expand_fld(y)
   c_lab <- expand_fld(clr)
-  jd    <- position_jitterdodge(.2)
   
   base  <- ggplot(data) +
     aes(!!x, !!y, color = !!clr) +
@@ -118,10 +123,11 @@ custom_plot <- function(data, x, y, clr, p_type = "scatter", y_lims = NULL) {
     facet_wrap(~satellite) +
     scale_y_continuous(limits = y_lims, expand = expansion(mult = c(.01, .01)))
   
-  if (p_type == "scatter") {
-    base + geom_point(position = jd) 
+  if (p_type == "box") {
+    base + geom_boxplot() 
   } else {
-    base + geom_boxplot()
+    jd  <- position_jitterdodge(.2)
+    base + geom_point(position = jd)
   }
 }
 ```
@@ -196,13 +202,25 @@ As a secondary test, we also train a model in each iteration uses leave one grou
 
 The following variables were either included or excluded to test their affect on model performance. 
 
-1.    **One hot encoding**: when true, the Zambian districts were used as dummy variables. Each district becomes a column with either inside district (1) or outside district (0). This is equivalent to a spatial fixed effects model. When false, 
+1.    **Sensor platform**: the sensor platform which imagery was taken from. Options are:
 
-2.    **Crop mask**: when true, only points with cropland are retained. In some iterations, this becomes redundant as only points with cropland were featurized, rather than including a random selection of points (targeted vs non-targeted approach). When false, all points are retained.   
+    - The Landsat satellite constellation including 5, 7, and 8  
+    - Landsat 8 only (this avoids the SLC failure)
+    - The Sentinel 2 satellite constellation including 2A and 2B
 
-3.    **Weighted average**: when true, a weighted average was used in summarizing the features to the district level. Weights are the calculated proportion of cropland over the area where the features were calculated. When false, a simple mean is used in summarizing the features to the district level.  
+2.    **Spectral bandpass**: the combination of distinct spectral bandpass's collected by the electro-optical sensor and utilized in the convolutional neural network model.
 
-4.    **Limiting month range**: whether the months were limited to the dry season (from April to October, or using the full year range. Limiting month ranges to the dry season results in more high quality imagery (i.e., low cloud cover). 
+3.    **Spatial resolution**: the number of 0.01 by 0.01 degree grid cells we targeted for featurization. These are represented as points in longitude and latitude, where the coordinates are the center of the grid cell. Exact area covered by each grid cell varies with latitude and elevation. 
+
+4.    **One hot encoding**: when true, the Zambian districts were used as dummy variables. Each district becomes a column with either inside district (1) or outside district (0). This is equivalent to a spatial fixed effects model. When false, district is dropped altogether. 
+
+5.    **Crop mask**: when true, only points with cropland are retained. In some iterations, this becomes redundant as only points with cropland were featurized, rather than including a random selection of points (targeted vs non-targeted approach). When false, all points are retained.   
+
+6.    **Weighted average**: when true, a weighted average was used in summarizing the features to the district level. Weights are the calculated proportion of cropland over the area where the features were calculated. When false, a simple mean is used in summarizing the features to the district level.  
+
+7.    **Limiting month range**: whether the months were limited to the dry season (from April to October, or using the full year range. Limiting month ranges to the dry season results in more high quality imagery (i.e., low cloud cover). 
+
+8.    **Available year range**: features are limited in overall time range by the launch date of the individual sensor platforms. 
 
 # Results 
 
@@ -210,18 +228,9 @@ Here we break the results into two sections based on the statistic we are intere
 
 ## Validation score (R<sup>2</sup>)
 
-The first statistic we evaluate is the coefficient of determination (R<sup>2</sup>) calculated as the average R<sup>2</sup> of the 5 validation sets. Here we see the distribution of all validation scores. 
-
+The first statistic we evaluate is the coefficient of determination (R<sup>2</sup>) calculated from the predicted values and the observed values from each of the 5 validation sets. Here we see the distribution of all validation scores. 
 
 **Note**: The scales are forced to be the same between K-Fold and LOGO. The idea was to evaluate the relative difference in performance, but it makes some distributions harder to interpret. Would it help to make them independent?
-
-::: {.panel-tabset}
-
-## One sensor
-
-::: {.panel-tabset}
-
-## K-Fold
 
 ```{r echo = FALSE}
 min_lim <- min(
@@ -244,6 +253,14 @@ max_lim_two <- max(
 )
 limits_two <- c(min_lim_two, max_lim_two)
 ```
+
+::: {.panel-tabset}
+
+## One sensor
+
+::: {.panel-tabset}
+
+## K-Fold
 
 ```{r}
 ggplot(data = one_sensor_results) +
@@ -618,3 +635,158 @@ custom_plot(
 ```
 
 :::
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Anomaly validation score (R<sup>2</sup>)
+
+Finally, we evaluate the coefficient of determination (R<sup>2</sup>) calculated from the predicted values and the observed values from each of the 5 validation sets of the models trained on feature anomalies. Here we see the distribution of all validation scores.
+
+
+**Note**: The scales are forced to be the same between K-Fold and LOGO. The idea was to evaluate the relative difference in performance, but it makes some distributions harder to interpret. Would it help to make them independent?
+
+```{r echo = FALSE}
+min_lim <- min(
+  min(anomaly_results$kfold_val_R2), 
+  min(anomaly_results$logo_val_R2)
+)
+max_lim <- max(
+  max(anomaly_results$kfold_val_R2), 
+  max(anomaly_results$logo_val_R2)
+)
+limits <- c(min_lim, max_lim)
+```
+
+::: {.panel-tabset}
+
+## K-Fold
+
+```{r}
+ggplot(data = anomaly_results) +
+  aes(x = kfold_val_R2) +
+  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
+  labs(x = expand_fld('kfold_val_R2')) +
+  scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
+```
+
+## LOGO
+
+```{r}
+ggplot(data = anomaly_results) +
+  aes(x = logo_val_R2) +
+  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
+  labs(x = expand_fld('logo_val_R2')) +
+  scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
+```
+
+:::
+
+### Hot encoding
+
+::: {.panel-tabset}
+
+## K-Fold
+
+```{r}
+custom_plot(
+  data = anomaly_results, 
+  x = hot_encode, 
+  y = kfold_val_R2,
+  clr = month_range,
+  p_type = "box",
+  y_lims = limits
+)
+```
+
+## LOGO
+
+```{r}
+custom_plot(
+  data = anomaly_results, 
+  x = hot_encode, 
+  y = logo_val_R2,
+  clr = month_range,
+  p_type = "box",
+  y_lims = limits
+)
+```
+
+:::
+
+### Crop mask
+
+::: {.panel-tabset}
+
+## K-Fold
+
+```{r}
+custom_plot(
+  data = anomaly_results, 
+  x = crop_mask, 
+  y = kfold_val_R2,
+  clr = month_range,
+  p_type = "box",
+  y_lims = limits
+)
+```
+
+## LOGO
+
+```{r}
+custom_plot(
+  data = anomaly_results, 
+  x = crop_mask, 
+  y = logo_val_R2,
+  clr = month_range,
+  p_type = "box",
+  y_lims = limits
+)
+```
+
+:::
+
+### Weighted average
+
+::: {.panel-tabset}
+
+
+## K-Fold
+
+```{r }
+custom_plot(
+  data = anomaly_results, 
+  x = weighted_avg, 
+  y = kfold_val_R2,
+  clr = month_range,
+  p_type = "box",
+  y_lims = limits
+)
+```
+
+## LOGO
+
+```{r }
+custom_plot(
+  data = anomaly_results, 
+  x = weighted_avg, 
+  y = logo_val_R2,
+  clr = month_range,
+  p_type = "box",
+  y_lims = limits
+)
+```
+
+:::
+
+
