@@ -48,6 +48,7 @@ librarian::shelf(
   here,
   rlang,
   latex2exp,
+  arrow,
   quiet = T
 )
 
@@ -57,11 +58,13 @@ anomaly_date    <- "2022-11-02"
 
 one_sensor_fn <- paste0("results_", one_sensor_date, ".csv")
 two_sensor_fn <- paste0("2_sensor_results_", two_sensor_date, ".csv")
-anomaly_fn <- paste0("anomaly_results_", anomaly_date, ".csv")
+anomaly_fn    <- paste0("anomaly_results_", anomaly_date, ".csv")
+high_res_fn   <- 'high-res-pred_k-fold-cv_landsat-8-c2-l2_bands-1-2-3-4-5-6-7_ZMB_20k-points_1000-features_yr-2013-2021_mn-4-9_lm-True_cm-True_wa-True_he-True.feather'
 
 one_sensor_results <- here::here("data", "results", one_sensor_fn) %>% 
   read_csv(show_col_types = FALSE) %>% 
-  filter(points != 20 | crop_mask == T)
+  filter(points != 20 | crop_mask == T) %>% 
+  mutate(avg_res = (kfold_val_R2 + kfold_demean_R2) / 2)
 
 two_sensor_results <- here::here("data", "results", two_sensor_fn) %>%
   read_csv(show_col_types = FALSE) %>% 
@@ -84,6 +87,12 @@ two_sensor_results <- here::here("data", "results", two_sensor_fn) %>%
 anomaly_results <- here::here("data", "results", anomaly_fn) %>% 
   read_csv(show_col_types = FALSE) %>% 
   filter(points != 20 | crop_mask == T)
+
+high_res_predictions <- here::here('data', 'results', high_res_fn) %>% 
+  arrow::read_feather()
+
+country_shp <- here::here('data', 'geo_boundaries', 'gadm36_ZMB_2.shp') %>% 
+  sf::read_sf()
 ```
 
 ```{r echo=F,message=F, warning=F}
@@ -788,5 +797,47 @@ custom_plot(
 ```
 
 :::
+
+## High resolution predictions
+
+Result from using the top performing model to make predictions on the high_reolution features (before summarizing to district level). 
+
+Top performing model:
+
+1) **Sensor platform**: Landsat 8 
+
+1) **Spectral bandpass**: bands 1-7 (AOT, R, G, B, NIR, SWIR16, SWIR22)
+
+1) **Spatial resolution**: 20,000 0.01 by 0.01 degree grid cells, taken from the top 10% of cropland area in each district.
+
+1) **One hot encoding**: true, the Zambian districts were used as dummy variables. 
+
+1) **Crop mask**: true, only points with cropland are retained. This is by default with the targeted method of selecting points described abovve.  
+
+1) **Weighted average**: true, a weighted average was used in summarizing the features to the district level. 
+
+1) **Limiting month range**: the months were limited to the dry season (from April to September).
+
+1) **Available year range**: 2013 to 2021. 
+
+The top performing model used ridge regression with 5-fold cross validation. Evaluated by taking the mean of the validation score and the de-meaned R2 score.
+
+**Notes**: 
+
+1) Need to discuss how to select the "best model". 
+
+1) I cap the predictions at roughly the level of the yield levels. This is largely for plotting purpose, need to discuss in next meeting!
+
+```{r fig.height=10, fig.width=10}
+high_res_predictions <- high_res_predictions %>% 
+  mutate(prediction = ifelse(prediction > 1.1, 1, prediction))
+
+ggplot() +
+  geom_point(data = high_res_predictions, size = .1,
+             aes(x = lon, y = lat, color = prediction)) +
+  geom_sf(data = country_shp, fill = NA, color = 'black') +
+  facet_wrap(~year) +
+  scale_color_viridis_c()
+```
 
 
