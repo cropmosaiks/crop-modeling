@@ -827,20 +827,6 @@ The top performing model used ridge regression with 5-fold cross validation. Eva
 
 1) I cap the predictions at roughly the level of the yield levels. This is largely for plotting purpose, need to discuss in next meeting!
 
-### High resolution maps
-
-```{r fig.height=10, fig.width=10}
-high_res_predictions <- high_res_predictions %>% 
-  mutate(prediction = ifelse(prediction > 1.1, 1, prediction))
-
-ggplot() +
-  geom_point(data = high_res_predictions, size = .1,
-             aes(x = lon, y = lat, color = prediction)) +
-  geom_sf(data = country_shp, fill = NA, color = 'black') +
-  facet_wrap(~year) +
-  scale_color_viridis_c()
-```
-
 ### Observed vs predicted 
 
 ::: {.panel-tabset}
@@ -913,4 +899,57 @@ ggplot() +
 
 :::
 
+### Maps
 
+::: {.panel-tabset}
+
+#### Log yield
+
+```{r fig.height=10, fig.width=10}
+yield <- summary_predictions %>% 
+  mutate(residuals = prediction - log_yield) %>% 
+  left_join(country_shp) %>% 
+  sf::st_as_sf()
+
+ggplot() +
+  geom_sf(data = yield, aes(fill = log_yield), color = 'black') +
+  facet_wrap(~year) +
+  scale_fill_viridis_c()
+```
+
+#### Predicted yield
+
+```{r fig.height=10, fig.width=10}
+ggplot() +
+  geom_sf(data = yield, aes(fill = prediction), color = 'black') +
+  facet_wrap(~year) +
+  scale_fill_viridis_c()
+```
+
+#### Residual
+
+
+```{r fig.height=10, fig.width=10}
+ggplot() +
+  geom_sf(data = yield, aes(fill = residuals), color = 'black') +
+  facet_wrap(~year) +
+  scale_fill_viridis_c()
+```
+
+$predicted - observed$ so positive values indicates over-prediction, and negative values indicates under-prediction.
+
+#### High res. predictions
+
+```{r fig.height=10, fig.width=10}
+high_res_predictions <- high_res_predictions %>% 
+  mutate(prediction = ifelse(prediction > 1.1, 1, prediction))
+
+ggplot() +
+  geom_point(data = high_res_predictions, size = .1,
+             aes(x = lon, y = lat, color = prediction)) +
+  geom_sf(data = country_shp, fill = NA, color = 'black') +
+  facet_wrap(~year) +
+  scale_color_viridis_c()
+```
+
+:::
