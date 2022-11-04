@@ -120,18 +120,21 @@
 <ul class="collapse">
 <li><a href="#validation-score-r2" id="toc-validation-score-r2" class="nav-link" data-scroll-target="#validation-score-r2">Validation score (R<sup>2</sup>)</a>
 <ul class="collapse">
+<li><a href="#overall" id="toc-overall" class="nav-link" data-scroll-target="#overall">Overall</a></li>
 <li><a href="#hot-encoding" id="toc-hot-encoding" class="nav-link" data-scroll-target="#hot-encoding">Hot encoding</a></li>
 <li><a href="#crop-mask" id="toc-crop-mask" class="nav-link" data-scroll-target="#crop-mask">Crop mask</a></li>
 <li><a href="#weighted-average" id="toc-weighted-average" class="nav-link" data-scroll-target="#weighted-average">Weighted average</a></li>
 </ul></li>
 <li><a href="#de-meaned-score-r2" id="toc-de-meaned-score-r2" class="nav-link" data-scroll-target="#de-meaned-score-r2">De-meaned score (R<sup>2</sup>)</a>
 <ul class="collapse">
+<li><a href="#overall-1" id="toc-overall-1" class="nav-link" data-scroll-target="#overall-1">Overall</a></li>
 <li><a href="#hot-encoding-1" id="toc-hot-encoding-1" class="nav-link" data-scroll-target="#hot-encoding-1">Hot encoding</a></li>
 <li><a href="#crop-mask-1" id="toc-crop-mask-1" class="nav-link" data-scroll-target="#crop-mask-1">Crop mask</a></li>
 <li><a href="#weighted-average-1" id="toc-weighted-average-1" class="nav-link" data-scroll-target="#weighted-average-1">Weighted average</a></li>
 </ul></li>
 <li><a href="#anomaly-validation-score-r2" id="toc-anomaly-validation-score-r2" class="nav-link" data-scroll-target="#anomaly-validation-score-r2">Anomaly validation score (R<sup>2</sup>)</a>
 <ul class="collapse">
+<li><a href="#overall-2" id="toc-overall-2" class="nav-link" data-scroll-target="#overall-2">Overall</a></li>
 <li><a href="#hot-encoding-2" id="toc-hot-encoding-2" class="nav-link" data-scroll-target="#hot-encoding-2">Hot encoding</a></li>
 <li><a href="#crop-mask-2" id="toc-crop-mask-2" class="nav-link" data-scroll-target="#crop-mask-2">Crop mask</a></li>
 <li><a href="#weighted-average-2" id="toc-weighted-average-2" class="nav-link" data-scroll-target="#weighted-average-2">Weighted average</a></li>
@@ -268,6 +271,8 @@
 <div class="cell">
 
 </div>
+<section id="overall" class="level3">
+<h3 class="anchored" data-anchor-id="overall">Overall</h3>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">One sensor</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Two sensor</a></li></ul>
 <div class="tab-content">
@@ -347,6 +352,7 @@
 </div>
 </div>
 </div>
+</section>
 <section id="hot-encoding" class="level3">
 <h3 class="anchored" data-anchor-id="hot-encoding">Hot encoding</h3>
 <div class="panel-tabset">
@@ -633,6 +639,8 @@
 <section id="de-meaned-score-r2" class="level2">
 <h2 class="anchored" data-anchor-id="de-meaned-score-r2">De-meaned score (R<sup>2</sup>)</h2>
 <p>To get an idea of the each models ability to predict crop yield over time, we remove spatial variability by subtracting the district means from both observed and predicted yields. These de-meaned values are then evaluated by calculating the coefficient of determination. A high score indicates the model is able to predict well over time, while a low score indicates it performed this task poorly. Here we see the distribution of all de-meaned scores.</p>
+<section id="overall-1" class="level3">
+<h3 class="anchored" data-anchor-id="overall-1">Overall</h3>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-13-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-1" role="tab" aria-controls="tabset-13-1" aria-selected="true">One sensor</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-2" role="tab" aria-controls="tabset-13-2" aria-selected="false">Two sensor</a></li></ul>
 <div class="tab-content">
@@ -666,6 +674,7 @@
 </div>
 </div>
 </div>
+</section>
 <section id="hot-encoding-1" class="level3">
 <h3 class="anchored" data-anchor-id="hot-encoding-1">Hot encoding</h3>
 <div class="panel-tabset">
@@ -800,6 +809,8 @@
 <div class="cell">
 
 </div>
+<section id="overall-2" class="level3">
+<h3 class="anchored" data-anchor-id="overall-2">Overall</h3>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-17-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-1" role="tab" aria-controls="tabset-17-1" aria-selected="true">K-Fold</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-17-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-2" role="tab" aria-controls="tabset-17-2" aria-selected="false">LOGO</a></li></ul>
 <div class="tab-content">
@@ -835,6 +846,7 @@
 </div>
 </div>
 </div>
+</section>
 <section id="hot-encoding-2" class="level3">
 <h3 class="anchored" data-anchor-id="hot-encoding-2">Hot encoding</h3>
 <div class="panel-tabset">
@@ -1035,7 +1047,7 @@
 <span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> log_yield, <span class="at">y =</span> kfold_cv_predictions, <span class="at">color =</span> <span class="fu">as.factor</span>(year))) <span class="sc">+</span></span>
 <span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
 <span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>() <span class="sc">+</span></span>
-<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">'Year'</span>, <span class="at">x =</span> <span class="st">'Observed'</span>, <span class="at">y =</span> <span class="st">'Predicted (from validation set)'</span>) <span class="sc">+</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">'Year'</span>, <span class="at">x =</span> <span class="st">'Observed'</span>, <span class="at">y =</span> <span class="st">'Predicted'</span>) <span class="sc">+</span></span>
 <span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> <span class="cn">NULL</span>, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fl">0.05</span>, <span class="at">y =</span> .<span class="dv">7</span>), <span class="at">label =</span> val_R2_label) <span class="sc">+</span></span>
 <span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">82</span>)) <span class="sc">+</span></span>
 <span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">15</span>, .<span class="dv">82</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

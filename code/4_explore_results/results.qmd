@@ -84,7 +84,8 @@ two_sensor_results <- here::here("data", "results", two_sensor_fn) %>%
     weighted_avg = case_when(
       weighted_avg_1 == T & weighted_avg_2 == T ~ 'TRUE',
       weighted_avg_1 == F & weighted_avg_2 == F ~ 'FALSE',
-      T ~ 'mixed'))
+      T ~ 'mixed')) %>% 
+  mutate(avg_res = (kfold_val_R2 + kfold_demean_R2) / 2)
 
 anomaly_results <- here::here("data", "results", anomaly_fn) %>% 
   read_csv(show_col_types = FALSE) %>% 
@@ -269,13 +270,15 @@ max_lim_two <- max(
 limits_two <- c(min_lim_two, max_lim_two)
 ```
 
-::: {.panel-tabset}
-
-## One sensor
+### Overall
 
 ::: {.panel-tabset}
 
-## K-Fold
+#### One sensor
+
+::: {.panel-tabset}
+
+##### K-Fold
 
 ```{r}
 ggplot(data = one_sensor_results) +
@@ -285,7 +288,7 @@ ggplot(data = one_sensor_results) +
   scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
 ```
 
-## LOGO
+##### LOGO
 
 ```{r}
 ggplot(data = one_sensor_results) +
@@ -297,11 +300,11 @@ ggplot(data = one_sensor_results) +
 
 :::
 
-## Two sensor
+#### Two sensor
 
 ::: {.panel-tabset}
 
-## K-Fold
+##### K-Fold
 
 ```{r}
 ggplot(data = two_sensor_results) +
@@ -311,7 +314,7 @@ ggplot(data = two_sensor_results) +
   scale_x_continuous(limits = limits_two, expand = expansion(mult = c(.01, .01)))
 ```
 
-## LOGO
+##### LOGO
 
 ```{r}
 ggplot(data = two_sensor_results) +
@@ -329,11 +332,11 @@ ggplot(data = two_sensor_results) +
 
 ::: {.panel-tabset}
 
-## One sensor
+#### One sensor
 
 ::: {.panel-tabset}
 
-## K-Fold
+##### K-Fold
 
 ```{r}
 custom_plot(
@@ -346,7 +349,7 @@ custom_plot(
 )
 ```
 
-## LOGO
+##### LOGO
 
 ```{r}
 custom_plot(
@@ -361,11 +364,11 @@ custom_plot(
 
 :::
 
-## Two sensor
+#### Two sensor
 
 ::: {.panel-tabset}
 
-## K-Fold
+##### K-Fold
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
@@ -378,7 +381,7 @@ custom_plot(
 )
 ```
 
-## LOGO
+##### LOGO
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
@@ -399,11 +402,11 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## One sensor
+#### One sensor
 
 ::: {.panel-tabset}
 
-## K-Fold
+##### K-Fold
 
 ```{r}
 custom_plot(
@@ -416,7 +419,7 @@ custom_plot(
 )
 ```
 
-## LOGO
+##### LOGO
 
 ```{r}
 custom_plot(
@@ -431,11 +434,11 @@ custom_plot(
 
 :::
 
-## Two sensor
+#### Two sensor
 
 ::: {.panel-tabset}
 
-## K-Fold
+##### K-Fold
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
@@ -448,7 +451,7 @@ custom_plot(
 )
 ```
 
-## LOGO
+##### LOGO
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
@@ -469,11 +472,11 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## One sensor
+#### One sensor
 
 ::: {.panel-tabset}
 
-## K-Fold
+##### K-Fold
 
 ```{r }
 custom_plot(
@@ -486,7 +489,7 @@ custom_plot(
 )
 ```
 
-## LOGO
+##### LOGO
 
 ```{r }
 custom_plot(
@@ -501,11 +504,11 @@ custom_plot(
 
 :::
 
-## Two sensor
+#### Two sensor
 
 ::: {.panel-tabset}
 
-## K-Fold
+##### K-Fold
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
@@ -518,7 +521,7 @@ custom_plot(
 )
 ```
 
-## LOGO
+##### LOGO
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
@@ -539,9 +542,11 @@ custom_plot(
 
 To get an idea of the each models ability to predict crop yield over time, we remove spatial variability by subtracting the district means from both observed and predicted yields. These de-meaned values are then evaluated by calculating the coefficient of determination. A high score indicates the model is able to predict well over time, while a low score indicates it performed this task poorly. Here we see the distribution of all de-meaned scores.
 
+### Overall
+
 ::: {.panel-tabset}
 
-## One sensor
+#### One sensor
 
 ```{r}
 ggplot(data = one_sensor_results) +
@@ -550,7 +555,7 @@ ggplot(data = one_sensor_results) +
   labs(x = expand_fld('kfold_demean_R2'))
 ```
 
-## Two sensor
+#### Two sensor
 
 ```{r}
 ggplot(data = two_sensor_results) +
@@ -565,7 +570,7 @@ ggplot(data = two_sensor_results) +
 
 ::: {.panel-tabset}
 
-## One sensor
+#### One sensor
 
 ```{r}
 custom_plot(
@@ -577,7 +582,7 @@ custom_plot(
 )
 ```
 
-## Two sensor
+#### Two sensor
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
@@ -595,7 +600,7 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## One sensor
+#### One sensor
 
 ```{r}
 custom_plot(
@@ -607,7 +612,7 @@ custom_plot(
 )
 ```
 
-## Two sensor
+#### Two sensor
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
@@ -625,7 +630,7 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## One sensor
+#### One sensor
 
 ```{r}
 custom_plot(
@@ -637,7 +642,7 @@ custom_plot(
 )
 ```
 
-## Two sensor
+#### Two sensor
 
 ```{r fig.height=8, fig.width=8}
 custom_plot(
@@ -650,19 +655,6 @@ custom_plot(
 ```
 
 :::
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## Anomaly validation score (R<sup>2</sup>)
 
@@ -683,9 +675,11 @@ max_lim <- max(
 limits <- c(min_lim, max_lim)
 ```
 
+### Overall
+
 ::: {.panel-tabset}
 
-## K-Fold
+#### K-Fold
 
 ```{r}
 ggplot(data = anomaly_results) +
@@ -695,7 +689,7 @@ ggplot(data = anomaly_results) +
   scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
 ```
 
-## LOGO
+#### LOGO
 
 ```{r}
 ggplot(data = anomaly_results) +
@@ -711,7 +705,7 @@ ggplot(data = anomaly_results) +
 
 ::: {.panel-tabset}
 
-## K-Fold
+#### K-Fold
 
 ```{r}
 custom_plot(
@@ -724,7 +718,7 @@ custom_plot(
 )
 ```
 
-## LOGO
+#### LOGO
 
 ```{r}
 custom_plot(
@@ -743,7 +737,7 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## K-Fold
+#### K-Fold
 
 ```{r}
 custom_plot(
@@ -756,7 +750,7 @@ custom_plot(
 )
 ```
 
-## LOGO
+#### LOGO
 
 ```{r}
 custom_plot(
@@ -775,7 +769,7 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-## K-Fold
+#### K-Fold
 
 ```{r }
 custom_plot(
@@ -788,7 +782,7 @@ custom_plot(
 )
 ```
 
-## LOGO
+#### LOGO
 
 ```{r }
 custom_plot(
@@ -847,12 +841,11 @@ ggplot() +
   scale_color_viridis_c()
 ```
 
-
 ### Observed vs predicted 
 
 ::: {.panel-tabset}
 
-## Validation
+#### Validation
 
 ```{r warning = FALSE}
 train_pred <- filter(summary_predictions, split == "train")
@@ -873,13 +866,13 @@ ggplot() +
              aes(x = log_yield, y = kfold_cv_predictions, color = as.factor(year))) +
   geom_abline() +
   scale_color_viridis_d() +
-  labs(color = 'Year', x = 'Observed', y = 'Predicted (from validation set)') +
+  labs(color = 'Year', x = 'Observed', y = 'Predicted') +
   geom_text(data = NULL, aes(x = 0.05, y = .7), label = val_R2_label) +
   scale_x_continuous(limits = c(0, .82)) +
   scale_y_continuous(limits = c(-.15, .82))
 ```
 
-## Train
+#### Train
 
 ```{r warning = FALSE}
 train_R2 <- r2_general(train_pred$log_yield, train_pred$prediction)
@@ -898,7 +891,7 @@ ggplot() +
   scale_y_continuous(limits = c(-.15, .82))
 ```
 
-## Test
+#### Test
 
 ```{r warning = FALSE}
 test_pred <- filter(summary_predictions, split == "test")
