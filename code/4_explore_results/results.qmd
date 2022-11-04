@@ -59,7 +59,9 @@ anomaly_date    <- "2022-11-02"
 one_sensor_fn <- paste0("results_", one_sensor_date, ".csv")
 two_sensor_fn <- paste0("2_sensor_results_", two_sensor_date, ".csv")
 anomaly_fn    <- paste0("anomaly_results_", anomaly_date, ".csv")
-high_res_fn   <- 'high-res-pred_k-fold-cv_landsat-8-c2-l2_bands-1-2-3-4-5-6-7_ZMB_20k-points_1000-features_yr-2013-2021_mn-4-9_lm-True_cm-True_wa-True_he-True.feather'
+pred_suffix   <- 'landsat-8-c2-l2_bands-1-2-3-4-5-6-7_ZMB_20k-points_1000-features_yr-2013-2021_mn-4-9_lm-True_cm-True_wa-True_he-True'
+high_res_fn   <- paste0('high-res-pred_k-fold-cv_', pred_suffix, '.feather')
+summary_fn    <- paste0('summary-pred_k-fold-cv_', pred_suffix, '.csv')
 
 one_sensor_results <- here::here("data", "results", one_sensor_fn) %>% 
   read_csv(show_col_types = FALSE) %>% 
@@ -90,6 +92,10 @@ anomaly_results <- here::here("data", "results", anomaly_fn) %>%
 
 high_res_predictions <- here::here('data', 'results', high_res_fn) %>% 
   arrow::read_feather()
+
+summary_predictions <- here::here('data', 'results', summary_fn) %>% 
+  readr::read_csv() %>% 
+  mutate(split = factor(split, levels = c('train', 'test')))
 
 country_shp <- here::here('data', 'geo_boundaries', 'gadm36_ZMB_2.shp') %>% 
   sf::read_sf()
@@ -769,7 +775,6 @@ custom_plot(
 
 ::: {.panel-tabset}
 
-
 ## K-Fold
 
 ```{r }
@@ -798,7 +803,7 @@ custom_plot(
 
 :::
 
-## High resolution predictions
+## Predictions
 
 Result from using the top performing model to make predictions on the high_reolution features (before summarizing to district level). 
 
@@ -828,6 +833,8 @@ The top performing model used ridge regression with 5-fold cross validation. Eva
 
 1) I cap the predictions at roughly the level of the yield levels. This is largely for plotting purpose, need to discuss in next meeting!
 
+### High resolution maps
+
 ```{r fig.height=10, fig.width=10}
 high_res_predictions <- high_res_predictions %>% 
   mutate(prediction = ifelse(prediction > 1.1, 1, prediction))
@@ -839,5 +846,78 @@ ggplot() +
   facet_wrap(~year) +
   scale_color_viridis_c()
 ```
+
+
+### Observed vs predicted 
+
+::: {.panel-tabset}
+
+## Validation
+
+```{r warning = FALSE}
+train_pred <- filter(summary_predictions, split == "train")
+
+r2_general <-function(preds,actual){ 
+  r2 <- 1- sum((preds - actual) ^ 2)/sum((actual - mean(actual))^2)
+  return(round(r2, 3))
+}
+# rsq <- function (x, y) cor(x, y) ^ 2
+
+val_R2 <- r2_general(train_pred$log_yield, train_pred$kfold_cv_predictions)
+
+val_R2_label <- latex2exp::TeX(
+  "$R^2$ = \\r2", user_defined = list("\\r2"=val_R2))
+
+ggplot() +
+  geom_point(data = train_pred,
+             aes(x = log_yield, y = kfold_cv_predictions, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = 'Year', x = 'Observed', y = 'Predicted (from validation set)') +
+  geom_text(data = NULL, aes(x = 0.05, y = .7), label = val_R2_label) +
+  scale_x_continuous(limits = c(0, .82)) +
+  scale_y_continuous(limits = c(-.15, .82))
+```
+
+## Train
+
+```{r warning = FALSE}
+train_R2 <- r2_general(train_pred$log_yield, train_pred$prediction)
+
+train_R2_label <- latex2exp::TeX(
+  "$R^2$ = \\r2", user_defined = list("\\r2"=train_R2))
+
+ggplot() +
+  geom_point(data = train_pred,
+             aes(x = log_yield, y = prediction, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = 'Year', x = 'Observed', y = 'Predicted') +
+  geom_text(data = NULL, aes(x = 0.05, y = .70), label = train_R2_label) +
+  scale_x_continuous(limits = c(0, .82)) +
+  scale_y_continuous(limits = c(-.15, .82))
+```
+
+## Test
+
+```{r warning = FALSE}
+test_pred <- filter(summary_predictions, split == "test")
+test_R2 <- r2_general(test_pred$log_yield, test_pred$prediction)
+
+test_R2_label <- latex2exp::TeX(
+  "$R^2$ = \\r2", user_defined = list("\\r2"=test_R2))
+
+ggplot() +
+  geom_point(data = test_pred,
+             aes(x = log_yield, y = prediction, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = 'Year', x = 'Observed', y = 'Predicted') +
+  geom_text(data = NULL, aes(x = 0.05, y = .7), label = test_R2_label) +
+  scale_x_continuous(limits = c(0, .82)) +
+  scale_y_continuous(limits = c(-.15, .82))
+```
+
+:::
 
 

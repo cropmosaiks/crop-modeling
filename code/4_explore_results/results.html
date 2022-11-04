@@ -6,7 +6,7 @@
   <meta name="author" content="Cullen Molitor">
   <meta name="author" content="Grace Lewin">
   <meta name="author" content="Juliet Cohen">
-  <meta name="dcterms.date" content="2022-11-03">
+  <meta name="dcterms.date" content="2022-11-04">
   <title>CropMOSAIKS Model Results</title>
   <style>
     code{white-space: pre-wrap;}
@@ -136,7 +136,11 @@
 <li><a href="#crop-mask-2" id="toc-crop-mask-2" class="nav-link" data-scroll-target="#crop-mask-2">Crop mask</a></li>
 <li><a href="#weighted-average-2" id="toc-weighted-average-2" class="nav-link" data-scroll-target="#weighted-average-2">Weighted average</a></li>
 </ul></li>
-<li><a href="#high-resolution-predictions" id="toc-high-resolution-predictions" class="nav-link" data-scroll-target="#high-resolution-predictions">High resolution predictions</a></li>
+<li><a href="#predictions" id="toc-predictions" class="nav-link" data-scroll-target="#predictions">Predictions</a>
+<ul class="collapse">
+<li><a href="#high-resolution-maps" id="toc-high-resolution-maps" class="nav-link" data-scroll-target="#high-resolution-maps">High resolution maps</a></li>
+<li><a href="#observed-vs-predicted" id="toc-observed-vs-predicted" class="nav-link" data-scroll-target="#observed-vs-predicted">Observed vs predicted</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </nav>
@@ -156,7 +160,7 @@
 <p>Grace Lewin</p>
 </a></div><div><a href="https://github.com/julietcohen">
 <p>Juliet Cohen</p>
-</a></div></div></div></div><div><div class="quarto-title-meta-heading">Published</div><div class="quarto-title-meta-contents"><p class="date">November 3, 2022</p></div></div></div></header>
+</a></div></div></div></div><div><div class="quarto-title-meta-heading">Published</div><div class="quarto-title-meta-contents"><p class="date">November 4, 2022</p></div></div></div></header>
 
 <div class="cell">
 
@@ -964,8 +968,8 @@
 </div>
 </section>
 </section>
-<section id="high-resolution-predictions" class="level2">
-<h2 class="anchored" data-anchor-id="high-resolution-predictions">High resolution predictions</h2>
+<section id="predictions" class="level2">
+<h2 class="anchored" data-anchor-id="predictions">Predictions</h2>
 <p>Result from using the top performing model to make predictions on the high_reolution features (before summarizing to district level).</p>
 <p>Top performing model:</p>
 <ol type="1">
@@ -984,6 +988,8 @@
 <li><p>Need to discuss how to select the “best model”.</p></li>
 <li><p>I cap the predictions at roughly the level of the yield levels. This is largely for plotting purpose, need to discuss in next meeting!</p></li>
 </ol>
+<section id="high-resolution-maps" class="level3">
+<h3 class="anchored" data-anchor-id="high-resolution-maps">High resolution maps</h3>
 <div class="cell">
 <details>
 <summary>Show the code</summary>
@@ -1001,7 +1007,97 @@
 <p><img src="results_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid" width="960"></p>
 </div>
 </div>
+</section>
+<section id="observed-vs-predicted" class="level3">
+<h3 class="anchored" data-anchor-id="observed-vs-predicted">Observed vs predicted</h3>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-21-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-21-1" role="tab" aria-controls="tabset-21-1" aria-selected="true">Validation</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-21-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-21-2" role="tab" aria-controls="tabset-21-2" aria-selected="false">Train</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-21-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-21-3" role="tab" aria-controls="tabset-21-3" aria-selected="false">Test</a></li></ul>
+<div class="tab-content">
+<div id="tabset-21-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-21-1-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>train_pred <span class="ot">&lt;-</span> <span class="fu">filter</span>(summary_predictions, split <span class="sc">==</span> <span class="st">"train"</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>r2_general <span class="ot">&lt;-</span><span class="cf">function</span>(preds,actual){ </span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  r2 <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">-</span> <span class="fu">sum</span>((preds <span class="sc">-</span> actual) <span class="sc">^</span> <span class="dv">2</span>)<span class="sc">/</span><span class="fu">sum</span>((actual <span class="sc">-</span> <span class="fu">mean</span>(actual))<span class="sc">^</span><span class="dv">2</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">round</span>(r2, <span class="dv">3</span>))</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="co"># rsq &lt;- function (x, y) cor(x, y) ^ 2</span></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>val_R2 <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(train_pred<span class="sc">$</span>log_yield, train_pred<span class="sc">$</span>kfold_cv_predictions)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>val_R2_label <span class="ot">&lt;-</span> latex2exp<span class="sc">::</span><span class="fu">TeX</span>(</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="st">"$R^2$ = </span><span class="sc">\\</span><span class="st">r2"</span>, <span class="at">user_defined =</span> <span class="fu">list</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">r2"</span><span class="ot">=</span>val_R2))</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> train_pred,</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> log_yield, <span class="at">y =</span> kfold_cv_predictions, <span class="at">color =</span> <span class="fu">as.factor</span>(year))) <span class="sc">+</span></span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>() <span class="sc">+</span></span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">'Year'</span>, <span class="at">x =</span> <span class="st">'Observed'</span>, <span class="at">y =</span> <span class="st">'Predicted (from validation set)'</span>) <span class="sc">+</span></span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> <span class="cn">NULL</span>, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fl">0.05</span>, <span class="at">y =</span> .<span class="dv">7</span>), <span class="at">label =</span> val_R2_label) <span class="sc">+</span></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">82</span>)) <span class="sc">+</span></span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">15</span>, .<span class="dv">82</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-21-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-21-2-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>train_R2 <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(train_pred<span class="sc">$</span>log_yield, train_pred<span class="sc">$</span>prediction)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>train_R2_label <span class="ot">&lt;-</span> latex2exp<span class="sc">::</span><span class="fu">TeX</span>(</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">"$R^2$ = </span><span class="sc">\\</span><span class="st">r2"</span>, <span class="at">user_defined =</span> <span class="fu">list</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">r2"</span><span class="ot">=</span>train_R2))</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> train_pred,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> log_yield, <span class="at">y =</span> prediction, <span class="at">color =</span> <span class="fu">as.factor</span>(year))) <span class="sc">+</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>() <span class="sc">+</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">'Year'</span>, <span class="at">x =</span> <span class="st">'Observed'</span>, <span class="at">y =</span> <span class="st">'Predicted'</span>) <span class="sc">+</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> <span class="cn">NULL</span>, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fl">0.05</span>, <span class="at">y =</span> .<span class="dv">70</span>), <span class="at">label =</span> train_R2_label) <span class="sc">+</span></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">82</span>)) <span class="sc">+</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">15</span>, .<span class="dv">82</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-21-3" class="tab-pane" role="tabpanel" aria-labeledby="tabset-21-3-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>test_pred <span class="ot">&lt;-</span> <span class="fu">filter</span>(summary_predictions, split <span class="sc">==</span> <span class="st">"test"</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>test_R2 <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(test_pred<span class="sc">$</span>log_yield, test_pred<span class="sc">$</span>prediction)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>test_R2_label <span class="ot">&lt;-</span> latex2exp<span class="sc">::</span><span class="fu">TeX</span>(</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">"$R^2$ = </span><span class="sc">\\</span><span class="st">r2"</span>, <span class="at">user_defined =</span> <span class="fu">list</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">r2"</span><span class="ot">=</span>test_R2))</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> test_pred,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(<span class="at">x =</span> log_yield, <span class="at">y =</span> prediction, <span class="at">color =</span> <span class="fu">as.factor</span>(year))) <span class="sc">+</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>() <span class="sc">+</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>() <span class="sc">+</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">'Year'</span>, <span class="at">x =</span> <span class="st">'Observed'</span>, <span class="at">y =</span> <span class="st">'Predicted'</span>) <span class="sc">+</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">data =</span> <span class="cn">NULL</span>, <span class="fu">aes</span>(<span class="at">x =</span> <span class="fl">0.05</span>, <span class="at">y =</span> .<span class="dv">7</span>), <span class="at">label =</span> test_R2_label) <span class="sc">+</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, .<span class="dv">82</span>)) <span class="sc">+</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">15</span>, .<span class="dv">82</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 
+</section>
 </section>
 </section>
 </main>
