@@ -107,7 +107,7 @@ colors <- c("TRUE" = 'dodgerblue', "FALSE" = "firebrick",
             'mixed' = 'darkorchid',
             "4-9" = 'dodgerblue', "1-12" = "firebrick")
 
-expand_fld <- function(fld) {
+expand_field <- function(fld) {
   switch(
     rlang::as_name(fld),
     'kfold_val_R2'    = 'K-Fold Validation Score (R$^2$)',
@@ -118,7 +118,7 @@ expand_fld <- function(fld) {
     'crop_mask'       = 'Crop Mask',
     'weighted_avg'    = 'Weighted Average',
     rlang::as_name(fld)
-  ) %>% TeX()
+  ) %>% latex2exp::TeX()
 }
 
 theme_set(theme_bw())
@@ -128,9 +128,9 @@ custom_plot <- function(data, x, y, clr, p_type = "scatter", y_lims = NULL) {
   x     <- enquo(x)
   y     <- enquo(y)
   clr   <- enquo(clr)
-  x_lab <- expand_fld(x)
-  y_lab <- expand_fld(y)
-  c_lab <- expand_fld(clr)
+  x_lab <- expand_field(x)
+  y_lab <- expand_field(y)
+  c_lab <- expand_field(clr)
   
   base  <- ggplot(data) +
     aes(!!x, !!y, color = !!clr) +
@@ -168,7 +168,7 @@ This script produces graphics to explore the results of the statistics gathered 
 
 Landsat 7 suffered a [scan line correction failure](https://www.usgs.gov/landsat-missions/landsat-7?qt-science_support_page_related_con=0#qt-science_support_page_related_con) in 2003. All imagery thereafter contains striping with missing data, which is typically worse at the eastern and western edges of the image. There is a center strip from north to south that is unaffected. We use patches of a full  satellite scene, and patches with striping are unsuitable for convolution directly. Therefore, all Landsat 7 imagery used has been corrected with simple imputation through a nearest neighbor approach to approximate the missing pixel values. We keep track of the amount of percent of missing pixels. 
 
-The nearest neighbor is a simple imputation method and was selected due to Landsat pass-over rate of 16 days. This means many months there is only a single image over a given point. We use monthly imagery rather than aggregate across months, thus nearest neighbor is the simplest method. 
+The nearest neighbor is a simple imputation method and was selected due to Landsat pass-over rate of 16 days. This means many months there is only a single image over a given point. We use monthly imagery rather than aggregate across months, thus nearest neighbor is the simplest method of filling in missing pixel values. 
 
 **Time range**:
 
@@ -284,7 +284,7 @@ limits_two <- c(min_lim_two, max_lim_two)
 ggplot(data = one_sensor_results) +
   aes(x = kfold_val_R2) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_fld('kfold_val_R2')) +
+  labs(x = expand_field('kfold_val_R2')) +
   scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
 ```
 
@@ -294,7 +294,7 @@ ggplot(data = one_sensor_results) +
 ggplot(data = one_sensor_results) +
   aes(x = logo_val_R2) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_fld('logo_val_R2')) +
+  labs(x = expand_field('logo_val_R2')) +
   scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
 ```
 
@@ -310,7 +310,7 @@ ggplot(data = one_sensor_results) +
 ggplot(data = two_sensor_results) +
   aes(x = kfold_val_R2) +
   geom_histogram(bins = 60, fill = 'darkorchid', color = 'black') +
-  labs(x = expand_fld('kfold_val_R2')) +
+  labs(x = expand_field('kfold_val_R2')) +
   scale_x_continuous(limits = limits_two, expand = expansion(mult = c(.01, .01)))
 ```
 
@@ -320,7 +320,7 @@ ggplot(data = two_sensor_results) +
 ggplot(data = two_sensor_results) +
   aes(x = logo_val_R2) +
   geom_histogram(bins = 60, fill = 'darkorchid', color = 'black') +
-  labs(x = expand_fld('logo_val_R2')) +
+  labs(x = expand_field('logo_val_R2')) +
   scale_x_continuous(limits = limits_two, expand = expansion(mult = c(.01, .01)))
 ```
 
@@ -552,7 +552,7 @@ To get an idea of the each models ability to predict crop yield over time, we re
 ggplot(data = one_sensor_results) +
   aes(x = kfold_demean_R2) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_fld('kfold_demean_R2'))
+  labs(x = expand_field('kfold_demean_R2'))
 ```
 
 #### Two sensor
@@ -561,7 +561,7 @@ ggplot(data = one_sensor_results) +
 ggplot(data = two_sensor_results) +
   aes(x = kfold_demean_R2) +
   geom_histogram(bins = 60, fill = 'darkorchid', color = 'black') +
-  labs(x = expand_fld('kfold_demean_R2'))
+  labs(x = expand_field('kfold_demean_R2'))
 ```
 
 :::
@@ -660,7 +660,6 @@ custom_plot(
 
 Finally, we evaluate the coefficient of determination (R<sup>2</sup>) calculated from the predicted values and the observed values from each of the 5 validation sets of the models trained on feature anomalies. Here we see the distribution of all validation scores.
 
-
 **Note**: The scales are forced to be the same between K-Fold and LOGO. The idea was to evaluate the relative difference in performance, but it makes some distributions harder to interpret. Would it help to make them independent?
 
 ```{r echo = FALSE}
@@ -685,7 +684,7 @@ limits <- c(min_lim, max_lim)
 ggplot(data = anomaly_results) +
   aes(x = kfold_val_R2) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_fld('kfold_val_R2')) +
+  labs(x = expand_field('kfold_val_R2')) +
   scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
 ```
 
@@ -695,7 +694,7 @@ ggplot(data = anomaly_results) +
 ggplot(data = anomaly_results) +
   aes(x = logo_val_R2) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_fld('logo_val_R2')) +
+  labs(x = expand_field('logo_val_R2')) +
   scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
 ```
 
@@ -827,6 +826,30 @@ The top performing model used ridge regression with 5-fold cross validation. Eva
 
 1) I cap the predictions at roughly the level of the yield levels. This is largely for plotting purpose, need to discuss in next meeting!
 
+```{r}
+pred_plot <- function(.data){
+  p <- ggplot() +
+    geom_point(data = .data,
+               aes(x = log_yield, y = kfold_cv_predictions, color = as.factor(year))) +
+    geom_abline() +
+    scale_color_viridis_d() +
+    labs(color = NULL, x = 'Observed', y = 'Predicted') +
+    geom_text(data = NULL, aes(x = 0.05, y = .7), label = val_R2_label) +
+    scale_x_continuous(limits = c(0, .82)) +
+    scale_y_continuous(limits = c(-.15, .82)) +
+    theme(legend.position = c(.9, .35)
+          ,legend.background = element_rect(fill = alpha(.75))
+    )
+  
+  ggExtra::ggMarginal(
+    p, type = "histogram", 
+    groupFill = T
+    # fill = "dodgerblue"
+  )  
+}
+
+```
+
 ### Observed vs predicted 
 
 ::: {.panel-tabset}
@@ -836,8 +859,8 @@ The top performing model used ridge regression with 5-fold cross validation. Eva
 ```{r warning = FALSE}
 train_pred <- filter(summary_predictions, split == "train")
 
-r2_general <-function(preds,actual){ 
-  r2 <- 1- sum((preds - actual) ^ 2)/sum((actual - mean(actual))^2)
+r2_general <-function(actual, preds){ 
+  r2 <- 1 - sum((preds - actual) ^ 2) / sum((actual - mean(actual))^2)
   return(round(r2, 3))
 }
 # rsq <- function (x, y) cor(x, y) ^ 2
@@ -847,15 +870,25 @@ val_R2 <- r2_general(train_pred$log_yield, train_pred$kfold_cv_predictions)
 val_R2_label <- latex2exp::TeX(
   "$R^2$ = \\r2", user_defined = list("\\r2"=val_R2))
 
-ggplot() +
+p <- ggplot() +
   geom_point(data = train_pred,
              aes(x = log_yield, y = kfold_cv_predictions, color = as.factor(year))) +
   geom_abline() +
   scale_color_viridis_d() +
-  labs(color = 'Year', x = 'Observed', y = 'Predicted') +
+  labs(color = NULL, x = 'Observed', y = 'Predicted') +
   geom_text(data = NULL, aes(x = 0.05, y = .7), label = val_R2_label) +
   scale_x_continuous(limits = c(0, .82)) +
-  scale_y_continuous(limits = c(-.15, .82))
+  scale_y_continuous(limits = c(-.15, .82)) +
+  theme(legend.position = c(.9, .35)
+        ,legend.background = element_rect(fill = alpha(.75))
+        )
+
+ggExtra::ggMarginal(
+  p, type = "histogram", 
+  groupFill = T
+  # fill = "dodgerblue"
+)
+pred_plot(train_pred)
 ```
 
 #### Train
@@ -899,11 +932,17 @@ ggplot() +
 
 :::
 
-### Maps
+### Crop Yield
+
+**Note**: Need to add in the cropland map.
 
 ::: {.panel-tabset}
 
-#### Log yield
+#### Maps
+
+::: {.panel-tabset}
+
+##### Log yield
 
 ```{r fig.height=10, fig.width=10}
 yield <- summary_predictions %>% 
@@ -917,7 +956,7 @@ ggplot() +
   scale_fill_viridis_c()
 ```
 
-#### Predicted yield
+##### Predicted yield
 
 ```{r fig.height=10, fig.width=10}
 ggplot() +
@@ -926,8 +965,7 @@ ggplot() +
   scale_fill_viridis_c()
 ```
 
-#### Residual
-
+##### Residual
 
 ```{r fig.height=10, fig.width=10}
 ggplot() +
@@ -938,11 +976,15 @@ ggplot() +
 
 $predicted - observed$ so positive values indicates over-prediction, and negative values indicates under-prediction.
 
-#### High res. predictions
+##### High res. predictions
 
 ```{r fig.height=10, fig.width=10}
 high_res_predictions <- high_res_predictions %>% 
-  mutate(prediction = ifelse(prediction > 1.1, 1, prediction))
+  mutate(
+    prediction = case_when(
+      prediction > 1.1 ~ 1, 
+      prediction < 0 ~ 0,
+      T ~ prediction)) 
 
 ggplot() +
   geom_point(data = high_res_predictions, size = .1,
@@ -953,3 +995,42 @@ ggplot() +
 ```
 
 :::
+
+#### Histograms
+
+::: {.panel-tabset}
+
+##### Log yield
+
+```{r }
+ggplot(data = yield, aes(x = log_yield)) +
+  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') 
+```
+
+##### Predicted yield
+
+```{r }
+ggplot(data = yield, aes(x = prediction)) +
+  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') 
+```
+
+##### Residual
+
+```{r }
+ggplot(data = yield, aes(x = residuals)) +
+  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') 
+```
+
+$predicted - observed$ so positive values indicates over-prediction, and negative values indicates under-prediction.
+
+##### High res. predictions
+
+```{r }
+ggplot(data = high_res_predictions, aes(x = prediction)) +
+  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') 
+```
+
+:::
+
+:::
+
