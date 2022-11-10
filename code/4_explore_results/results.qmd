@@ -74,11 +74,23 @@ one_sensor_results <- here::here("data", "results", one_sensor_fn) %>%
   mutate(avg_res = (kfold_val_R2 + kfold_demean_R2) / 2,
          avg_all = (kfold_val_R2 + kfold_demean_R2 + logo_val_R2) / 3)
 
+lsc <- 'landsat-c2-l2'
+ls8 <- 'landsat-8-c2-l2'
+s2 <- 'sentinel-2-l2a'
+
 two_sensor_results <- here::here("data", "results", two_sensor_fn) %>%
   read_csv(show_col_types = FALSE, col_select = -1) %>% 
   distinct() %>%
   mutate(
-    satellite = paste0(satellite_1,' with ',satellite_2),
+    # satellite = paste0(satellite_1,' with ',satellite_2),
+    satellite = case_when(
+      satellite_1 == satellite_2 ~ paste0(satellite_1,' with ',satellite_2),
+      (satellite_1 == lsc & satellite_2 == ls8) |
+        (satellite_2 == lsc & satellite_1 == ls8) ~ paste0(lsc,' with ',ls8),
+      (satellite_1 == lsc & satellite_2 == s2) |
+        (satellite_2 == lsc & satellite_1 == s2) ~ paste0(lsc,' with ',s2),
+      (satellite_1 == ls8 & satellite_2 == s2) |
+        (satellite_2 == ls8 & satellite_1 == s2) ~ paste0(ls8,' with ',s2)),
     month_range = case_when(
       month_range_1 == '4-9' & month_range_2 == '4-9' ~ '4-9',
       month_range_1 == '1-12' & month_range_2 == '1-12' ~ '1-12',
