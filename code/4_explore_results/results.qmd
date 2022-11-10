@@ -49,11 +49,14 @@ librarian::shelf(
   rlang,
   latex2exp,
   arrow,
+  sf,
+  terra,
+  tidyterra,
   quiet = T
 )
 
-one_sensor_date <- "2022-10-26"
-two_sensor_date <- "2022-10-28"
+one_sensor_date <- "2022-11-09"
+two_sensor_date <- "2022-11-09"
 anomaly_date    <- "2022-11-02"
 
 one_sensor_fn <- paste0("results_", one_sensor_date, ".csv")
@@ -62,15 +65,18 @@ anomaly_fn    <- paste0("anomaly_results_", anomaly_date, ".csv")
 pred_suffix   <- 'landsat-8-c2-l2_bands-1-2-3-4-5-6-7_ZMB_20k-points_1000-features_yr-2013-2021_mn-4-9_lm-True_cm-True_wa-True_he-True'
 high_res_fn   <- paste0('high-res-pred_k-fold-cv_', pred_suffix, '.feather')
 summary_fn    <- paste0('summary-pred_k-fold-cv_', pred_suffix, '.csv')
+# high_res_fn   <- "high-res-pred_k-fold-cv_best-k-fold-2-sensor-params_he-True.feather"
+# summary_fn    <- 'summary-pred_k-fold-cv_best-k-fold-2-sensor-params_he-True.csv'
 
 one_sensor_results <- here::here("data", "results", one_sensor_fn) %>% 
-  read_csv(show_col_types = FALSE) %>% 
+  read_csv(show_col_types = FALSE, col_select = -1) %>% 
   filter(points != 20 | crop_mask == T) %>% 
-  mutate(avg_res = (kfold_val_R2 + kfold_demean_R2) / 2)
+  mutate(avg_res = (kfold_val_R2 + kfold_demean_R2) / 2,
+         avg_all = (kfold_val_R2 + kfold_demean_R2 + logo_val_R2) / 3)
 
 two_sensor_results <- here::here("data", "results", two_sensor_fn) %>%
-  read_csv(show_col_types = FALSE) %>% 
-  distinct(across(18:41), .keep_all = TRUE) %>%
+  read_csv(show_col_types = FALSE, col_select = -1) %>% 
+  distinct() %>%
   mutate(
     satellite = paste0(satellite_1,' with ',satellite_2),
     month_range = case_when(
@@ -84,11 +90,12 @@ two_sensor_results <- here::here("data", "results", two_sensor_fn) %>%
     weighted_avg = case_when(
       weighted_avg_1 == T & weighted_avg_2 == T ~ 'TRUE',
       weighted_avg_1 == F & weighted_avg_2 == F ~ 'FALSE',
-      T ~ 'mixed')) %>% 
-  mutate(avg_res = (kfold_val_R2 + kfold_demean_R2) / 2)
+      T ~ 'mixed'),
+    avg_res = (kfold_val_R2 + kfold_demean_R2) / 2,
+    avg_all = (kfold_val_R2 + kfold_demean_R2 + logo_val_R2) / 3) 
 
 anomaly_results <- here::here("data", "results", anomaly_fn) %>% 
-  read_csv(show_col_types = FALSE) %>% 
+  read_csv(show_col_types = FALSE, col_select = -1) %>% 
   filter(points != 20 | crop_mask == T)
 
 high_res_predictions <- here::here('data', 'results', high_res_fn) %>% 
@@ -100,6 +107,33 @@ summary_predictions <- here::here('data', 'results', summary_fn) %>%
 
 country_shp <- here::here('data', 'geo_boundaries', 'gadm36_ZMB_2.shp') %>% 
   sf::read_sf()
+
+yield_sf <- summary_predictions %>% 
+  mutate(residuals = prediction - log_yield) %>% 
+  left_join(country_shp) %>% 
+  sf::st_as_sf()
+
+high_res_predictions <- high_res_predictions %>% 
+  mutate(
+    prediction = case_when(
+      prediction > 1.1 ~ 1, 
+      prediction < 0 ~ 0,
+      T ~ prediction)) 
+
+# country_vect <- country_shp %>%
+#   sf::st_union() %>%
+#   terra::vect()
+# 
+# crop_land <- here::here("data", "land_cover", "ZMB_cropland_2019.tif") %>%
+#   terra::rast() %>%
+#   terra::crop(country_vect, mask=TRUE) 
+#   
+# crop_land[crop_land == 0] <- NA
+# 
+# terra::writeRaster(
+#   crop_land, 
+#   here::here("data", "land_cover", "ZMB_cropland_2019_cropped.tif"),
+#   filetype = 'GTiff', overwrite=T)
 ```
 
 ```{r echo=F,message=F, warning=F}
@@ -112,7 +146,8 @@ expand_field <- function(fld) {
     rlang::as_name(fld),
     'kfold_val_R2'    = 'K-Fold Validation Score (R$^2$)',
     'logo_val_R2'     = 'LOGO Validation Score (R$^2$)',
-    'kfold_demean_R2' = 'De-meaned Score (R$^2$)',
+    'kfold_demean_R2' = 'K-Fold De-meaned Score (R$^2$)',
+    'logo_demean_R2'  = 'LOGO De-meaned Score (R$^2$)',
     'month_range'     = 'Month\nRange',
     'hot_encode'      = 'One Hot Encoding',
     'crop_mask'       = 'Crop Mask',
@@ -124,7 +159,23 @@ expand_field <- function(fld) {
 theme_set(theme_bw())
 theme_update()
 
-custom_plot <- function(data, x, y, clr, p_type = "scatter", y_lims = NULL) {
+hist_plot <- function(data, x) {
+  x     <- enquo(x)
+  x_lab <- expand_field(x)
+  if(deparse(substitute(data))=='two_sensor_results'){n_sensors = 2}else{n_sensors=1}
+  if(n_sensors == 1){clr<-'dodgerblue'}else{clr<-'darkorchid'}
+  if(n_sensors == 1){n_bins<-30}else{n_bins<-60}
+  if(n_sensors == 1){lms<-limits}else{lms<-limits_two}
+  expansion <- expansion(mult = c(.01, .01))
+  
+  ggplot(data = data) +
+    aes(x = !!x) +
+    geom_histogram(bins = n_bins, fill = clr, color = 'black') +
+    labs(x = x_lab) +
+    scale_x_continuous(limits = lms, expand = expansion)
+}
+
+dist_plot <- function(data, x, y, clr, p_type = "box", y_lims = NULL) {
   x     <- enquo(x)
   y     <- enquo(y)
   clr   <- enquo(clr)
@@ -145,6 +196,34 @@ custom_plot <- function(data, x, y, clr, p_type = "scatter", y_lims = NULL) {
     jd  <- position_jitterdodge(.2)
     base + geom_point(position = jd)
   }
+}
+
+r2_general <-function(actual, preds) { 
+  r2 <- 1 - sum((preds - actual) ^ 2) / sum((actual - mean(actual))^2)
+  return(round(r2, 3))
+}
+# rsq <- function (x, y) { cor(x, y) ^ 2}
+
+pred_plot <- function(.data, y, label){
+  y <- enquo(y)
+  p <- ggplot() +
+    geom_point(data = .data,
+               aes(x = log_yield, y = !!y, color = as.factor(year))) +
+    geom_abline() +
+    scale_color_viridis_d() +
+    labs(color = NULL, x = 'Observed', y = 'Predicted') +
+    geom_text(data = NULL, aes(x = 0.05, y = .7), label = label) +
+    scale_x_continuous(limits = c(0, .82)) +
+    scale_y_continuous(limits = c(-.15, .82)) +
+    theme(legend.position = c(.9, .35)
+          ,legend.background = element_rect(fill = alpha(.75))
+    )
+  
+  ggExtra::ggMarginal(
+    p, type = "histogram", 
+    groupFill = T
+    # fill = "dodgerblue"
+  )  
 }
 ```
 
@@ -281,21 +360,13 @@ limits_two <- c(min_lim_two, max_lim_two)
 ##### K-Fold
 
 ```{r}
-ggplot(data = one_sensor_results) +
-  aes(x = kfold_val_R2) +
-  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_field('kfold_val_R2')) +
-  scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
+hist_plot(one_sensor_results, kfold_val_R2)
 ```
 
 ##### LOGO
 
 ```{r}
-ggplot(data = one_sensor_results) +
-  aes(x = logo_val_R2) +
-  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_field('logo_val_R2')) +
-  scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
+hist_plot(one_sensor_results, logo_val_R2)
 ```
 
 :::
@@ -307,21 +378,13 @@ ggplot(data = one_sensor_results) +
 ##### K-Fold
 
 ```{r}
-ggplot(data = two_sensor_results) +
-  aes(x = kfold_val_R2) +
-  geom_histogram(bins = 60, fill = 'darkorchid', color = 'black') +
-  labs(x = expand_field('kfold_val_R2')) +
-  scale_x_continuous(limits = limits_two, expand = expansion(mult = c(.01, .01)))
+hist_plot(two_sensor_results, kfold_val_R2)
 ```
 
 ##### LOGO
 
 ```{r}
-ggplot(data = two_sensor_results) +
-  aes(x = logo_val_R2) +
-  geom_histogram(bins = 60, fill = 'darkorchid', color = 'black') +
-  labs(x = expand_field('logo_val_R2')) +
-  scale_x_continuous(limits = limits_two, expand = expansion(mult = c(.01, .01)))
+hist_plot(two_sensor_results, logo_val_R2)
 ```
 
 :::
@@ -339,12 +402,11 @@ ggplot(data = two_sensor_results) +
 ##### K-Fold
 
 ```{r}
-custom_plot(
+dist_plot(
   data = one_sensor_results, 
   x = hot_encode, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -352,12 +414,11 @@ custom_plot(
 ##### LOGO
 
 ```{r}
-custom_plot(
+dist_plot(
   data = one_sensor_results, 
   x = hot_encode, 
   y = logo_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -371,12 +432,11 @@ custom_plot(
 ##### K-Fold
 
 ```{r fig.height=8, fig.width=8}
-custom_plot(
+dist_plot(
   data = two_sensor_results, 
   x = hot_encode, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits_two
 )
 ```
@@ -384,12 +444,11 @@ custom_plot(
 ##### LOGO
 
 ```{r fig.height=8, fig.width=8}
-custom_plot(
+dist_plot(
   data = two_sensor_results, 
   x = hot_encode, 
   y = logo_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits_two
 )
 ```
@@ -409,12 +468,11 @@ custom_plot(
 ##### K-Fold
 
 ```{r}
-custom_plot(
+dist_plot(
   data = one_sensor_results, 
   x = crop_mask, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -422,12 +480,11 @@ custom_plot(
 ##### LOGO
 
 ```{r}
-custom_plot(
+dist_plot(
   data = one_sensor_results, 
   x = crop_mask, 
   y = logo_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -441,12 +498,11 @@ custom_plot(
 ##### K-Fold
 
 ```{r fig.height=8, fig.width=8}
-custom_plot(
+dist_plot(
   data = two_sensor_results, 
   x = crop_mask, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits_two
 )
 ```
@@ -454,12 +510,11 @@ custom_plot(
 ##### LOGO
 
 ```{r fig.height=8, fig.width=8}
-custom_plot(
+dist_plot(
   data = two_sensor_results, 
   x = crop_mask, 
   y = logo_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits_two
 )
 ```
@@ -479,12 +534,11 @@ custom_plot(
 ##### K-Fold
 
 ```{r }
-custom_plot(
+dist_plot(
   data = one_sensor_results, 
   x = weighted_avg, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -492,12 +546,11 @@ custom_plot(
 ##### LOGO
 
 ```{r }
-custom_plot(
+dist_plot(
   data = one_sensor_results, 
   x = weighted_avg, 
   y = logo_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -511,12 +564,11 @@ custom_plot(
 ##### K-Fold
 
 ```{r fig.height=8, fig.width=8}
-custom_plot(
+dist_plot(
   data = two_sensor_results, 
   x = weighted_avg, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits_two
 )
 ```
@@ -524,12 +576,11 @@ custom_plot(
 ##### LOGO
 
 ```{r fig.height=8, fig.width=8}
-custom_plot(
+dist_plot(
   data = two_sensor_results, 
   x = weighted_avg, 
   y = logo_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits_two
 )
 ```
@@ -542,27 +593,67 @@ custom_plot(
 
 To get an idea of the each models ability to predict crop yield over time, we remove spatial variability by subtracting the district means from both observed and predicted yields. These de-meaned values are then evaluated by calculating the coefficient of determination. A high score indicates the model is able to predict well over time, while a low score indicates it performed this task poorly. Here we see the distribution of all de-meaned scores.
 
+```{r}
+min_lim <- min(
+  min(one_sensor_results$kfold_demean_R2), 
+  min(one_sensor_results$logo_demean_R2)
+)
+max_lim <- max(
+  max(one_sensor_results$kfold_demean_R2), 
+  max(one_sensor_results$logo_demean_R2)
+)
+limits <- c(min_lim, max_lim)
+
+min_lim_two <- min(
+  min(two_sensor_results$kfold_demean_R2), 
+  min(two_sensor_results$logo_demean_R2)
+)
+max_lim_two <- max(
+  max(two_sensor_results$kfold_demean_R2), 
+  max(two_sensor_results$logo_demean_R2)
+)
+limits_two <- c(min_lim_two, max_lim_two)
+```
+
 ### Overall
 
 ::: {.panel-tabset}
 
 #### One sensor
 
+::: {.panel-tabset}
+
+##### K-Fold
+
 ```{r}
-ggplot(data = one_sensor_results) +
-  aes(x = kfold_demean_R2) +
-  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_field('kfold_demean_R2'))
+hist_plot(one_sensor_results, kfold_demean_R2)
 ```
+
+##### LOGO
+
+```{r}
+hist_plot(one_sensor_results, logo_demean_R2)
+```
+
+:::
 
 #### Two sensor
 
+::: {.panel-tabset}
+
+##### K-Fold
+
 ```{r}
-ggplot(data = two_sensor_results) +
-  aes(x = kfold_demean_R2) +
-  geom_histogram(bins = 60, fill = 'darkorchid', color = 'black') +
-  labs(x = expand_field('kfold_demean_R2'))
+hist_plot(two_sensor_results, kfold_demean_R2)
 ```
+
+##### LOGO
+
+```{r}
+hist_plot(two_sensor_results, logo_demean_R2)
+```
+
+:::
 
 :::
 
@@ -572,27 +663,63 @@ ggplot(data = two_sensor_results) +
 
 #### One sensor
 
+::: {.panel-tabset}
+
+##### K-Fold
+
 ```{r}
-custom_plot(
+dist_plot(
   data = one_sensor_results, 
   x = hot_encode, 
   y = kfold_demean_R2,
   clr = month_range,
-  p_type = "box"
+  y_lims = limits
 )
 ```
 
+##### LOGO
+
+```{r}
+dist_plot(
+  data = one_sensor_results, 
+  x = hot_encode, 
+  y = logo_demean_R2,
+  clr = month_range,
+  y_lims = limits
+)
+```
+
+:::
+
 #### Two sensor
 
+::: {.panel-tabset}
+
+##### K-Fold
+
 ```{r fig.height=8, fig.width=8}
-custom_plot(
+dist_plot(
   data = two_sensor_results, 
   x = hot_encode, 
   y = kfold_demean_R2,
   clr = month_range,
-  p_type = "box"
+  y_lims = limits_two
 )
 ```
+
+##### LOGO
+
+```{r fig.height=8, fig.width=8}
+dist_plot(
+  data = two_sensor_results, 
+  x = hot_encode, 
+  y = logo_demean_R2,
+  clr = month_range,
+  y_lims = limits_two
+)
+```
+
+:::
 
 :::
 
@@ -602,27 +729,63 @@ custom_plot(
 
 #### One sensor
 
+::: {.panel-tabset}
+
+##### K-Fold
+
 ```{r}
-custom_plot(
+dist_plot(
   data = one_sensor_results, 
   x = crop_mask, 
   y = kfold_demean_R2,
   clr = month_range,
-  p_type = "box"
+  y_lims = limits
 )
 ```
 
+##### LOGO
+
+```{r}
+dist_plot(
+  data = one_sensor_results, 
+  x = crop_mask, 
+  y = logo_demean_R2,
+  clr = month_range,
+  y_lims = limits
+)
+```
+
+:::
+
 #### Two sensor
 
+::: {.panel-tabset}
+
+##### K-Fold
+
 ```{r fig.height=8, fig.width=8}
-custom_plot(
+dist_plot(
   data = two_sensor_results, 
   x = crop_mask, 
   y = kfold_demean_R2,
   clr = month_range,
-  p_type = "box"
+  y_lims = limits_two
 )
 ```
+
+##### LOGO
+
+```{r fig.height=8, fig.width=8}
+dist_plot(
+  data = two_sensor_results, 
+  x = crop_mask, 
+  y = logo_demean_R2,
+  clr = month_range,
+  y_lims = limits_two
+)
+```
+
+:::
 
 :::
 
@@ -632,27 +795,63 @@ custom_plot(
 
 #### One sensor
 
+::: {.panel-tabset}
+
+##### K-Fold
+
 ```{r}
-custom_plot(
+dist_plot(
   data = one_sensor_results, 
   x = weighted_avg, 
   y = kfold_demean_R2,
   clr = month_range,
-  p_type = "box"
+  y_lims = limits
 )
 ```
 
+##### LOGO
+
+```{r}
+dist_plot(
+  data = one_sensor_results, 
+  x = weighted_avg, 
+  y = logo_demean_R2,
+  clr = month_range,
+  y_lims = limits
+)
+```
+
+:::
+
 #### Two sensor
 
+::: {.panel-tabset}
+
+##### K-Fold
+
 ```{r fig.height=8, fig.width=8}
-custom_plot(
+dist_plot(
   data = two_sensor_results, 
   x = weighted_avg, 
   y = kfold_demean_R2,
   clr = month_range,
-  p_type = "box"
+  y_lims = limits_two
 )
 ```
+
+##### LOGO
+
+```{r fig.height=8, fig.width=8}
+dist_plot(
+  data = two_sensor_results, 
+  x = weighted_avg, 
+  y = logo_demean_R2,
+  clr = month_range,
+  y_lims = limits_two
+)
+```
+
+:::
 
 :::
 
@@ -681,21 +880,13 @@ limits <- c(min_lim, max_lim)
 #### K-Fold
 
 ```{r}
-ggplot(data = anomaly_results) +
-  aes(x = kfold_val_R2) +
-  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_field('kfold_val_R2')) +
-  scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
+hist_plot(anomaly_results, kfold_val_R2)
 ```
 
 #### LOGO
 
 ```{r}
-ggplot(data = anomaly_results) +
-  aes(x = logo_val_R2) +
-  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') +
-  labs(x = expand_field('logo_val_R2')) +
-  scale_x_continuous(limits = limits, expand = expansion(mult = c(.01, .01)))
+hist_plot(anomaly_results, logo_val_R2)
 ```
 
 :::
@@ -707,12 +898,11 @@ ggplot(data = anomaly_results) +
 #### K-Fold
 
 ```{r}
-custom_plot(
+dist_plot(
   data = anomaly_results, 
   x = hot_encode, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -720,12 +910,11 @@ custom_plot(
 #### LOGO
 
 ```{r}
-custom_plot(
+dist_plot(
   data = anomaly_results, 
   x = hot_encode, 
   y = logo_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -739,12 +928,11 @@ custom_plot(
 #### K-Fold
 
 ```{r}
-custom_plot(
+dist_plot(
   data = anomaly_results, 
   x = crop_mask, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -752,12 +940,11 @@ custom_plot(
 #### LOGO
 
 ```{r}
-custom_plot(
+dist_plot(
   data = anomaly_results, 
   x = crop_mask, 
   y = logo_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -771,12 +958,11 @@ custom_plot(
 #### K-Fold
 
 ```{r }
-custom_plot(
+dist_plot(
   data = anomaly_results, 
   x = weighted_avg, 
   y = kfold_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
@@ -784,70 +970,59 @@ custom_plot(
 #### LOGO
 
 ```{r }
-custom_plot(
+dist_plot(
   data = anomaly_results, 
   x = weighted_avg, 
   y = logo_val_R2,
   clr = month_range,
-  p_type = "box",
   y_lims = limits
 )
 ```
 
 :::
 
-## Predictions
+## America's next top model
 
-Result from using the top performing model to make predictions on the high_reolution features (before summarizing to district level). 
+The top performing model used ridge regression with 5-fold cross validation, repeated for 17 regularization parameters, with the top performing regularization parameter used for model fitting. 
 
 Top performing model:
 
 1) **Sensor platform**: Landsat 8 
 
-1) **Spectral bandpass**: bands 1-7 (AOT, R, G, B, NIR, SWIR16, SWIR22)
+1) **Spectral bandpass**: Landsat 8 bands 1, 2, 3, 4, 5, 6, and 7 (coastal/aerosol, blue, green, red, near infrared, short-wave infrared 16, short-wave infrared 22)    
 
-1) **Spatial resolution**: 20,000 0.01 by 0.01 degree grid cells, taken from the top 10% of cropland area in each district.
+1) **Spatial resolution**: 20,000 0.01 by 0.01 degree grid cells, sampled form an evenly spaced grid.
+
+1) **Number of features**: 1,000 for each satellite, for each month (18,000 total).
+
+1) **Limiting month range**: Landsat 8: true, the months were limited to the dry season (from April to September).    
+    
+1) **Crop mask**: Landsat 8: true, only points with cropland are retained.  
+    
+1) **Weighted average**: true, a weighted average was used in summarizing the features to the district level.
 
 1) **One hot encoding**: true, the Zambian districts were used as dummy variables. 
 
-1) **Crop mask**: true, only points with cropland are retained. This is by default with the targeted method of selecting points described abovve.  
-
-1) **Weighted average**: true, a weighted average was used in summarizing the features to the district level. 
-
-1) **Limiting month range**: the months were limited to the dry season (from April to September).
-
-1) **Available year range**: 2013 to 2021. 
-
-The top performing model used ridge regression with 5-fold cross validation. Evaluated by taking the mean of the validation score and the de-meaned R2 score.
+1) **Available year range**: 2013 to 2021, the overlap of available satellite data and crop yield data. 
 
 **Notes**: 
 
-1) Need to discuss how to select the "best model". 
+1) Need to discuss how to select the "best model" (see email). 
 
 1) I cap the predictions at roughly the level of the yield levels. This is largely for plotting purpose, need to discuss in next meeting!
 
 ```{r}
-pred_plot <- function(.data){
-  p <- ggplot() +
-    geom_point(data = .data,
-               aes(x = log_yield, y = kfold_cv_predictions, color = as.factor(year))) +
-    geom_abline() +
-    scale_color_viridis_d() +
-    labs(color = NULL, x = 'Observed', y = 'Predicted') +
-    geom_text(data = NULL, aes(x = 0.05, y = .7), label = val_R2_label) +
-    scale_x_continuous(limits = c(0, .82)) +
-    scale_y_continuous(limits = c(-.15, .82)) +
-    theme(legend.position = c(.9, .35)
-          ,legend.background = element_rect(fill = alpha(.75))
-    )
-  
-  ggExtra::ggMarginal(
-    p, type = "histogram", 
-    groupFill = T
-    # fill = "dodgerblue"
-  )  
-}
+train_pred <- filter(summary_predictions, split == "train")
+test_pred <- filter(summary_predictions, split == "test")
 
+val_R2 <- r2_general(train_pred$log_yield, train_pred$kfold_cv_predictions)
+val_R2_label <- latex2exp::TeX("$R^2$ = \\r2", user_defined = list("\\r2"=val_R2))
+
+train_R2 <- r2_general(train_pred$log_yield, train_pred$prediction)
+train_R2_label <- latex2exp::TeX("$R^2$ = \\r2", user_defined = list("\\r2"=train_R2))
+
+test_R2 <- r2_general(test_pred$log_yield, test_pred$prediction)
+test_R2_label <- latex2exp::TeX("$R^2$ = \\r2", user_defined = list("\\r2"=test_R2))
 ```
 
 ### Observed vs predicted 
@@ -857,77 +1032,19 @@ pred_plot <- function(.data){
 #### Validation
 
 ```{r warning = FALSE}
-train_pred <- filter(summary_predictions, split == "train")
-
-r2_general <-function(actual, preds){ 
-  r2 <- 1 - sum((preds - actual) ^ 2) / sum((actual - mean(actual))^2)
-  return(round(r2, 3))
-}
-# rsq <- function (x, y) cor(x, y) ^ 2
-
-val_R2 <- r2_general(train_pred$log_yield, train_pred$kfold_cv_predictions)
-
-val_R2_label <- latex2exp::TeX(
-  "$R^2$ = \\r2", user_defined = list("\\r2"=val_R2))
-
-p <- ggplot() +
-  geom_point(data = train_pred,
-             aes(x = log_yield, y = kfold_cv_predictions, color = as.factor(year))) +
-  geom_abline() +
-  scale_color_viridis_d() +
-  labs(color = NULL, x = 'Observed', y = 'Predicted') +
-  geom_text(data = NULL, aes(x = 0.05, y = .7), label = val_R2_label) +
-  scale_x_continuous(limits = c(0, .82)) +
-  scale_y_continuous(limits = c(-.15, .82)) +
-  theme(legend.position = c(.9, .35)
-        ,legend.background = element_rect(fill = alpha(.75))
-        )
-
-ggExtra::ggMarginal(
-  p, type = "histogram", 
-  groupFill = T
-  # fill = "dodgerblue"
-)
-pred_plot(train_pred)
+pred_plot(train_pred, y = kfold_cv_predictions, val_R2_label)
 ```
 
 #### Train
 
 ```{r warning = FALSE}
-train_R2 <- r2_general(train_pred$log_yield, train_pred$prediction)
-
-train_R2_label <- latex2exp::TeX(
-  "$R^2$ = \\r2", user_defined = list("\\r2"=train_R2))
-
-ggplot() +
-  geom_point(data = train_pred,
-             aes(x = log_yield, y = prediction, color = as.factor(year))) +
-  geom_abline() +
-  scale_color_viridis_d() +
-  labs(color = 'Year', x = 'Observed', y = 'Predicted') +
-  geom_text(data = NULL, aes(x = 0.05, y = .70), label = train_R2_label) +
-  scale_x_continuous(limits = c(0, .82)) +
-  scale_y_continuous(limits = c(-.15, .82))
+pred_plot(train_pred, prediction, train_R2_label)
 ```
 
 #### Test
 
 ```{r warning = FALSE}
-test_pred <- filter(summary_predictions, split == "test")
-test_R2 <- r2_general(test_pred$log_yield, test_pred$prediction)
-
-test_R2_label <- latex2exp::TeX(
-  "$R^2$ = \\r2", user_defined = list("\\r2"=test_R2))
-
-ggplot() +
-  geom_point(data = test_pred,
-             aes(x = log_yield, y = prediction, color = as.factor(year))) +
-  geom_abline() +
-  scale_color_viridis_d() +
-  labs(color = 'Year', x = 'Observed', y = 'Predicted') +
-  geom_text(data = NULL, aes(x = 0.05, y = .7), label = test_R2_label) +
-  scale_x_continuous(limits = c(0, .82)) +
-  scale_y_continuous(limits = c(-.15, .82))
+pred_plot(test_pred, prediction, test_R2_label)
 ```
 
 :::
@@ -942,16 +1059,29 @@ ggplot() +
 
 ::: {.panel-tabset}
 
+##### Crop Land
+
+```{r fig.height=10, fig.width=10, warning=FALSE, message=FALSE}
+crop_land <- here::here("data", "land_cover", "ZMB_cropland_2019_cropped.tif") %>% 
+  terra::rast() 
+
+ggplot() +
+  geom_sf(data = country_shp, color = 'black', fill = "#414487FF") +
+  tidyterra::geom_spatraster(data = crop_land) +
+  scale_fill_gradientn(
+    colours = '#5ec962', na.value = NA, labels = NULL,
+    guide = guide_colorbar(barheight = unit(.5, 'cm'), ticks = F)) +
+  scale_x_continuous(expand = expansion(c(0.01,0.01))) +
+  scale_y_continuous(expand = expansion(c(0.01,0.01))) +
+  labs(fill = "Cropland")
+```
+
+
 ##### Log yield
 
 ```{r fig.height=10, fig.width=10}
-yield <- summary_predictions %>% 
-  mutate(residuals = prediction - log_yield) %>% 
-  left_join(country_shp) %>% 
-  sf::st_as_sf()
-
 ggplot() +
-  geom_sf(data = yield, aes(fill = log_yield), color = 'black') +
+  geom_sf(data = yield_sf, aes(fill = log_yield), color = 'black') +
   facet_wrap(~year) +
   scale_fill_viridis_c()
 ```
@@ -960,7 +1090,7 @@ ggplot() +
 
 ```{r fig.height=10, fig.width=10}
 ggplot() +
-  geom_sf(data = yield, aes(fill = prediction), color = 'black') +
+  geom_sf(data = yield_sf, aes(fill = prediction), color = 'black') +
   facet_wrap(~year) +
   scale_fill_viridis_c()
 ```
@@ -969,9 +1099,10 @@ ggplot() +
 
 ```{r fig.height=10, fig.width=10}
 ggplot() +
-  geom_sf(data = yield, aes(fill = residuals), color = 'black') +
+  geom_sf(data = yield_sf, aes(fill = residuals), color = 'black') +
   facet_wrap(~year) +
-  scale_fill_viridis_c()
+  scale_fill_distiller(palette = "BrBG")
+  # scico::scale_fill_scico(palette = 'vik')
 ```
 
 $predicted - observed$ so positive values indicates over-prediction, and negative values indicates under-prediction.
@@ -979,13 +1110,6 @@ $predicted - observed$ so positive values indicates over-prediction, and negativ
 ##### High res. predictions
 
 ```{r fig.height=10, fig.width=10}
-high_res_predictions <- high_res_predictions %>% 
-  mutate(
-    prediction = case_when(
-      prediction > 1.1 ~ 1, 
-      prediction < 0 ~ 0,
-      T ~ prediction)) 
-
 ggplot() +
   geom_point(data = high_res_predictions, size = .1,
              aes(x = lon, y = lat, color = prediction)) +
@@ -1003,21 +1127,21 @@ ggplot() +
 ##### Log yield
 
 ```{r }
-ggplot(data = yield, aes(x = log_yield)) +
+ggplot(data = yield_sf, aes(x = log_yield)) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') 
 ```
 
 ##### Predicted yield
 
 ```{r }
-ggplot(data = yield, aes(x = prediction)) +
+ggplot(data = yield_sf, aes(x = prediction)) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') 
 ```
 
 ##### Residual
 
 ```{r }
-ggplot(data = yield, aes(x = residuals)) +
+ggplot(data = yield_sf, aes(x = residuals)) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') 
 ```
 
