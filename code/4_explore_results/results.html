@@ -6,7 +6,9 @@
   <meta name="author" content="Cullen Molitor">
   <meta name="author" content="Grace Lewin">
   <meta name="author" content="Juliet Cohen">
-  <meta name="dcterms.date" content="2022-11-09">
+  <meta name="author" content="Jonathan Proctor">
+  <meta name="author" content="Tamma Carleton">
+  <meta name="dcterms.date" content="2022-11-11">
   <title>CropMOSAIKS Model Results</title>
   <style>
     code{white-space: pre-wrap;}
@@ -101,7 +103,8 @@
   <nav id="TOC" role="doc-toc">
 <h2 id="toc-title">Contents</h2>
 <ul>
-<li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a>
+<li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+<li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a>
 <ul class="collapse">
 <li><a href="#todo" id="toc-todo" class="nav-link" data-scroll-target="#todo">TODO:</a></li>
 </ul></li>
@@ -141,8 +144,15 @@
 </ul></li>
 <li><a href="#americas-next-top-model" id="toc-americas-next-top-model" class="nav-link" data-scroll-target="#americas-next-top-model">America’s next top model</a>
 <ul class="collapse">
+<li><a href="#best-general-model" id="toc-best-general-model" class="nav-link" data-scroll-target="#best-general-model">Best general model</a>
+<ul class="collapse">
 <li><a href="#observed-vs-predicted" id="toc-observed-vs-predicted" class="nav-link" data-scroll-target="#observed-vs-predicted">Observed vs predicted</a></li>
 <li><a href="#crop-yield" id="toc-crop-yield" class="nav-link" data-scroll-target="#crop-yield">Crop Yield</a></li>
+</ul></li>
+<li><a href="#best-over-time-model" id="toc-best-over-time-model" class="nav-link" data-scroll-target="#best-over-time-model">Best over-time model</a>
+<ul class="collapse">
+<li><a href="#observed-vs-predicted-1" id="toc-observed-vs-predicted-1" class="nav-link" data-scroll-target="#observed-vs-predicted-1">Observed vs predicted</a></li>
+</ul></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -157,20 +167,26 @@
 
 
 
+
+
 <div class="quarto-title"><h1 class="title display-7">CropMOSAIKS Model Results</h1></div><div class="quarto-title-meta"><div><div class="quarto-title-meta-heading">Authors</div><div class="quarto-title-meta-contents"><div class="quarto-title-authors"><div><a href="https://github.com/cullen-molitor">
 <p>Cullen Molitor</p>
 </a><a class="quarto-title-author-orcid" href="https://orcid.org/0000-0001-8309-8821"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></div><div><a href="https://github.com/gracelewin">
 <p>Grace Lewin</p>
-</a></div><div><a href="https://github.com/julietcohen">
+</a><a class="quarto-title-author-orcid" href="https://orcid.org/0000-0001-7106-0201"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></div><div><a href="https://github.com/julietcohen">
 <p>Juliet Cohen</p>
-</a></div></div></div></div><div><div class="quarto-title-meta-heading">Published</div><div class="quarto-title-meta-contents"><p class="date">November 9, 2022</p></div></div></div></header>
+</a></div><div><a href="https://www.jonathanproctor.org/">
+<p>Jonathan Proctor</p>
+</a><a class="quarto-title-author-orcid" href="https://orcid.org/0000-0001-8053-8828"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></div><div><a href="https://www.tammacarleton.com/">
+<p>Tamma Carleton</p>
+</a><a class="quarto-title-author-orcid" href="https://orcid.org/0000-0002-5518-0550"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></div></div></div></div><div><div class="quarto-title-meta-heading">Published</div><div class="quarto-title-meta-contents"><p class="date">November 11, 2022</p></div></div></div></header>
 
+<section id="setup" class="level1">
+<h1>Setup</h1>
 <div class="cell">
 
 </div>
-<div class="cell">
-
-</div>
+</section>
 <section id="summary" class="level1">
 <h1>Summary</h1>
 <p>This script produces graphics to explore the results of the statistics gathered as a result of iteratively modeling crop yield on random convolutional features created from satellite imagery. Each model iteration represents a combination of unique inputs, described in detail below.</p>
@@ -220,24 +236,26 @@
 <p>All models use ridge regression on data summarized to the district level (both yield and features) and split into a training set (80%) and a test set (20%). Each combinations of model inputs are used to train 2 separate models with different cross validation (CV) strategies. One uses “k-fold” CV, and one the other uses “leave one group out” CV. The two strategies and their implications are described below. Additionally, each model uses a grid search method to identify and select the “best” regularization parameter by iterating the CV process over an array of values, and selecting the value which provides the best performance. In our case we search over an array of 17 values between 0 and 100,000,000: <code>1.e-08, 1.e-07, 1.e-06, 1.e-05, 1.e-04, 1.e-03, 1.e-02, 1.e-01, 1,</code> <code>1.e+01, 1.e+02, 1.e+03, 1.e+04, 1.e+05, 1.e+06, 1.e+07, 1.e+08</code>.</p>
 <section id="k-fold-cv" class="level3">
 <h3 class="anchored" data-anchor-id="k-fold-cv">K-fold CV</h3>
-<p>The primary model in each iteration uses k-fold cross validation using 5 folds of data. This means the training data is split into five folds, each with 20% of the available data. The model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the 5 iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We chose 5-fold CV for its ability to predict over space as well as over time… more on why later.</p>
+<p>The primary model in each iteration uses 5-fold cross validation. This means the training data is split into five folds, each with 20% of the available data. The model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the 5 iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../figures/kfold_cv_split.png" class="img-fluid figure-img"></p>
 <p></p><figcaption aria-hidden="true" class="figure-caption">Figure 1. Diagram representing k-fold cross validation data splitting strategy</figcaption><p></p>
 </figure>
 </div>
+<p>We chose 5-fold CV for its ability to predict over space as well as over time… more on why later.</p>
 </section>
 <section id="leave-one-group-out-logo-cv" class="level3">
 <h3 class="anchored" data-anchor-id="leave-one-group-out-logo-cv">Leave one group out (LOGO) CV</h3>
-<p>As a secondary test, we also train a model in each iteration uses leave one group out CV using year as the grouping variable. This means the training data is split into <span class="math inline">\(n\)</span> groups, where <span class="math inline">\(n\)</span> is the number of years in the data, with each group containing <span class="math inline">\(1/n^{th}\)</span> of the available data. Each iteration of the model is trained using <span class="math inline">\(n-1\)</span> groups as training data, and is validated on the remaining group. This process is repeated <span class="math inline">\(n\)</span> times, using a different group for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the <span class="math inline">\(n\)</span> iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We use LOGO CV as a secondary test for it ability to evaluate how well these models are able to predict over time… More on why later..</p>
+<p>As a secondary test, we train an additional model (for each unique set of inputs) with leave one group out CV where year is the grouping variable. This means the training data is split into <span class="math inline">\(n\)</span> groups, where <span class="math inline">\(n\)</span> is the number of years in the data, with each group containing <span class="math inline">\(1/n^{th}\)</span> of the available data. Each iteration of the model is trained using <span class="math inline">\(n-1\)</span> groups as training data, and is validated on the remaining group. This process is repeated <span class="math inline">\(n\)</span> times, using a different group for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the <span class="math inline">\(n\)</span> iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="../../figures/logo_cv_split.png" class="img-fluid figure-img"></p>
 <p></p><figcaption aria-hidden="true" class="figure-caption">Figure 2. Diagram representing leave one group out cross validation data splitting strategy</figcaption><p></p>
 </figure>
 </div>
-<p><strong>Note</strong>: Currently we are not splitting into train and test sets for LOGO CV. This is something that should be decided and finalized.</p>
+<p>We use LOGO CV as a secondary test for it ability to evaluate how well these models are able to predict over time… More on why later..</p>
+<p><strong>Note</strong>: Currently we are not splitting into train and test sets for LOGO CV. This is something that should be decided and finalized. It is important to note that we cannot split the data into train and test and do hot encoding (or maybe we can but its all 0 for a district not included? not sure actually).</p>
 </section>
 </section>
 <section id="model-inputs" class="level2">
@@ -287,7 +305,7 @@
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist_plot</span>(one_sensor_results, kfold_val_R2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -298,7 +316,7 @@
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist_plot</span>(one_sensor_results, logo_val_R2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -316,7 +334,7 @@
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist_plot</span>(two_sensor_results, kfold_val_R2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -327,7 +345,7 @@
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist_plot</span>(two_sensor_results, logo_val_R2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -359,7 +377,7 @@
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -376,7 +394,7 @@
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -400,7 +418,7 @@
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -417,7 +435,7 @@
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -449,7 +467,7 @@
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -466,7 +484,7 @@
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -490,7 +508,7 @@
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -507,7 +525,7 @@
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -539,7 +557,7 @@
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -556,7 +574,7 @@
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -580,7 +598,7 @@
 <span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -597,7 +615,7 @@
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -651,7 +669,7 @@
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist_plot</span>(one_sensor_results, kfold_demean_R2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -662,7 +680,7 @@
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist_plot</span>(one_sensor_results, logo_demean_R2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -680,7 +698,7 @@
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist_plot</span>(two_sensor_results, kfold_demean_R2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -691,7 +709,7 @@
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist_plot</span>(two_sensor_results, logo_demean_R2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -723,7 +741,7 @@
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -740,7 +758,7 @@
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -764,7 +782,7 @@
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -781,7 +799,7 @@
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -813,7 +831,7 @@
 <span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -830,7 +848,7 @@
 <span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -854,7 +872,7 @@
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -871,7 +889,7 @@
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -903,7 +921,7 @@
 <span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -920,7 +938,7 @@
 <span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -944,7 +962,7 @@
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -961,7 +979,7 @@
 <span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="768"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="768"></p>
 </div>
 </div>
 </div>
@@ -991,7 +1009,7 @@
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist_plot</span>(anomaly_results, kfold_val_R2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1002,7 +1020,7 @@
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist_plot</span>(anomaly_results, logo_val_R2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1027,7 +1045,7 @@
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-39-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1044,7 +1062,7 @@
 <span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-40-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1069,7 +1087,7 @@
 <span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-41-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1086,7 +1104,7 @@
 <span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-42-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1111,7 +1129,7 @@
 <span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-43-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1128,7 +1146,7 @@
 <span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-45-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-44-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1138,13 +1156,15 @@
 </section>
 <section id="americas-next-top-model" class="level2">
 <h2 class="anchored" data-anchor-id="americas-next-top-model">America’s next top model</h2>
+<section id="best-general-model" class="level3">
+<h3 class="anchored" data-anchor-id="best-general-model">Best general model</h3>
 <p>The top performing model used ridge regression with 5-fold cross validation, repeated for 17 regularization parameters, with the top performing regularization parameter used for model fitting.</p>
 <p>Top performing model:</p>
 <ol type="1">
 <li><p><strong>Sensor platform</strong>: Landsat 8</p></li>
 <li><p><strong>Spectral bandpass</strong>: Landsat 8 bands 1, 2, 3, 4, 5, 6, and 7 (coastal/aerosol, blue, green, red, near infrared, short-wave infrared 16, short-wave infrared 22)</p></li>
-<li><p><strong>Spatial resolution</strong>: 20,000 0.01 by 0.01 degree grid cells, sampled form an evenly spaced grid.</p></li>
-<li><p><strong>Number of features</strong>: 1,000 for each satellite, for each month (18,000 total).</p></li>
+<li><p><strong>Spatial resolution</strong>: 20,000 0.01 by 0.01 degree grid cells, representing top 10% of cropland in each district.</p></li>
+<li><p><strong>Number of features</strong>: 1,000 for each month (6,000 total).</p></li>
 <li><p><strong>Limiting month range</strong>: Landsat 8: true, the months were limited to the dry season (from April to September).</p></li>
 <li><p><strong>Crop mask</strong>: Landsat 8: true, only points with cropland are retained.</p></li>
 <li><p><strong>Weighted average</strong>: true, a weighted average was used in summarizing the features to the district level.</p></li>
@@ -1160,20 +1180,22 @@
 <details>
 <summary>Show the code</summary>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>train_pred <span class="ot">&lt;-</span> <span class="fu">filter</span>(summary_predictions, split <span class="sc">==</span> <span class="st">"train"</span>)</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>test_pred <span class="ot">&lt;-</span> <span class="fu">filter</span>(summary_predictions, split <span class="sc">==</span> <span class="st">"test"</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>test_pred  <span class="ot">&lt;-</span> <span class="fu">filter</span>(summary_predictions, split <span class="sc">==</span> <span class="st">"test"</span>)</span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>val_R2 <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(train_pred<span class="sc">$</span>log_yield, train_pred<span class="sc">$</span>kfold_cv_predictions)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>val_R2_label <span class="ot">&lt;-</span> latex2exp<span class="sc">::</span><span class="fu">TeX</span>(<span class="st">"$R^2$ = </span><span class="sc">\\</span><span class="st">r2"</span>, <span class="at">user_defined =</span> <span class="fu">list</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">r2"</span><span class="ot">=</span>val_R2))</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>train_n <span class="ot">&lt;-</span> <span class="fu">length</span>(train_pred<span class="sc">$</span>prediction)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>test_n  <span class="ot">&lt;-</span> <span class="fu">length</span>(test_pred<span class="sc">$</span>prediction)</span>
 <span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>train_R2 <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(train_pred<span class="sc">$</span>log_yield, train_pred<span class="sc">$</span>prediction)</span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>train_R2_label <span class="ot">&lt;-</span> latex2exp<span class="sc">::</span><span class="fu">TeX</span>(<span class="st">"$R^2$ = </span><span class="sc">\\</span><span class="st">r2"</span>, <span class="at">user_defined =</span> <span class="fu">list</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">r2"</span><span class="ot">=</span>train_R2))</span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>test_R2 <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(test_pred<span class="sc">$</span>log_yield, test_pred<span class="sc">$</span>prediction)</span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>test_R2_label <span class="ot">&lt;-</span> latex2exp<span class="sc">::</span><span class="fu">TeX</span>(<span class="st">"$R^2$ = </span><span class="sc">\\</span><span class="st">r2"</span>, <span class="at">user_defined =</span> <span class="fu">list</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">r2"</span><span class="ot">=</span>test_R2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>val_R2   <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(train_pred<span class="sc">$</span>log_yield, train_pred<span class="sc">$</span>kfold_cv_predictions)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>train_R2 <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(train_pred<span class="sc">$</span>log_yield, train_pred<span class="sc">$</span>prediction)</span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>test_R2  <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(test_pred<span class="sc">$</span>log_yield, test_pred<span class="sc">$</span>prediction)</span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>val_label   <span class="ot">&lt;-</span> <span class="fu">plot_label</span>(val_R2,   train_n)</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>train_label <span class="ot">&lt;-</span> <span class="fu">plot_label</span>(train_R2, train_n)</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>test_label  <span class="ot">&lt;-</span> <span class="fu">plot_label</span>(test_R2,  test_n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="observed-vs-predicted" class="level3">
-<h3 class="anchored" data-anchor-id="observed-vs-predicted">Observed vs predicted</h3>
+<section id="observed-vs-predicted" class="level4">
+<h4 class="anchored" data-anchor-id="observed-vs-predicted">Observed vs predicted</h4>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-29-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-29-1" role="tab" aria-controls="tabset-29-1" aria-selected="true">Validation</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-29-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-29-2" role="tab" aria-controls="tabset-29-2" aria-selected="false">Train</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-29-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-29-3" role="tab" aria-controls="tabset-29-3" aria-selected="false">Test</a></li></ul>
 <div class="tab-content">
@@ -1181,10 +1203,10 @@
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_plot</span>(train_pred, <span class="at">y =</span> kfold_cv_predictions, val_R2_label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_plot</span>(train_pred, <span class="at">x =</span> log_yield, <span class="at">y =</span> kfold_cv_predictions, val_label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-47-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-46-1.png" class="img-fluid" width="480"></p>
 </div>
 </div>
 </div>
@@ -1192,10 +1214,10 @@
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_plot</span>(train_pred, prediction, train_R2_label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_plot</span>(train_pred, <span class="at">x =</span> log_yield, prediction, train_label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-47-1.png" class="img-fluid" width="480"></p>
 </div>
 </div>
 </div>
@@ -1203,19 +1225,18 @@
 <div class="cell">
 <details>
 <summary>Show the code</summary>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_plot</span>(test_pred, prediction, test_R2_label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_plot</span>(test_pred, <span class="at">x =</span> log_yield, prediction, test_label)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-48-1.png" class="img-fluid" width="480"></p>
 </div>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="crop-yield" class="level3">
-<h3 class="anchored" data-anchor-id="crop-yield">Crop Yield</h3>
-<p><strong>Note</strong>: Need to add in the cropland map.</p>
+<section id="crop-yield" class="level4">
+<h4 class="anchored" data-anchor-id="crop-yield">Crop Yield</h4>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-32-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-32-1" role="tab" aria-controls="tabset-32-1" aria-selected="true">Maps</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-32-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-32-2" role="tab" aria-controls="tabset-32-2" aria-selected="false">Histograms</a></li></ul>
 <div class="tab-content">
@@ -1241,7 +1262,7 @@
 <span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">"Cropland"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid" width="960"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid" width="960"></p>
 </div>
 </div>
 </div>
@@ -1255,7 +1276,7 @@
 <span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid" width="960"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid" width="960"></p>
 </div>
 </div>
 </div>
@@ -1269,7 +1290,7 @@
 <span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid" width="960"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-51-1.png" class="img-fluid" width="960"></p>
 </div>
 </div>
 </div>
@@ -1283,7 +1304,7 @@
 <span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">"BrBG"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid" width="960"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid" width="960"></p>
 </div>
 <details>
 <summary>Show the code</summary>
@@ -1304,7 +1325,7 @@
 <span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_c</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid" width="960"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-53-1.png" class="img-fluid" width="960"></p>
 </div>
 </div>
 </div>
@@ -1323,7 +1344,7 @@
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">'dodgerblue'</span>, <span class="at">color =</span> <span class="st">'black'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-55-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-54-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1335,7 +1356,7 @@
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">'dodgerblue'</span>, <span class="at">color =</span> <span class="st">'black'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-55-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
@@ -1347,7 +1368,7 @@
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">'dodgerblue'</span>, <span class="at">color =</span> <span class="st">'black'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p><span class="math inline">\(predicted - observed\)</span> so positive values indicates over-prediction, and negative values indicates under-prediction.</p>
@@ -1360,16 +1381,128 @@
 <span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">30</span>, <span class="at">fill =</span> <span class="st">'dodgerblue'</span>, <span class="at">color =</span> <span class="st">'black'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="results_files/figure-html/unnamed-chunk-58-1.png" class="img-fluid" width="672"></p>
+<p><img src="results_files/figure-html/unnamed-chunk-57-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="best-over-time-model" class="level3">
+<h3 class="anchored" data-anchor-id="best-over-time-model">Best over-time model</h3>
+<p>The top performing model over time used ridge regression with leave one group out cross validation, repeated for 17 regularization parameters, with the top performing regularization parameter used for model fitting.</p>
+<p>Top performing model:</p>
+<ol type="1">
+<li><p><strong>Sensor platform</strong>:</p>
+<ul>
+<li>Sentinel 2 (S2)</li>
+<li>Landsat 8 (LS8)</li>
+</ul></li>
+<li><p><strong>Spectral bandpass</strong>:</p>
+<ul>
+<li>S2 bands: B, G, R, NIR<br>
+</li>
+<li>LS8 bands: B, G, R, NIR, SWIR16, SWIR22, AOT</li>
+</ul></li>
+<li><p><strong>Spatial resolution</strong>:</p>
+<ul>
+<li>S2: 15,000 0.01 by 0.01 degree grid cells, sampled form an evenly spaced grid.<br>
+</li>
+<li>LS8: 20,000 0.01 by 0.01 degree grid cells, representing top 10% of cropland in each district</li>
+</ul></li>
+<li><p><strong>Number of features</strong>: 18,000 total (1,000 for each satellite, for each month).</p>
+<ul>
+<li>S2: 12,000 (January to December).<br>
+</li>
+<li>LS8: 6,000 (April to September)</li>
+</ul></li>
+<li><p><strong>Limiting month range</strong>:</p>
+<ul>
+<li>S2: false, all months were used (January to December).<br>
+</li>
+<li>LS8: true, the months were limited to the dry season (April to September).</li>
+</ul></li>
+<li><p><strong>Crop mask</strong>:</p>
+<ul>
+<li>S2: true, only points with cropland are retained.<br>
+</li>
+<li>LS8: true, by defualt with the targeted method of selecting points described above</li>
+</ul></li>
+<li><p><strong>Weighted average</strong>:</p>
+<ul>
+<li>Ss2: true, a weighted average was used in summarizing the features to the district level.</li>
+<li>LS8: true, a weighted average was used in summarizing the features to the district level.</li>
+</ul></li>
+<li><p><strong>One hot encoding</strong>: true, the Zambian districts were used as dummy variables.</p></li>
+<li><p><strong>Available year range</strong>: 2016 to 2021, the overlap of available satellite data and crop yield data.</p></li>
+</ol>
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>train_pred <span class="ot">&lt;-</span> <span class="fu">filter</span>(logo_predictions, split <span class="sc">==</span> <span class="st">"train"</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>val_n     <span class="ot">&lt;-</span> <span class="fu">length</span>(logo_predictions<span class="sc">$</span>logo_cv_prediction)</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>val_R2    <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(logo_predictions<span class="sc">$</span>log_yield, logo_predictions<span class="sc">$</span>logo_cv_prediction)</span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>demean_R2 <span class="ot">&lt;-</span> <span class="fu">r2_general</span>(logo_predictions<span class="sc">$</span>demean_yield, logo_predictions<span class="sc">$</span>logo_demean_prediction)</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a>val_label    <span class="ot">&lt;-</span> <span class="fu">plot_label</span>(val_R2, val_n)</span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a>demean_label <span class="ot">&lt;-</span> <span class="fu">plot_label</span>(demean_R2,   val_n)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="observed-vs-predicted-1" class="level4">
+<h4 class="anchored" data-anchor-id="observed-vs-predicted-1">Observed vs predicted</h4>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-33-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-33-1" role="tab" aria-controls="tabset-33-1" aria-selected="true">LOGO Validation Predictions</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-33-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-33-2" role="tab" aria-controls="tabset-33-2" aria-selected="false">Demeaned Predictions</a></li></ul>
+<div class="tab-content">
+<div id="tabset-33-1" class="tab-pane active" role="tabpanel" aria-labeledby="tabset-33-1-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_plot</span>(</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>  logo_predictions,</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> log_yield, </span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> logo_cv_prediction, </span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> val_label</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-59-1.png" class="img-fluid" width="480"></p>
+</div>
+</div>
+</div>
+<div id="tabset-33-2" class="tab-pane" role="tabpanel" aria-labeledby="tabset-33-2-tab">
+<div class="cell">
+<details>
+<summary>Show the code</summary>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>min_x <span class="ot">=</span> <span class="fu">min</span>(logo_predictions<span class="sc">$</span>demean_yield)</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>max_x <span class="ot">=</span> <span class="fu">max</span>(logo_predictions<span class="sc">$</span>demean_yield)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>min_y <span class="ot">=</span> <span class="fu">min</span>(logo_predictions<span class="sc">$</span>logo_demean_prediction)</span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>max_y <span class="ot">=</span> <span class="fu">max</span>(logo_predictions<span class="sc">$</span>logo_demean_prediction)</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a><span class="fu">pred_plot</span>(</span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">.data =</span> logo_predictions, </span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> demean_yield, </span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> logo_demean_prediction, </span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">label =</span> demean_label,</span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">y_lims =</span> <span class="fu">c</span>(min_y, max_y), </span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">x_lims =</span> <span class="fu">c</span>(min_x, max_x), </span>
+<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">label_pos =</span> <span class="fu">c</span>(min_x<span class="fl">+.05</span>, max_y<span class="fl">-.05</span>)</span>
+<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="results_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid" width="480"></p>
 </div>
 </div>
 </div>
 </div>
 </div>
 
+</section>
 </section>
 </section>
 </section>

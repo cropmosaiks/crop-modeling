@@ -5,24 +5,43 @@ author:
     orcid: 0000-0001-8309-8821
     url: https://github.com/cullen-molitor
     affiliations:
-      - ref: ucsb
+      - ref: bren
   - name: Grace Lewin
+    orcid: 0000-0001-7106-0201
     url: https://github.com/gracelewin
     affiliations:
-      - ref: ucsb
+      - ref: eemb
   - name: Juliet Cohen
     url: https://github.com/julietcohen
     affiliations:
       - ref: nceas
+  - name: Jonathan Proctor
+    orcid: 0000-0001-8053-8828
+    url: https://www.jonathanproctor.org/
+    affiliations:
+      - ref: harvard
+  - name: Tamma Carleton
+    orcid: 0000-0002-5518-0550
+    url: https://www.tammacarleton.com/
+    affiliations:
+      - ref: bren
 affiliations:
-  - id: ucsb
-    name: University of California, Santa Barbara
+  - id: bren
+    name: Bren School of Environmental Science & Management, UC Santa Barbara
+    city: Santa Barbara
+    state: CA
+  - id: eemb
+    name: Ecology, Evolution, and Marine Biology, UC Santa Barbara
     city: Santa Barbara
     state: CA
   - id: nceas
     name: National Center for Ecological Analysis and Synthesis
     city: Santa Barbara
     state: CA
+  - id: harvard
+    name: Center for the Environment and Data Science Initiative, Harvard University
+    city: Cambridge
+    state: MA
 date: '`r Sys.Date()`'
 format:
   html:
@@ -34,6 +53,8 @@ format:
     number-sections: false
 fig-cap-location: bottom
 ---
+
+# Setup
 
 ```{r echo=F,message=F, warning=F}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
@@ -65,8 +86,10 @@ anomaly_fn    <- paste0("anomaly_results_", anomaly_date, ".csv")
 pred_suffix   <- 'landsat-8-c2-l2_bands-1-2-3-4-5-6-7_ZMB_20k-points_1000-features_yr-2013-2021_mn-4-9_lm-True_cm-True_wa-True_he-True'
 high_res_fn   <- paste0('high-res-pred_k-fold-cv_', pred_suffix, '.feather')
 summary_fn    <- paste0('summary-pred_k-fold-cv_', pred_suffix, '.csv')
-# high_res_fn   <- "high-res-pred_k-fold-cv_best-k-fold-2-sensor-params_he-True.feather"
-# summary_fn    <- 'summary-pred_k-fold-cv_best-k-fold-2-sensor-params_he-True.csv'
+# sensor_1      <- 'sentinel-2-l2a_2-3-4-8_15_False_True_True'
+# sensor_2      <- 'landsat-8-c2-l2_1-2-3-4-5-6-7_20_True_True_True_True'
+# summary_logo  <- paste0('summary-pred_logo-cv_fn-1_',sensor_1,'_fn-2_',sensor_2,'_he-True.csv')
+summary_logo  <- 'summary_logo_2_sensor_results_2022-11-11.csv'
 
 one_sensor_results <- here::here("data", "results", one_sensor_fn) %>% 
   read_csv(show_col_types = FALSE, col_select = -1) %>% 
@@ -117,6 +140,10 @@ summary_predictions <- here::here('data', 'results', summary_fn) %>%
   readr::read_csv() %>% 
   mutate(split = factor(split, levels = c('train', 'test')))
 
+logo_predictions <- here::here('data', 'results', summary_logo) %>% 
+  readr::read_csv() %>% 
+  mutate(split = factor(split, levels = c('train', 'test')))
+
 country_shp <- here::here('data', 'geo_boundaries', 'gadm36_ZMB_2.shp') %>% 
   sf::read_sf()
 
@@ -146,9 +173,7 @@ high_res_predictions <- high_res_predictions %>%
 #   crop_land, 
 #   here::here("data", "land_cover", "ZMB_cropland_2019_cropped.tif"),
 #   filetype = 'GTiff', overwrite=T)
-```
 
-```{r echo=F,message=F, warning=F}
 colors <- c("TRUE" = 'dodgerblue', "FALSE" = "firebrick",
             'mixed' = 'darkorchid',
             "4-9" = 'dodgerblue', "1-12" = "firebrick")
@@ -216,26 +241,34 @@ r2_general <-function(actual, preds) {
 }
 # rsq <- function (x, y) { cor(x, y) ^ 2}
 
-pred_plot <- function(.data, y, label){
+pred_plot <- function(.data, x, y, label = NULL, x_lims = c(0, .82),
+                      y_lims = c(0, .82), label_pos = c(.05, .75)){
+  x <- enquo(x)
   y <- enquo(y)
   p <- ggplot() +
     geom_point(data = .data,
-               aes(x = log_yield, y = !!y, color = as.factor(year))) +
+               aes(x = !!x, y = !!y, color = as.factor(year))) +
     geom_abline() +
     scale_color_viridis_d() +
     labs(color = NULL, x = 'Observed', y = 'Predicted') +
-    geom_text(data = NULL, aes(x = 0.05, y = .7), label = label) +
-    scale_x_continuous(limits = c(0, .82)) +
-    scale_y_continuous(limits = c(-.15, .82)) +
+    geom_text(data = NULL, aes(x = label_pos[1], y = label_pos[2]), label = label) +
+    scale_x_continuous(limits = x_lims) +
+    scale_y_continuous(limits = y_lims) +
     theme(legend.position = c(.9, .35)
           ,legend.background = element_rect(fill = alpha(.75))
-    )
+    ) 
   
   ggExtra::ggMarginal(
     p, type = "histogram", 
     groupFill = T
     # fill = "dodgerblue"
   )  
+}
+
+plot_label <- function(r, n) {
+  latex2exp::TeX(
+  "$\\overset{R^2 = \\r2}{n = \\n2}$", 
+  user_defined = list("\\r2"=r, "\\n2" = n))
 }
 ```
 
@@ -293,17 +326,21 @@ All models use ridge regression on data summarized to the district level (both y
 
 ### K-fold CV 
 
-The primary model in each iteration uses k-fold cross validation using 5 folds of data. This means the training data is split into five folds, each with 20% of the available data. The model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the 5 iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We chose 5-fold CV for its ability to predict over space as well as over  time... more on why later.     
+The primary model in each iteration uses 5-fold cross validation. This means the training data is split into five folds, each with 20% of the available data. The model is trained using 4 of the folds as training data, and is validated on the remaining fold. This process is repeated 5 times, using a different fold for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the 5 iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data.      
 
 ![Figure 1. Diagram representing k-fold cross validation data splitting strategy](../../figures/kfold_cv_split.png)
 
+We chose 5-fold CV for its ability to predict over space as well as over time... more on why later.
+
 ### Leave one group out (LOGO) CV 
 
-As a secondary test, we also train a model in each iteration uses leave one group out CV using year as the grouping variable. This means the training data is split into $n$ groups, where $n$ is the number of years in the data, with each group containing $1/n^{th}$ of the available data. Each iteration of the model is trained using $n-1$ groups as training data, and is validated on the remaining group. This process is repeated $n$ times, using a different group for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the $n$ iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. We use LOGO CV as a secondary test for it ability to evaluate how well these models are able to predict over time... More on why later..
+As a secondary test, we train an additional model (for each unique set of inputs) with leave one group out CV where year is the grouping variable. This means the training data is split into $n$ groups, where $n$ is the number of years in the data, with each group containing $1/n^{th}$ of the available data. Each iteration of the model is trained using $n-1$ groups as training data, and is validated on the remaining group. This process is repeated $n$ times, using a different group for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the $n$ iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. 
 
 ![Figure 2. Diagram representing leave one group out cross validation data splitting strategy](../../figures/logo_cv_split.png)
 
-**Note**: Currently we are not splitting into train and test sets for LOGO CV. This is something that should be decided and finalized. 
+We use LOGO CV as a secondary test for it ability to evaluate how well these models are able to predict over time... More on why later..
+
+**Note**: Currently we are not splitting into train and test sets for LOGO CV. This is something that should be decided and finalized. It is important to note that we cannot split the data into train and test and do hot encoding (or maybe we can but its all 0 for a district not included? not sure actually). 
 
 ## Model inputs
 
@@ -995,6 +1032,8 @@ dist_plot(
 
 ## America's next top model
 
+### Best general model
+
 The top performing model used ridge regression with 5-fold cross validation, repeated for 17 regularization parameters, with the top performing regularization parameter used for model fitting. 
 
 Top performing model:
@@ -1003,9 +1042,9 @@ Top performing model:
 
 1) **Spectral bandpass**: Landsat 8 bands 1, 2, 3, 4, 5, 6, and 7 (coastal/aerosol, blue, green, red, near infrared, short-wave infrared 16, short-wave infrared 22)    
 
-1) **Spatial resolution**: 20,000 0.01 by 0.01 degree grid cells, sampled form an evenly spaced grid.
+1) **Spatial resolution**: 20,000 0.01 by 0.01 degree grid cells, representing top 10% of cropland in each district.
 
-1) **Number of features**: 1,000 for each satellite, for each month (18,000 total).
+1) **Number of features**: 1,000 for each month (6,000 total).
 
 1) **Limiting month range**: Landsat 8: true, the months were limited to the dry season (from April to September).    
     
@@ -1025,53 +1064,53 @@ Top performing model:
 
 ```{r}
 train_pred <- filter(summary_predictions, split == "train")
-test_pred <- filter(summary_predictions, split == "test")
+test_pred  <- filter(summary_predictions, split == "test")
 
-val_R2 <- r2_general(train_pred$log_yield, train_pred$kfold_cv_predictions)
-val_R2_label <- latex2exp::TeX("$R^2$ = \\r2", user_defined = list("\\r2"=val_R2))
+train_n <- length(train_pred$prediction)
+test_n  <- length(test_pred$prediction)
 
+val_R2   <- r2_general(train_pred$log_yield, train_pred$kfold_cv_predictions)
 train_R2 <- r2_general(train_pred$log_yield, train_pred$prediction)
-train_R2_label <- latex2exp::TeX("$R^2$ = \\r2", user_defined = list("\\r2"=train_R2))
+test_R2  <- r2_general(test_pred$log_yield, test_pred$prediction)
 
-test_R2 <- r2_general(test_pred$log_yield, test_pred$prediction)
-test_R2_label <- latex2exp::TeX("$R^2$ = \\r2", user_defined = list("\\r2"=test_R2))
+val_label   <- plot_label(val_R2,   train_n)
+train_label <- plot_label(train_R2, train_n)
+test_label  <- plot_label(test_R2,  test_n)
 ```
 
-### Observed vs predicted 
+#### Observed vs predicted 
 
 ::: {.panel-tabset}
 
-#### Validation
+##### Validation
 
-```{r warning = FALSE}
-pred_plot(train_pred, y = kfold_cv_predictions, val_R2_label)
+```{r warning = FALSE, fig.width=5, fig.height=5}
+pred_plot(train_pred, x = log_yield, y = kfold_cv_predictions, val_label)
 ```
 
-#### Train
+##### Train
 
-```{r warning = FALSE}
-pred_plot(train_pred, prediction, train_R2_label)
+```{r warning = FALSE, fig.width=5, fig.height=5}
+pred_plot(train_pred, x = log_yield, prediction, train_label)
 ```
 
-#### Test
+##### Test
 
-```{r warning = FALSE}
-pred_plot(test_pred, prediction, test_R2_label)
+```{r warning = FALSE, fig.width=5, fig.height=5}
+pred_plot(test_pred, x = log_yield, prediction, test_label)
 ```
 
 :::
 
-### Crop Yield
-
-**Note**: Need to add in the cropland map.
+#### Crop Yield
 
 ::: {.panel-tabset}
 
-#### Maps
+##### Maps
 
 ::: {.panel-tabset}
 
-##### Crop Land
+###### Crop Land
 
 ```{r fig.height=10, fig.width=10, warning=FALSE, message=FALSE}
 crop_land <- here::here("data", "land_cover", "ZMB_cropland_2019_cropped.tif") %>% 
@@ -1089,7 +1128,7 @@ ggplot() +
 ```
 
 
-##### Log yield
+###### Log yield
 
 ```{r fig.height=10, fig.width=10}
 ggplot() +
@@ -1098,7 +1137,7 @@ ggplot() +
   scale_fill_viridis_c()
 ```
 
-##### Predicted yield
+###### Predicted yield
 
 ```{r fig.height=10, fig.width=10}
 ggplot() +
@@ -1107,7 +1146,7 @@ ggplot() +
   scale_fill_viridis_c()
 ```
 
-##### Residual
+###### Residual
 
 ```{r fig.height=10, fig.width=10}
 ggplot() +
@@ -1119,7 +1158,7 @@ ggplot() +
 
 $predicted - observed$ so positive values indicates over-prediction, and negative values indicates under-prediction.
 
-##### High res. predictions
+###### High res. predictions
 
 ```{r fig.height=10, fig.width=10}
 ggplot() +
@@ -1132,25 +1171,25 @@ ggplot() +
 
 :::
 
-#### Histograms
+##### Histograms
 
 ::: {.panel-tabset}
 
-##### Log yield
+###### Log yield
 
 ```{r }
 ggplot(data = yield_sf, aes(x = log_yield)) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') 
 ```
 
-##### Predicted yield
+###### Predicted yield
 
 ```{r }
 ggplot(data = yield_sf, aes(x = prediction)) +
   geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') 
 ```
 
-##### Residual
+###### Residual
 
 ```{r }
 ggplot(data = yield_sf, aes(x = residuals)) +
@@ -1159,7 +1198,7 @@ ggplot(data = yield_sf, aes(x = residuals)) +
 
 $predicted - observed$ so positive values indicates over-prediction, and negative values indicates under-prediction.
 
-##### High res. predictions
+###### High res. predictions
 
 ```{r }
 ggplot(data = high_res_predictions, aes(x = prediction)) +
@@ -1170,3 +1209,95 @@ ggplot(data = high_res_predictions, aes(x = prediction)) +
 
 :::
 
+### Best over-time model
+
+The top performing model over time used ridge regression with leave one group out cross validation, repeated for 17 regularization parameters, with the top performing regularization parameter used for model fitting. 
+
+Top performing model:
+
+1) **Sensor platform**: 
+
+    + Sentinel 2 (S2)
+    + Landsat 8 (LS8)   
+
+1) **Spectral bandpass**:  
+
+    + S2 bands: B, G, R, NIR   
+    + LS8 bands: B, G, R, NIR, SWIR16, SWIR22, AOT  
+
+1) **Spatial resolution**: 
+
+    + S2: 15,000 0.01 by 0.01 degree grid cells, sampled form an evenly spaced grid.    
+    + LS8: 20,000 0.01 by 0.01 degree grid cells, representing top 10% of cropland in each district  
+
+1) **Number of features**: 18,000 total (1,000 for each satellite, for each month).  
+
+    + S2: 12,000 (January to December).  
+    + LS8: 6,000 (April to September)
+
+1) **Limiting month range**: 
+
+    + S2: false, all months were used (January to December).  
+    + LS8: true, the months were limited to the dry season (April to September).   
+    
+1) **Crop mask**:  
+
+    + S2: true, only points with cropland are retained.  
+    + LS8: true, by defualt with the targeted method of selecting points described above  
+    
+1) **Weighted average**: 
+
+    + Ss2: true, a weighted average was used in summarizing the features to the district level.
+    + LS8: true, a weighted average was used in summarizing the features to the district level.  
+    
+1) **One hot encoding**: true, the Zambian districts were used as dummy variables. 
+
+1) **Available year range**: 2016 to 2021, the overlap of available satellite data and crop yield data.
+
+```{r}
+train_pred <- filter(logo_predictions, split == "train")
+
+val_n     <- length(logo_predictions$logo_cv_prediction)
+val_R2    <- r2_general(logo_predictions$log_yield, logo_predictions$logo_cv_prediction)
+demean_R2 <- r2_general(logo_predictions$demean_yield, logo_predictions$logo_demean_prediction)
+
+val_label    <- plot_label(val_R2, val_n)
+demean_label <- plot_label(demean_R2,   val_n)
+```
+
+#### Observed vs predicted 
+
+::: {.panel-tabset}
+
+##### LOGO Validation Predictions
+
+```{r warning = FALSE, fig.width=5, fig.height=5}
+pred_plot(
+  logo_predictions,
+  x = log_yield, 
+  y = logo_cv_prediction, 
+  label = val_label
+)
+```
+
+##### Demeaned Predictions
+
+```{r warning = FALSE, fig.width=5, fig.height=5}
+min_x = min(logo_predictions$demean_yield)
+max_x = max(logo_predictions$demean_yield)
+
+min_y = min(logo_predictions$logo_demean_prediction)
+max_y = max(logo_predictions$logo_demean_prediction)
+
+pred_plot(
+  .data = logo_predictions, 
+  x = demean_yield, 
+  y = logo_demean_prediction, 
+  label = demean_label,
+  y_lims = c(min_y, max_y), 
+  x_lims = c(min_x, max_x), 
+  label_pos = c(min_x+.05, max_y-.05)
+)
+```
+
+:::
