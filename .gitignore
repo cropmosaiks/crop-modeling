@@ -210,6 +210,7 @@ data/random_features/summary/*
 !data/random_features/summary/.gitkeep
 
 models/k-fold*
+models/kfold*
 models/logo*
 
 #################### Other files ####################
