@@ -1,0 +1,460 @@
+---
+title: Final Figures
+author: 
+  - name: Cullen Molitor
+    orcid: 0000-0001-8309-8821
+    url: https://github.com/cullen-molitor
+    affiliations:
+      - ref: bren
+  - name: Grace Lewin
+    orcid: 0000-0001-7106-0201
+    url: https://github.com/gracelewin
+    affiliations:
+      - ref: eemb
+  - name: Juliet Cohen
+    orcid: 0000-0001-8217-4028
+    url: https://github.com/julietcohen
+    affiliations:
+      - ref: nceas
+  - name: Steven Cognac
+    orcid: 0000-0001-8803-3074
+    url: https://github.com/cognack
+    affiliations:
+      - ref: bren
+  - name: Jonathan Proctor
+    orcid: 0000-0001-8053-8828
+    url: https://www.jonathanproctor.org/
+    affiliations:
+      - ref: harvard
+  - name: Tamma Carleton
+    orcid: 0000-0002-5518-0550
+    url: https://www.tammacarleton.com/
+    affiliations:
+      - ref: bren
+affiliations:
+  - id: bren
+    name: Bren School of Environmental Science & Management, UC Santa Barbara
+    city: Santa Barbara
+    state: CA
+  - id: eemb
+    name: Ecology, Evolution, and Marine Biology, UC Santa Barbara
+    city: Santa Barbara
+    state: CA
+  - id: nceas
+    name: National Center for Ecological Analysis and Synthesis
+    city: Santa Barbara
+    state: CA
+  - id: harvard
+    name: Center for the Environment and Data Science Initiative, Harvard University
+    city: Cambridge
+    state: MA
+date: '`r Sys.Date()`'
+format:
+  html:
+    code-fold: true
+    code-summary: "Show the code"
+    toc: true
+    toc-title: Contents
+    toc-depth: 4
+    number-sections: false
+fig-cap-location: bottom
+---
+
+# Setup
+
+```{r message=F, warning=F}
+####################### R ENVIRONMENT #######################
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+
+source(here::here('code', '4_explore_results', 'utility.R'))
+```
+
+```{r}
+ggplot(data = zmb_precip_summary) +
+  aes(x = month, y = precipitation) +
+  geom_col(fill = "dodgerblue") +
+  scale_y_continuous(expand = expansion(add = c(0, 20))) +
+### SOWING
+  geom_segment(x = "Oct", xend = "Dec", y = 80, yend = 80, 
+               lineend = 'round', size = 2) +
+  geom_label(x = "Dec",
+             y = 80, label = "Sowing",
+             hjust = 1.65, vjust = .5, size = 3) +
+### GROWING 
+  geom_segment(x = "Nov", xend = "May", y = 60, yend = 60, 
+               lineend = 'round', size = 2) +
+  geom_label(x = "Feb",
+             y = 60, label = "Growing",
+             hjust = 1.1, vjust = .5, size = 3) +
+### SURVEY
+  geom_segment(x = "Mar", xend = "Apr", y = 40, yend = 40, 
+               lineend = 'round', size = 2) +
+  geom_label(x = "Apr",
+             y = 40, label = "CFS",
+             hjust = 1.3, vjust = .5, size = 3) +
+### HARVEST  
+  geom_segment(x = "Apr", xend = "Jun", y = 20, yend = 20, 
+               lineend = 'round', size = 2) +
+  geom_label(x = "May",
+             y = 20, label = "Harvest", 
+             hjust = 0.5, vjust = 0.5, size = 3) 
+```
+
+```{r}
+cat('Train on levels\n\tCoefficient of determination')
+cat(paste0("\n\tVal:  ", r2_general(train_pred$log_yield,
+                                     train_pred$kfold_cv_predictions)))
+cat(paste0("\n\tTest: ", r2_general(test_pred$log_yield,
+                                     test_pred$prediction)))
+cat('\n\n\tPearsons correlation coefficient')
+cat(paste0("\n\tVal:  ", r2_pears(train_pred$log_yield,
+                                   train_pred$kfold_cv_predictions)))
+cat(paste0("\n\tTest: ", r2_pears(test_pred$log_yield,
+                                   test_pred$prediction)))
+
+cat('\n\nTrain on levels, then demean\n\tCoefficient of determination')
+cat(paste0("\n\tVal:  ", r2_general(train_pred$demean_yield, 
+                                     train_pred$demean_cv_pred)))
+cat(paste0("\n\tTest: ", r2_general(test_pred$demean_yield, 
+                                     test_pred$demean_pred)))
+cat('\n\n\tPearsons correlation coefficient')
+cat(paste0("\n\tVal:  ", r2_pears(train_pred$demean_yield, 
+                                   train_pred$demean_cv_pred)))
+cat(paste0("\n\tTest: ", r2_pears(test_pred$demean_yield, 
+                                   test_pred$demean_pred)))
+
+cat('\n\nTrain on anomailes - best above \n\tCoefficient of determination')
+cat(paste0("\n\tVal:  ", r2_general(anom_train_pred$yield_anom,
+                                     anom_train_pred$kfold_cv_predictions)))
+cat(paste0("\n\tTest: ", r2_general(anom_test_pred$yield_anom,
+                                     anom_test_pred$prediction)))
+cat('\n\n\tPearsons correlation coefficient')
+cat(paste0("\n\tVal:  ", r2_pears(anom_train_pred$yield_anom, 
+                                   anom_train_pred$kfold_cv_predictions)))
+cat(paste0("\n\tTest: ", r2_pears(anom_test_pred$yield_anom, 
+                                   anom_test_pred$prediction)))
+
+cat('\n\nTrain on anomailes - best overall \n\tCoefficient of determination')
+cat(paste0("\n\tVal:  ", r2_general(best_anom_train_pred$yield_anom,
+                                     best_anom_train_pred$kfold_cv_predictions)))
+cat(paste0("\n\tTest: ", r2_general(best_anom_test_pred$yield_anom,
+                                     best_anom_test_pred$prediction)))
+cat('\n\n\tPearsons correlation coefficient')
+cat(paste0("\n\tVal:  ", r2_pears(best_anom_train_pred$yield_anom,
+                                   best_anom_train_pred$kfold_cv_predictions)))
+cat(paste0("\n\tTest: ", r2_pears(best_anom_test_pred$yield_anom,
+                                   best_anom_test_pred$prediction)))
+```
+
+```{r}
+latex_new_lines <- function(each_line) { 
+  if ("character" != class(each_line)) {
+    stop("latex_lines expects a character vector")
+  }
+  ret <- paste0("\\normalsize{$", each_line[1], "$}")
+  while(0 != length(each_line <- tail(each_line, n=-1))) {
+    ret <- paste0("\\overset{", ret, "}{\\normalsize{$", each_line[1],"$}}")
+  }
+  return(ret)
+}
+
+plot_label <- function(R2, r2, n) {
+  TeX(latex_new_lines(c('R^2=\\R2','r^2=\\r2', 'n=\\n')), 
+      user_defined = list("\\R2" = R2, "\\r2" = r2, "\\n" = n))
+}
+```
+
+```{r fig.height=3.5, fig.width=7}
+val_R2  <- r2_general(train_pred$log_yield, train_pred$kfold_cv_predictions)
+test_R2 <- r2_general(test_pred$log_yield, test_pred$prediction)
+
+val_r2  <- r2_pears(train_pred$log_yield, train_pred$kfold_cv_predictions)
+test_r2 <- r2_pears(test_pred$log_yield, test_pred$prediction)
+
+train_n <- length(train_pred$prediction)
+test_n  <- length(test_pred$prediction)
+
+val_label  <- plot_label(R2 = val_R2, r2 = val_r2, n = train_n)
+test_label <- plot_label(R2 = test_R2, r2 = test_r2, n = test_n)
+
+p1 <- ggplot() +
+  geom_point(data = summary_predictions,
+             aes(x = log_yield, y = kfold_cv_predictions, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = NULL, x = 'log(1+mt/ha)', y = 'Model estimate') +
+  geom_text(data = NULL, aes(x = .06, y = .75), label = val_label) +
+  scale_x_continuous(limits = c(0, .82)) +
+  scale_y_continuous(limits = c(0, 0.82)) +
+  theme(legend.position = c(.9, .35)
+        ,legend.background = element_rect(fill = alpha(.75))
+  ) 
+
+p1 <- ggExtra::ggMarginal(
+  p1, type = "histogram", 
+  groupFill = T
+) 
+
+p2 <- ggplot() +
+  geom_point(data = filter(summary_predictions, split == 'test'),
+             aes(x = log_yield, y = prediction, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = NULL, x = 'log(1+mt/ha)', y = NULL) +
+  geom_text(data = NULL, aes(x = .06, y = .75), label = test_label) +
+  scale_x_continuous(limits = c(0, .82)) +
+  scale_y_continuous(limits = c(0, 0.82)) +
+  theme(legend.position = c(.9, .35)
+        ,legend.background = element_rect(fill = alpha(.75))
+  ) 
+
+p2 <- ggExtra::ggMarginal(
+  p2, type = "histogram", 
+  groupFill = T
+) 
+cowplot::plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
+```
+
+```{r fig.height=3.5, fig.width=7}
+val_R2  <- r2_general(train_pred$demean_yield, train_pred$demean_cv_pred)
+test_R2 <- r2_general(test_pred$demean_yield, test_pred$demean_pred)
+
+val_r2  <- r2_pears(train_pred$demean_yield, train_pred$demean_cv_pred)
+test_r2 <- r2_pears(test_pred$demean_yield, test_pred$demean_pred)
+
+train_n <- length(train_pred$prediction)
+test_n  <- length(test_pred$prediction)
+
+val_label  <- plot_label(R2 = val_R2, r2 = val_r2, n = train_n)
+test_label <- plot_label(R2 = test_R2, r2 = test_r2, n = test_n)
+
+p1 <- ggplot() +
+  geom_point(data = train_pred,
+             aes(x = demean_yield, y = demean_cv_pred, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = 'Demeaned model estimate') +
+  geom_text(data = NULL, aes(x = -.35, y = .35), label = val_label) +
+  scale_x_continuous(limits = c(-0.4, 0.4)) +
+  scale_y_continuous(limits = c(-0.4, 0.4)) +
+  theme(legend.position = c(.9, .35)
+        ,legend.background = element_rect(fill = alpha(.75))
+  ) 
+
+p1 <- ggExtra::ggMarginal(
+  p1, type = "histogram", 
+  groupFill = T
+) 
+
+p2 <- ggplot() +
+  geom_point(data = filter(test_pred, split == 'test'),
+             aes(x = demean_yield, y = demean_pred, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = NULL) +
+  geom_text(data = NULL, aes(x = -.35, y = .35), label = test_label) +
+  scale_x_continuous(limits = c(-0.4, 0.4)) +
+  scale_y_continuous(limits = c(-0.4, 0.4)) +
+  theme(legend.position = c(.9, .35)
+        ,legend.background = element_rect(fill = alpha(.75))
+  ) 
+
+p2 <- ggExtra::ggMarginal(
+  p2, type = "histogram", 
+  groupFill = T
+) 
+plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
+```
+
+```{r fig.height=3.5, fig.width=7}
+val_R2  <- r2_general(anom_train_pred$yield_anom, anom_train_pred$kfold_cv_predictions)
+test_R2 <- r2_general(anom_test_pred$yield_anom, anom_test_pred$prediction)
+
+val_r2  <- r2_pears(anom_train_pred$yield_anom, anom_train_pred$kfold_cv_predictions)
+test_r2 <- r2_pears(anom_test_pred$yield_anom, anom_test_pred$prediction)
+
+train_n <- length(anom_train_pred$kfold_cv_predictions)
+test_n  <- length(anom_test_pred$prediction)
+
+val_label  <- plot_label(R2 = val_R2, r2 = val_r2, n = train_n)
+test_label <- plot_label(R2 = test_R2, r2 = test_r2, n = test_n)
+
+p1 <- ggplot() +
+  geom_point(data = anom_train_pred,
+             aes(x = yield_anom, y = kfold_cv_predictions, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = 'Anomaly model estimate') +
+  geom_text(data = NULL, aes(x = -.35, y = .35), label = val_label) +
+  scale_x_continuous(limits = c(-0.4, 0.4)) +
+  scale_y_continuous(limits = c(-0.4, 0.4)) +
+  theme(legend.position = c(.9, .35)
+        ,legend.background = element_rect(fill = alpha(.75))
+  ) 
+
+p1 <- ggExtra::ggMarginal(
+  p1, type = "histogram", 
+  groupFill = T
+) 
+
+p2 <- ggplot() +
+  geom_point(data = filter(anom_test_pred, split == 'test'),
+             aes(x = yield_anom, y = prediction, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = NULL) +
+  geom_text(data = NULL, aes(x = -.35, y = .35), label = test_label) +
+  scale_x_continuous(limits = c(-0.4, 0.4)) +
+  scale_y_continuous(limits = c(-0.4, 0.4)) +
+  theme(legend.position = c(.9, .35)
+        ,legend.background = element_rect(fill = alpha(.75))
+  ) 
+
+p2 <- ggExtra::ggMarginal(
+  p2, type = "histogram", 
+  groupFill = T
+) 
+plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
+```
+
+```{r fig.height=3.5, fig.width=7}
+val_R2  <- r2_general(best_anom_train_pred$yield_anom, best_anom_train_pred$kfold_cv_predictions)
+test_R2 <- r2_general(best_anom_test_pred$yield_anom, best_anom_test_pred$prediction)
+
+val_r2  <- r2_pears(best_anom_train_pred$yield_anom, best_anom_train_pred$kfold_cv_predictions)
+test_r2 <- r2_pears(best_anom_test_pred$yield_anom, best_anom_test_pred$prediction)
+
+train_n <- length(best_anom_train_pred$kfold_cv_predictions)
+test_n  <- length(best_anom_test_pred$prediction)
+
+val_label  <- plot_label(R2 = val_R2, r2 = val_r2, n = train_n)
+test_label <- plot_label(R2 = test_R2, r2 = test_r2, n = test_n)
+
+p1 <- ggplot() +
+  geom_point(data = best_anom_train_pred,
+             aes(x = yield_anom, y = kfold_cv_predictions, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = 'Anomaly model estimate') +
+  geom_text(data = NULL, aes(x = -.35, y = .35), label = val_label) +
+  scale_x_continuous(limits = c(-0.4, 0.4)) +
+  scale_y_continuous(limits = c(-0.4, 0.4)) +
+  theme(legend.position = c(.9, .35)
+        ,legend.background = element_rect(fill = alpha(.75))
+  ) 
+
+p1 <- ggExtra::ggMarginal(
+  p1, type = "histogram", 
+  groupFill = T
+) 
+
+p2 <- ggplot() +
+  geom_point(data = filter(best_anom_test_pred, split == 'test'),
+             aes(x = yield_anom, y = prediction, color = as.factor(year))) +
+  geom_abline() +
+  scale_color_viridis_d() +
+  labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = NULL) +
+  geom_text(data = NULL, aes(x = -.35, y = .35), label = test_label) +
+  scale_x_continuous(limits = c(-0.4, 0.4)) +
+  scale_y_continuous(limits = c(-0.4, 0.4)) +
+  theme(legend.position = c(.9, .35)
+        ,legend.background = element_rect(fill = alpha(.75))
+  ) 
+
+p2 <- ggExtra::ggMarginal(
+  p2, type = "histogram", 
+  groupFill = T
+) 
+plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
+```
+
+```{r fig.height=7, fig.width=8, warning=FALSE, message=FALSE}
+  
+library(rnaturalearth)
+library(rnaturalearthdata)
+library(ggspatial)
+
+africa <- ne_countries(scale = "medium", returnclass = "sf") %>% 
+  dplyr::filter(continent == 'Africa')
+
+extent <- terra::ext(zmb_union)
+extent <- terra::as.polygons(extent)
+terra::crs(extent) <- "epsg:4326"
+
+provinces <- here::here('data', 'geo_boundaries', 'gadm36_ZMB_1.shp') %>% 
+  sf::read_sf() %>% 
+  dplyr::rename('province' = NAME_1)
+
+ybreaks <- c(-8, -10, -12, -14, -16, -18)
+ylabs <- paste0(ybreaks,'°S')
+
+xbreaks <- c(22, 24, 26, 28, 30, 32, 34)
+xlabs <- paste0(xbreaks,'°E')
+
+inset <- ggplot() +
+  geom_sf(data = africa, fill = "white", linewidth = 1) +
+  geom_sf(data = extent, fill = NA, linewidth = 1, color = 'red') +
+  theme_void() +
+  theme(panel.border = element_rect(fill = NA),
+        panel.background = element_rect(fill = alpha("white", .5)))
+
+main <- ggplot() +
+  geom_sf(data = country_shp, linewidth = .5, color = 'black', fill = "grey60") +
+  geom_sf(data = provinces, linewidth = 1, color = 'black', fill = NA) +
+  geom_sf_label(data = provinces, aes(label = province) )+
+  scale_fill_viridis_d() +
+  scale_size_identity() + 
+  scale_x_continuous(breaks = xbreaks, labels = xlabs) +
+  scale_y_continuous(breaks = ybreaks, labels = ylabs) +
+  labs(x = NULL, y = NULL) +
+  theme(legend.position = "right")
+
+ggdraw() +
+  draw_plot(main) +
+  draw_plot(inset, x = 0.7, y = .06, width = .3, height = .3)
+
+# ggplot() +
+#   geom_sf(data = country_shp, linewidth = .5, color = 'black', fill = "grey60") +
+#   geom_sf(data = provinces, linewidth = 2, color = 'black', fill = NA) +
+#   geom_sf_label(data = country_shp, aes(label = district) )+
+#   scale_fill_viridis_d() +
+#   scale_size_identity() + 
+#   scale_x_continuous(breaks = xbreaks, labels = xlabs) +
+#   scale_y_continuous(breaks = ybreaks, labels = ylabs) +
+#   labs(x = NULL, y = NULL) +
+#   theme(legend.position = "right")
+```
+
+```{r fig.height=8, fig.width=8, warning=FALSE, message=FALSE}
+country_vect <- country_shp %>%
+  sf::st_union() %>%
+  terra::vect()
+  
+crop_land <- here::here("data", "land_cover", "ZMB_cropland_2019.tif") %>%
+  terra::rast() %>%
+  terra::crop(country_vect, mask=TRUE) %>% 
+  terra::aggregate(fact=33, fun='mean', na.rm = TRUE)
+
+ybreaks <- c(-8, -10, -12, -14, -16, -18)
+ylabs <- paste0(ybreaks,'°S')
+
+xbreaks <- c(22, 24, 26, 28, 30, 32, 34)
+xlabs <- paste0(xbreaks,'°E')
+
+ggplot() +
+  tidyterra::geom_spatraster(data = crop_land) +
+  geom_sf(data = country_shp, color = 'white', fill = NA, linewidth = .7) +
+  scale_fill_viridis_c(na.value = NA, guide = guide_colorbar(title.position = "top")) +
+  scale_x_continuous(breaks = xbreaks, labels = xlabs) +
+  scale_y_continuous(breaks = ybreaks, labels = ylabs) +
+  labs(fill = "Cropland Percentage") +
+  theme(legend.position = "bottom")
+```
+
+
+
+
+
+
+
+

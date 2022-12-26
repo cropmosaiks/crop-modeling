@@ -12,9 +12,15 @@ author:
     affiliations:
       - ref: eemb
   - name: Juliet Cohen
+    orcid: 0000-0001-8217-4028
     url: https://github.com/julietcohen
     affiliations:
       - ref: nceas
+  - name: Steven Cognac
+    orcid: 0000-0001-8803-3074
+    url: https://github.com/cognack
+    affiliations:
+      - ref: bren
   - name: Jonathan Proctor
     orcid: 0000-0001-8053-8828
     url: https://www.jonathanproctor.org/
@@ -56,220 +62,11 @@ fig-cap-location: bottom
 
 # Setup
 
-```{r echo=F,message=F, warning=F}
+```{r message=F, warning=F}
+####################### R ENVIRONMENT #######################
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 
-if (!require(librarian,quietly = T)){
-  install.packages('librarian')
-}
-
-librarian::shelf(
-  plotly,
-  tidyverse,
-  here,
-  rlang,
-  latex2exp,
-  arrow,
-  sf,
-  terra,
-  tidyterra,
-  quiet = T
-)
-
-one_sensor_date <- "2022-11-09"
-two_sensor_date <- "2022-11-09"
-anomaly_date    <- "2022-11-02"
-
-one_sensor_fn <- paste0("results_", one_sensor_date, ".csv")
-two_sensor_fn <- paste0("2_sensor_results_", two_sensor_date, ".csv")
-anomaly_fn    <- paste0("anomaly_results_", anomaly_date, ".csv")
-pred_suffix   <- 'landsat-8-c2-l2_bands-1-2-3-4-5-6-7_ZMB_20k-points_1000-features_yr-2013-2021_mn-4-9_lm-True_cm-True_wa-True_he-True'
-high_res_fn   <- paste0('high-res-pred_k-fold-cv_', pred_suffix, '.feather')
-summary_fn    <- paste0('summary-pred_k-fold-cv_', pred_suffix, '.csv')
-# sensor_1      <- 'sentinel-2-l2a_2-3-4-8_15_False_True_True'
-# sensor_2      <- 'landsat-8-c2-l2_1-2-3-4-5-6-7_20_True_True_True_True'
-# summary_logo  <- paste0('summary-pred_logo-cv_fn-1_',sensor_1,'_fn-2_',sensor_2,'_he-True.csv')
-summary_logo  <- 'summary_logo_2_sensor_results_2022-11-11.csv'
-
-one_sensor_results <- here::here("data", "results", one_sensor_fn) %>% 
-  read_csv(show_col_types = FALSE, col_select = -1) %>% 
-  filter(points != 20 | crop_mask == T) %>% 
-  mutate(avg_res = (kfold_val_R2 + kfold_demean_R2) / 2,
-         avg_all = (kfold_val_R2 + kfold_demean_R2 + logo_val_R2) / 3)
-
-lsc <- 'landsat-c2-l2'
-ls8 <- 'landsat-8-c2-l2'
-s2 <- 'sentinel-2-l2a'
-
-two_sensor_results <- here::here("data", "results", two_sensor_fn) %>%
-  read_csv(show_col_types = FALSE, col_select = -1) %>% 
-  distinct() %>%
-  mutate(
-    # satellite = paste0(satellite_1,' with ',satellite_2),
-    satellite = case_when(
-      satellite_1 == satellite_2 ~ paste0(satellite_1,' with ',satellite_2),
-      (satellite_1 == lsc & satellite_2 == ls8) |
-        (satellite_2 == lsc & satellite_1 == ls8) ~ paste0(lsc,' with ',ls8),
-      (satellite_1 == lsc & satellite_2 == s2) |
-        (satellite_2 == lsc & satellite_1 == s2) ~ paste0(lsc,' with ',s2),
-      (satellite_1 == ls8 & satellite_2 == s2) |
-        (satellite_2 == ls8 & satellite_1 == s2) ~ paste0(ls8,' with ',s2)),
-    month_range = case_when(
-      month_range_1 == '4-9' & month_range_2 == '4-9' ~ '4-9',
-      month_range_1 == '1-12' & month_range_2 == '1-12' ~ '1-12',
-      T ~ 'mixed'),
-    crop_mask = case_when(
-      crop_mask_1 == T & crop_mask_2 == T ~ 'TRUE',
-      crop_mask_1 == F & crop_mask_2 == F ~ 'FALSE',
-      T ~ 'mixed'),
-    weighted_avg = case_when(
-      weighted_avg_1 == T & weighted_avg_2 == T ~ 'TRUE',
-      weighted_avg_1 == F & weighted_avg_2 == F ~ 'FALSE',
-      T ~ 'mixed'),
-    avg_res = (kfold_val_R2 + kfold_demean_R2) / 2,
-    avg_all = (kfold_val_R2 + kfold_demean_R2 + logo_val_R2) / 3) 
-
-anomaly_results <- here::here("data", "results", anomaly_fn) %>% 
-  read_csv(show_col_types = FALSE, col_select = -1) %>% 
-  filter(points != 20 | crop_mask == T)
-
-high_res_predictions <- here::here('data', 'results', high_res_fn) %>% 
-  arrow::read_feather()
-
-summary_predictions <- here::here('data', 'results', summary_fn) %>% 
-  readr::read_csv() %>% 
-  mutate(split = factor(split, levels = c('train', 'test')))
-
-logo_predictions <- here::here('data', 'results', summary_logo) %>% 
-  readr::read_csv() %>% 
-  mutate(split = factor(split, levels = c('train', 'test')))
-
-country_shp <- here::here('data', 'geo_boundaries', 'gadm36_ZMB_2.shp') %>% 
-  sf::read_sf()
-
-yield_sf <- summary_predictions %>% 
-  mutate(residuals = prediction - log_yield) %>% 
-  left_join(country_shp) %>% 
-  sf::st_as_sf()
-
-high_res_predictions <- high_res_predictions %>% 
-  mutate(
-    prediction = case_when(
-      prediction > 1.1 ~ 1, 
-      prediction < 0 ~ 0,
-      T ~ prediction)) 
-
-# country_vect <- country_shp %>%
-#   sf::st_union() %>%
-#   terra::vect()
-# 
-# crop_land <- here::here("data", "land_cover", "ZMB_cropland_2019.tif") %>%
-#   terra::rast() %>%
-#   terra::crop(country_vect, mask=TRUE) 
-#   
-# crop_land[crop_land == 0] <- NA
-# 
-# terra::writeRaster(
-#   crop_land, 
-#   here::here("data", "land_cover", "ZMB_cropland_2019_cropped.tif"),
-#   filetype = 'GTiff', overwrite=T)
-
-colors <- c("TRUE" = 'dodgerblue', "FALSE" = "firebrick",
-            'mixed' = 'darkorchid',
-            "4-9" = 'dodgerblue', "1-12" = "firebrick")
-
-expand_field <- function(fld) {
-  switch(
-    rlang::as_name(fld),
-    'kfold_val_R2'    = 'K-Fold Validation Score (R$^2$)',
-    'logo_val_R2'     = 'LOGO Validation Score (R$^2$)',
-    'kfold_demean_R2' = 'K-Fold De-meaned Score (R$^2$)',
-    'logo_demean_R2'  = 'LOGO De-meaned Score (R$^2$)',
-    'month_range'     = 'Month\nRange',
-    'hot_encode'      = 'One Hot Encoding',
-    'crop_mask'       = 'Crop Mask',
-    'weighted_avg'    = 'Weighted Average',
-    rlang::as_name(fld)
-  ) %>% latex2exp::TeX()
-}
-
-theme_set(theme_bw())
-theme_update()
-
-hist_plot <- function(data, x) {
-  x     <- enquo(x)
-  x_lab <- expand_field(x)
-  if(deparse(substitute(data))=='two_sensor_results'){n_sensors = 2}else{n_sensors=1}
-  if(n_sensors == 1){clr<-'dodgerblue'}else{clr<-'darkorchid'}
-  if(n_sensors == 1){n_bins<-30}else{n_bins<-60}
-  if(n_sensors == 1){lms<-limits}else{lms<-limits_two}
-  expansion <- expansion(mult = c(.01, .01))
-  
-  ggplot(data = data) +
-    aes(x = !!x) +
-    geom_histogram(bins = n_bins, fill = clr, color = 'black') +
-    labs(x = x_lab) +
-    scale_x_continuous(limits = lms, expand = expansion)
-}
-
-dist_plot <- function(data, x, y, clr, p_type = "box", y_lims = NULL) {
-  x     <- enquo(x)
-  y     <- enquo(y)
-  clr   <- enquo(clr)
-  x_lab <- expand_field(x)
-  y_lab <- expand_field(y)
-  c_lab <- expand_field(clr)
-  
-  base  <- ggplot(data) +
-    aes(!!x, !!y, color = !!clr) +
-    scale_color_manual(values = colors, limits = force) +
-    labs(x = x_lab, y = y_lab, color = c_lab) + 
-    facet_wrap(~satellite) +
-    scale_y_continuous(limits = y_lims, expand = expansion(mult = c(.01, .01)))
-  
-  if (p_type == "box") {
-    base + geom_boxplot() 
-  } else {
-    jd  <- position_jitterdodge(.2)
-    base + geom_point(position = jd)
-  }
-}
-
-r2_general <-function(actual, preds) { 
-  r2 <- 1 - sum((preds - actual) ^ 2) / sum((actual - mean(actual))^2)
-  return(round(r2, 3))
-}
-# rsq <- function (x, y) { cor(x, y) ^ 2}
-
-pred_plot <- function(.data, x, y, label = NULL, x_lims = c(0, .82),
-                      y_lims = c(0, .82), label_pos = c(.05, .75)){
-  x <- enquo(x)
-  y <- enquo(y)
-  p <- ggplot() +
-    geom_point(data = .data,
-               aes(x = !!x, y = !!y, color = as.factor(year))) +
-    geom_abline() +
-    scale_color_viridis_d() +
-    labs(color = NULL, x = 'Observed', y = 'Predicted') +
-    geom_text(data = NULL, aes(x = label_pos[1], y = label_pos[2]), label = label) +
-    scale_x_continuous(limits = x_lims) +
-    scale_y_continuous(limits = y_lims) +
-    theme(legend.position = c(.9, .35)
-          ,legend.background = element_rect(fill = alpha(.75))
-    ) 
-  
-  ggExtra::ggMarginal(
-    p, type = "histogram", 
-    groupFill = T
-    # fill = "dodgerblue"
-  )  
-}
-
-plot_label <- function(r, n) {
-  latex2exp::TeX(
-  "$\\overset{R^2 = \\r2}{n = \\n2}$", 
-  user_defined = list("\\r2"=r, "\\n2" = n))
-}
+source(here::here('code', '4_explore_results', 'utility.R'))
 ```
 
 # Summary
@@ -332,19 +129,9 @@ The primary model in each iteration uses 5-fold cross validation. This means the
 
 We chose 5-fold CV for its ability to predict over space as well as over time... more on why later.
 
-### Leave one group out (LOGO) CV 
-
-As a secondary test, we train an additional model (for each unique set of inputs) with leave one group out CV where year is the grouping variable. This means the training data is split into $n$ groups, where $n$ is the number of years in the data, with each group containing $1/n^{th}$ of the available data. Each iteration of the model is trained using $n-1$ groups as training data, and is validated on the remaining group. This process is repeated $n$ times, using a different group for validation on each iteration. The performance measures are calculated by taking the predicted and observed values of the validation data in each of the $n$ iterations. Our primary metric is the coefficient of determination calculated on the observed and predicted values of the validation data. 
-
-![Figure 2. Diagram representing leave one group out cross validation data splitting strategy](../../figures/logo_cv_split.png)
-
-We use LOGO CV as a secondary test for it ability to evaluate how well these models are able to predict over time... More on why later..
-
-**Note**: Currently we are not splitting into train and test sets for LOGO CV. This is something that should be decided and finalized. It is important to note that we cannot split the data into train and test and do hot encoding (or maybe we can but its all 0 for a district not included? not sure actually). 
-
 ## Model inputs
 
-The following variables were either included or excluded to test their affect on model performance. 
+The following variables were either included or excluded to test their affect on model performance.
 
 1) **Sensor platform**: the sensor platform which imagery was taken from. Options are:
 
@@ -404,39 +191,15 @@ limits_two <- c(min_lim_two, max_lim_two)
 
 #### One sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r}
 hist_plot(one_sensor_results, kfold_val_R2)
 ```
 
-##### LOGO
-
-```{r}
-hist_plot(one_sensor_results, logo_val_R2)
-```
-
-:::
-
 #### Two sensor
-
-::: {.panel-tabset}
-
-##### K-Fold
 
 ```{r}
 hist_plot(two_sensor_results, kfold_val_R2)
 ```
-
-##### LOGO
-
-```{r}
-hist_plot(two_sensor_results, logo_val_R2)
-```
-
-:::
 
 :::
 
@@ -446,10 +209,6 @@ hist_plot(two_sensor_results, logo_val_R2)
 
 #### One sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r}
 dist_plot(
   data = one_sensor_results, 
@@ -459,27 +218,9 @@ dist_plot(
   y_lims = limits
 )
 ```
-
-##### LOGO
-
-```{r}
-dist_plot(
-  data = one_sensor_results, 
-  x = hot_encode, 
-  y = logo_val_R2,
-  clr = month_range,
-  y_lims = limits
-)
-```
-
-:::
 
 #### Two sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r fig.height=8, fig.width=8}
 dist_plot(
   data = two_sensor_results, 
@@ -489,20 +230,6 @@ dist_plot(
   y_lims = limits_two
 )
 ```
-
-##### LOGO
-
-```{r fig.height=8, fig.width=8}
-dist_plot(
-  data = two_sensor_results, 
-  x = hot_encode, 
-  y = logo_val_R2,
-  clr = month_range,
-  y_lims = limits_two
-)
-```
-
-:::
 
 :::
 
@@ -512,10 +239,6 @@ dist_plot(
 
 #### One sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r}
 dist_plot(
   data = one_sensor_results, 
@@ -525,27 +248,9 @@ dist_plot(
   y_lims = limits
 )
 ```
-
-##### LOGO
-
-```{r}
-dist_plot(
-  data = one_sensor_results, 
-  x = crop_mask, 
-  y = logo_val_R2,
-  clr = month_range,
-  y_lims = limits
-)
-```
-
-:::
 
 #### Two sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r fig.height=8, fig.width=8}
 dist_plot(
   data = two_sensor_results, 
@@ -555,20 +260,6 @@ dist_plot(
   y_lims = limits_two
 )
 ```
-
-##### LOGO
-
-```{r fig.height=8, fig.width=8}
-dist_plot(
-  data = two_sensor_results, 
-  x = crop_mask, 
-  y = logo_val_R2,
-  clr = month_range,
-  y_lims = limits_two
-)
-```
-
-:::
 
 :::
 
@@ -578,10 +269,6 @@ dist_plot(
 
 #### One sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r }
 dist_plot(
   data = one_sensor_results, 
@@ -591,27 +278,9 @@ dist_plot(
   y_lims = limits
 )
 ```
-
-##### LOGO
-
-```{r }
-dist_plot(
-  data = one_sensor_results, 
-  x = weighted_avg, 
-  y = logo_val_R2,
-  clr = month_range,
-  y_lims = limits
-)
-```
-
-:::
 
 #### Two sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r fig.height=8, fig.width=8}
 dist_plot(
   data = two_sensor_results, 
@@ -621,20 +290,6 @@ dist_plot(
   y_lims = limits_two
 )
 ```
-
-##### LOGO
-
-```{r fig.height=8, fig.width=8}
-dist_plot(
-  data = two_sensor_results, 
-  x = weighted_avg, 
-  y = logo_val_R2,
-  clr = month_range,
-  y_lims = limits_two
-)
-```
-
-:::
 
 :::
 
@@ -651,7 +306,7 @@ max_lim <- max(
   max(one_sensor_results$kfold_demean_R2), 
   max(one_sensor_results$logo_demean_R2)
 )
-limits <- c(min_lim, max_lim)
+limits <- c(min_lim, max_lim + 1)
 
 min_lim_two <- min(
   min(two_sensor_results$kfold_demean_R2), 
@@ -670,39 +325,15 @@ limits_two <- c(min_lim_two, max_lim_two)
 
 #### One sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r}
 hist_plot(one_sensor_results, kfold_demean_R2)
 ```
 
-##### LOGO
-
-```{r}
-hist_plot(one_sensor_results, logo_demean_R2)
-```
-
-:::
-
 #### Two sensor
-
-::: {.panel-tabset}
-
-##### K-Fold
 
 ```{r}
 hist_plot(two_sensor_results, kfold_demean_R2)
 ```
-
-##### LOGO
-
-```{r}
-hist_plot(two_sensor_results, logo_demean_R2)
-```
-
-:::
 
 :::
 
@@ -712,10 +343,6 @@ hist_plot(two_sensor_results, logo_demean_R2)
 
 #### One sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r}
 dist_plot(
   data = one_sensor_results, 
@@ -725,27 +352,9 @@ dist_plot(
   y_lims = limits
 )
 ```
-
-##### LOGO
-
-```{r}
-dist_plot(
-  data = one_sensor_results, 
-  x = hot_encode, 
-  y = logo_demean_R2,
-  clr = month_range,
-  y_lims = limits
-)
-```
-
-:::
 
 #### Two sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r fig.height=8, fig.width=8}
 dist_plot(
   data = two_sensor_results, 
@@ -755,20 +364,6 @@ dist_plot(
   y_lims = limits_two
 )
 ```
-
-##### LOGO
-
-```{r fig.height=8, fig.width=8}
-dist_plot(
-  data = two_sensor_results, 
-  x = hot_encode, 
-  y = logo_demean_R2,
-  clr = month_range,
-  y_lims = limits_two
-)
-```
-
-:::
 
 :::
 
@@ -778,10 +373,6 @@ dist_plot(
 
 #### One sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r}
 dist_plot(
   data = one_sensor_results, 
@@ -791,27 +382,9 @@ dist_plot(
   y_lims = limits
 )
 ```
-
-##### LOGO
-
-```{r}
-dist_plot(
-  data = one_sensor_results, 
-  x = crop_mask, 
-  y = logo_demean_R2,
-  clr = month_range,
-  y_lims = limits
-)
-```
-
-:::
 
 #### Two sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r fig.height=8, fig.width=8}
 dist_plot(
   data = two_sensor_results, 
@@ -821,20 +394,6 @@ dist_plot(
   y_lims = limits_two
 )
 ```
-
-##### LOGO
-
-```{r fig.height=8, fig.width=8}
-dist_plot(
-  data = two_sensor_results, 
-  x = crop_mask, 
-  y = logo_demean_R2,
-  clr = month_range,
-  y_lims = limits_two
-)
-```
-
-:::
 
 :::
 
@@ -844,10 +403,6 @@ dist_plot(
 
 #### One sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r}
 dist_plot(
   data = one_sensor_results, 
@@ -857,27 +412,9 @@ dist_plot(
   y_lims = limits
 )
 ```
-
-##### LOGO
-
-```{r}
-dist_plot(
-  data = one_sensor_results, 
-  x = weighted_avg, 
-  y = logo_demean_R2,
-  clr = month_range,
-  y_lims = limits
-)
-```
-
-:::
 
 #### Two sensor
 
-::: {.panel-tabset}
-
-##### K-Fold
-
 ```{r fig.height=8, fig.width=8}
 dist_plot(
   data = two_sensor_results, 
@@ -887,20 +424,6 @@ dist_plot(
   y_lims = limits_two
 )
 ```
-
-##### LOGO
-
-```{r fig.height=8, fig.width=8}
-dist_plot(
-  data = two_sensor_results, 
-  x = weighted_avg, 
-  y = logo_demean_R2,
-  clr = month_range,
-  y_lims = limits_two
-)
-```
-
-:::
 
 :::
 
@@ -912,12 +435,12 @@ Finally, we evaluate the coefficient of determination (R<sup>2</sup>) calculated
 
 ```{r echo = FALSE}
 min_lim <- min(
-  min(anomaly_results$kfold_val_R2), 
-  min(anomaly_results$logo_val_R2)
+  min(one_anomaly_results$kfold_val_R2), 
+  min(one_anomaly_results$logo_val_R2)
 )
 max_lim <- max(
-  max(anomaly_results$kfold_val_R2), 
-  max(anomaly_results$logo_val_R2)
+  max(one_anomaly_results$kfold_val_R2), 
+  max(one_anomaly_results$logo_val_R2)
 )
 limits <- c(min_lim, max_lim)
 ```
@@ -926,46 +449,16 @@ limits <- c(min_lim, max_lim)
 
 ::: {.panel-tabset}
 
-#### K-Fold
+#### One sensor
 
 ```{r}
-hist_plot(anomaly_results, kfold_val_R2)
+hist_plot(one_anomaly_results, kfold_val_R2 )
 ```
 
-#### LOGO
+#### Two sensor
 
 ```{r}
-hist_plot(anomaly_results, logo_val_R2)
-```
-
-:::
-
-### Hot encoding
-
-::: {.panel-tabset}
-
-#### K-Fold
-
-```{r}
-dist_plot(
-  data = anomaly_results, 
-  x = hot_encode, 
-  y = kfold_val_R2,
-  clr = month_range,
-  y_lims = limits
-)
-```
-
-#### LOGO
-
-```{r}
-dist_plot(
-  data = anomaly_results, 
-  x = hot_encode, 
-  y = logo_val_R2,
-  clr = month_range,
-  y_lims = limits
-)
+hist_plot(two_anomaly_results, kfold_val_R2)
 ```
 
 :::
@@ -974,11 +467,11 @@ dist_plot(
 
 ::: {.panel-tabset}
 
-#### K-Fold
+#### One sensor
 
 ```{r}
 dist_plot(
-  data = anomaly_results, 
+  data = one_anomaly_results, 
   x = crop_mask, 
   y = kfold_val_R2,
   clr = month_range,
@@ -986,13 +479,13 @@ dist_plot(
 )
 ```
 
-#### LOGO
+#### Two sensor
 
-```{r}
+```{r fig.height=8, fig.width=8}
 dist_plot(
-  data = anomaly_results, 
+  data = two_anomaly_results, 
   x = crop_mask, 
-  y = logo_val_R2,
+  y = kfold_val_R2,
   clr = month_range,
   y_lims = limits
 )
@@ -1004,11 +497,11 @@ dist_plot(
 
 ::: {.panel-tabset}
 
-#### K-Fold
+#### One sensor
 
-```{r }
+```{r}
 dist_plot(
-  data = anomaly_results, 
+  data = one_anomaly_results, 
   x = weighted_avg, 
   y = kfold_val_R2,
   clr = month_range,
@@ -1016,13 +509,13 @@ dist_plot(
 )
 ```
 
-#### LOGO
+#### Two sensor
 
-```{r }
+```{r fig.height=8, fig.width=8}
 dist_plot(
-  data = anomaly_results, 
+  data = two_anomaly_results, 
   x = weighted_avg, 
-  y = logo_val_R2,
+  y = kfold_val_R2,
   clr = month_range,
   y_lims = limits
 )
@@ -1030,7 +523,7 @@ dist_plot(
 
 :::
 
-## America's next top model
+## Top models
 
 ### Best general model
 
@@ -1038,27 +531,46 @@ The top performing model used ridge regression with 5-fold cross validation, rep
 
 Top performing model:
 
-1) **Sensor platform**: Landsat 8 
+1) **Sensor platform**: 
 
-1) **Spectral bandpass**: Landsat 8 bands 1, 2, 3, 4, 5, 6, and 7 (coastal/aerosol, blue, green, red, near infrared, short-wave infrared 16, short-wave infrared 22)    
+    + Landsat 8 (LS8) 
+    + Sentinel 2 (S2)  
 
-1) **Spatial resolution**: 20,000 0.01 by 0.01 degree grid cells, representing top 10% of cropland in each district.
+1) **Spectral bandpass**:  
 
-1) **Number of features**: 1,000 for each month (6,000 total).
+    + LS8 bands: AOT, B, G, R, NIR, SWIR16, SWIR22  
+    + S2 bands: B, G, R, NIR 
 
-1) **Limiting month range**: Landsat 8: true, the months were limited to the dry season (from April to September).    
+1) **Spatial resolution**: 
+
+    + LS8: 15,000 0.01 by 0.01 degree grid cells, sampled form an evenly spaced grid.   
+    + S2: 15,000 0.01 by 0.01 degree grid cells, sampled form an evenly spaced grid.    
+
+1) **Number of features**: 18,000 total (1,000 for each satellite, for each month).  
+
+    + LS8: 6,000 (April to September)
+    + S2: 12,000 (January to December)   
+
+1) **Limiting month range**: 
+
+    + LS8: true, the months were limited to the dry season (April to September)  
+    + S2: false, all months were used (January to December).     
     
-1) **Crop mask**: Landsat 8: true, only points with cropland are retained.  
+1) **Crop mask**:  
+
+    + LS8: false, all points are retained. 
+    + S2: true, only points with cropland are retained.  
     
-1) **Weighted average**: true, a weighted average was used in summarizing the features to the district level.
+1) **Weighted average**: 
+
+    + LS8: false, a simple average was used in summarizing the features to the district level.  
+    + S2: false, a simple average was used in summarizing the features to the district level.
 
 1) **One hot encoding**: true, the Zambian districts were used as dummy variables. 
 
-1) **Available year range**: 2013 to 2021, the overlap of available satellite data and crop yield data. 
+1) **Available year range**: 2016 to 2021, the overlap of available satellite data and crop yield data. 
 
 **Notes**: 
-
-1) Need to discuss how to select the "best model" (see email). 
 
 1) I cap the predictions at roughly the level of the yield levels. This is largely for plotting purpose, need to discuss in next meeting!
 
@@ -1113,9 +625,6 @@ pred_plot(test_pred, x = log_yield, prediction, test_label)
 ###### Crop Land
 
 ```{r fig.height=10, fig.width=10, warning=FALSE, message=FALSE}
-crop_land <- here::here("data", "land_cover", "ZMB_cropland_2019_cropped.tif") %>% 
-  terra::rast() 
-
 ggplot() +
   geom_sf(data = country_shp, color = 'black', fill = "#414487FF") +
   tidyterra::geom_spatraster(data = crop_land) +
@@ -1198,102 +707,130 @@ ggplot(data = yield_sf, aes(x = residuals)) +
 
 $predicted - observed$ so positive values indicates over-prediction, and negative values indicates under-prediction.
 
-###### High res. predictions
-
-```{r }
-ggplot(data = high_res_predictions, aes(x = prediction)) +
-  geom_histogram(bins = 30, fill = 'dodgerblue', color = 'black') 
-```
-
 :::
 
 :::
 
 ### Best over-time model
 
-The top performing model over time used ridge regression with leave one group out cross validation, repeated for 17 regularization parameters, with the top performing regularization parameter used for model fitting. 
+The top performing model wen evaluating the ability to predict over time as selected from the   
 
 Top performing model:
 
 1) **Sensor platform**: 
 
-    + Sentinel 2 (S2)
-    + Landsat 8 (LS8)   
+    + Landsat Collection (LSC) 
+    + Sentinel 2 (S2)  
 
 1) **Spectral bandpass**:  
 
-    + S2 bands: B, G, R, NIR   
-    + LS8 bands: B, G, R, NIR, SWIR16, SWIR22, AOT  
+    + LSC bands: B, G, R, NIR, SWIR16, SWIR22  
+    + S2 bands: B, G, R 
 
 1) **Spatial resolution**: 
 
-    + S2: 15,000 0.01 by 0.01 degree grid cells, sampled form an evenly spaced grid.    
-    + LS8: 20,000 0.01 by 0.01 degree grid cells, representing top 10% of cropland in each district  
+    + LSC: 20,000 0.01 by 0.01 degree grid cells, targeted cropland sampling.   
+    + S2: 4,000 0.01 by 0.01 degree grid cells, sampled form an evenly spaced grid.    
 
 1) **Number of features**: 18,000 total (1,000 for each satellite, for each month).  
 
-    + S2: 12,000 (January to December).  
-    + LS8: 6,000 (April to September)
+    + LSC: 6,000 (April to September)
+    + S2: 12,000 (January to December)   
 
 1) **Limiting month range**: 
 
-    + S2: false, all months were used (January to December).  
-    + LS8: true, the months were limited to the dry season (April to September).   
+    + LSC: true, the months were limited to the dry season (April to September)  
+    + S2: false, all months were used (January to December).     
     
 1) **Crop mask**:  
 
+    + LSC: true, by default from targeted cropland sampling approach. 
     + S2: true, only points with cropland are retained.  
-    + LS8: true, by defualt with the targeted method of selecting points described above  
     
 1) **Weighted average**: 
 
-    + Ss2: true, a weighted average was used in summarizing the features to the district level.
-    + LS8: true, a weighted average was used in summarizing the features to the district level.  
+    + LSC: false, a simple average was used in summarizing the features to the district level.  
+    + S2: false, a simple average was used in summarizing the features to the district level.
     
-1) **One hot encoding**: true, the Zambian districts were used as dummy variables. 
+1) **One hot encoding**: NA, the  features and yield values are demeaned prior to modeling. 
 
 1) **Available year range**: 2016 to 2021, the overlap of available satellite data and crop yield data.
-
-```{r}
-train_pred <- filter(logo_predictions, split == "train")
-
-val_n     <- length(logo_predictions$logo_cv_prediction)
-val_R2    <- r2_general(logo_predictions$log_yield, logo_predictions$logo_cv_prediction)
-demean_R2 <- r2_general(logo_predictions$demean_yield, logo_predictions$logo_demean_prediction)
-
-val_label    <- plot_label(val_R2, val_n)
-demean_label <- plot_label(demean_R2,   val_n)
-```
 
 #### Observed vs predicted 
 
 ::: {.panel-tabset}
 
-##### LOGO Validation Predictions
+##### Validation
 
 ```{r warning = FALSE, fig.width=5, fig.height=5}
+train_pred <- filter(best_anom_train_pred, split == "train")
+val_n      <- length(best_anom_train_pred$kfold_cv_predictions)
+val_R2     <- r2_general(best_anom_train_pred$yield_anom,
+                        best_anom_train_pred$kfold_cv_predictions)
+val_label  <- plot_label(val_R2, val_n)
+
+min_x = min(best_anom_train_pred$yield_anom)
+max_x = max(best_anom_train_pred$yield_anom)
+
+min_y = min(best_anom_train_pred$kfold_cv_predictions)
+max_y = max(best_anom_train_pred$kfold_cv_predictions)
+
 pred_plot(
-  logo_predictions,
-  x = log_yield, 
-  y = logo_cv_prediction, 
-  label = val_label
+  .data = best_anom_train_pred, 
+  x = yield_anom, 
+  y = kfold_cv_predictions, 
+  label = val_label,
+  y_lims = c(min_y, max_y), 
+  x_lims = c(min_x, max_x), 
+  label_pos = c(min_x+.05, max_y-.05)
 )
 ```
 
-##### Demeaned Predictions
+##### Train
 
 ```{r warning = FALSE, fig.width=5, fig.height=5}
-min_x = min(logo_predictions$demean_yield)
-max_x = max(logo_predictions$demean_yield)
+train_n      <- length(best_anom_train_pred$prediction)
+train_R2     <- r2_general(best_anom_train_pred$yield_anom,
+                        best_anom_train_pred$prediction)
+train_label  <- plot_label(train_R2, train_n)
 
-min_y = min(logo_predictions$logo_demean_prediction)
-max_y = max(logo_predictions$logo_demean_prediction)
+min_x = min(best_anom_train_pred$yield_anom)
+max_x = max(best_anom_train_pred$yield_anom)
+
+min_y = min(best_anom_train_pred$prediction)
+max_y = max(best_anom_train_pred$prediction)
 
 pred_plot(
-  .data = logo_predictions, 
-  x = demean_yield, 
-  y = logo_demean_prediction, 
-  label = demean_label,
+  .data = best_anom_train_pred, 
+  x = yield_anom, 
+  y = prediction, 
+  label = train_label,
+  y_lims = c(min_y, max_y), 
+  x_lims = c(min_x, max_x), 
+  label_pos = c(min_x+.05, max_y-.05)
+)
+```
+
+##### Test
+
+```{r warning = FALSE, fig.width=5, fig.height=5}
+test_pred <- filter(best_anom_test_pred, split == "test")
+test_n      <- length(best_anom_test_pred$prediction)
+test_R2     <- r2_general(best_anom_test_pred$yield_anom,
+                        best_anom_test_pred$prediction)
+test_label  <- plot_label(test_R2, test_n)
+
+# min_x = min(best_anom_test_pred$yield_anom)
+# max_x = max(best_anom_test_pred$yield_anom)
+# 
+# min_y = min(best_anom_test_pred$prediction)
+# max_y = max(best_anom_test_pred$prediction)
+
+pred_plot(
+  .data = best_anom_test_pred, 
+  x = yield_anom, 
+  y = prediction, 
+  label = test_label,
   y_lims = c(min_y, max_y), 
   x_lims = c(min_x, max_x), 
   label_pos = c(min_x+.05, max_y-.05)

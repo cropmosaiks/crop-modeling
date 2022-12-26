@@ -176,6 +176,9 @@ vignettes/*.pdf
 ########## Custom folder structure ##########
 
 # keep folders, ignore contents
+
+*.nc
+
 data/crop_yield/*
 !data/crop_yield/*.gitkeep
 
