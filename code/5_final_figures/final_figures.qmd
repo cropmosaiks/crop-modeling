@@ -156,8 +156,10 @@ climate <- temp %>%
   dplyr::left_join(ndvi) %>% 
   dplyr::left_join(crop_yield) %>% 
   dplyr::ungroup() %>% 
-  dplyr::mutate(across(.cols = 3:38, .fns = , ~(scale(.) %>% as.vector)),
-                yield_mt = log10(1+yield_mt))
+  dplyr::mutate(across(.cols = 3:38, .fns = , ~(scale(.) %>% as.vector))) %>% 
+  dplyr::relocate(yield_mt, .after = year)
+
+round(colMeans(climate[, 4:39]), 10) 
 
 readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
 ```
@@ -167,12 +169,20 @@ readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
 library(glmnet)
 
 ### Split data into training and test sets
-set.seed(100) 
+set.seed(42) 
 
-index <- sample(1:nrow(climate), 0.8*nrow(climate)) 
+climate <- climate %>% 
+  mutate(yield_mt = log10(1+yield_mt))
 
-train <- climate[index,] # Create the training data 
-test <- climate[-index,] # Create the test data
+df <- climate 
+# df <- dplyr::select(climate, 1:15)
+# df <- dplyr::select(climate, 1:3, 16:27)
+# df <- dplyr::select(climate, 1:3, 28:39)
+
+index <- sample(1:nrow(df), 0.8*nrow(df)) 
+
+train <- df[index,] # Create the training data 
+test <- df[-index,] # Create the test data
 
 # Create X matricies and y vectors from the train and test sets
 # Note that the glmnet function does not work with dataframes, so we need to create a numeric matrix for the training features 
