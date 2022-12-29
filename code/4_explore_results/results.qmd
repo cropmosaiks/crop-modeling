@@ -585,9 +585,9 @@ val_R2   <- r2_general(train_pred$log_yield, train_pred$kfold_cv_predictions)
 train_R2 <- r2_general(train_pred$log_yield, train_pred$prediction)
 test_R2  <- r2_general(test_pred$log_yield, test_pred$prediction)
 
-val_label   <- plot_label(val_R2,   train_n)
-train_label <- plot_label(train_R2, train_n)
-test_label  <- plot_label(test_R2,  test_n)
+val_label   <- plot_label_2(val_R2,   train_n)
+train_label <- plot_label_2(train_R2, train_n)
+test_label  <- plot_label_2(test_R2,  test_n)
 ```
 
 #### Observed vs predicted 
@@ -767,7 +767,7 @@ train_pred <- filter(best_anom_train_pred, split == "train")
 val_n      <- length(best_anom_train_pred$kfold_cv_predictions)
 val_R2     <- r2_general(best_anom_train_pred$yield_anom,
                         best_anom_train_pred$kfold_cv_predictions)
-val_label  <- plot_label(val_R2, val_n)
+val_label  <- plot_label_2(val_R2, val_n)
 
 min_x = min(best_anom_train_pred$yield_anom)
 max_x = max(best_anom_train_pred$yield_anom)
@@ -792,7 +792,7 @@ pred_plot(
 train_n      <- length(best_anom_train_pred$prediction)
 train_R2     <- r2_general(best_anom_train_pred$yield_anom,
                         best_anom_train_pred$prediction)
-train_label  <- plot_label(train_R2, train_n)
+train_label  <- plot_label_2(train_R2, train_n)
 
 min_x = min(best_anom_train_pred$yield_anom)
 max_x = max(best_anom_train_pred$yield_anom)
@@ -818,7 +818,7 @@ test_pred <- filter(best_anom_test_pred, split == "test")
 test_n      <- length(best_anom_test_pred$prediction)
 test_R2     <- r2_general(best_anom_test_pred$yield_anom,
                         best_anom_test_pred$prediction)
-test_label  <- plot_label(test_R2, test_n)
+test_label  <- plot_label_2(test_R2, test_n)
 
 # min_x = min(best_anom_test_pred$yield_anom)
 # max_x = max(best_anom_test_pred$yield_anom)

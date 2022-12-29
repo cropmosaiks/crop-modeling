@@ -6,6 +6,7 @@ if (!require(librarian,quietly = T)){
 librarian::shelf(
   plotly,
   tidyverse,
+  lubridate,
   here,
   rlang,
   latex2exp,
@@ -15,6 +16,9 @@ librarian::shelf(
   tidyterra,
   ggExtra,
   cowplot,
+  rnaturalearth,
+  rnaturalearthdata,
+  ggspatial,
   quiet = T
 )
 ####################### FILE NAMES #######################
@@ -328,8 +332,24 @@ pred_plot <- function(.data, x, y, label = NULL, x_lims = c(0, .82),
   )  
 }
 
-plot_label <- function(r, n) {
+latex_new_lines <- function(each_line) { 
+  if ("character" != class(each_line)) {
+    stop("latex_lines expects a character vector")
+  }
+  ret <- paste0("\\normalsize{$", each_line[1], "$}")
+  while(0 != length(each_line <- tail(each_line, n=-1))) {
+    ret <- paste0("\\overset{", ret, "}{\\normalsize{$", each_line[1],"$}}")
+  }
+  return(ret)
+}
+
+plot_label_2 <- function(r, n) {
   latex2exp::TeX(
     "$\\overset{R^2 = \\r2}{n = \\n2}$", 
     user_defined = list("\\r2"=r, "\\n2" = n))
+}
+
+plot_label_3 <- function(R2, r2, n) {
+  TeX(latex_new_lines(c('R^2=\\R2','r^2=\\r2', 'n=\\n')), 
+      user_defined = list("\\R2" = R2, "\\r2" = r2, "\\n" = n))
 }

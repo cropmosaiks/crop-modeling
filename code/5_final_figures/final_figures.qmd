@@ -69,6 +69,193 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 source(here::here('code', '4_explore_results', 'utility.R'))
 ```
 
+# Climate exploration 
+
+```{r}
+crop_yield <- here::here('data', 'crop_yield', 'cfs_maize_districts_zambia_2009_2022.csv') %>% 
+  readr::read_csv() %>% 
+  select(year, district, yield_mt)
+
+precip <- here::here(
+  'data',
+  'climate',
+  'timeseries-pr-monthly-mean_era_monthly_era5-0.5x0.5-timeseries_mean_1950-2020.nc') %>%
+  terra::rast()
+precip_times <- time(precip)
+precip_idx <- precip_times > as.POSIXct("2008-09-01") & precip_times < as.POSIXct("2023-01-01")
+precip_subset <- precip[[precip_idx]]
+precip_crop <- terra::crop(precip_subset, terra::ext(country_shp))
+
+precip_extract <- terra::extract(precip_crop, zmb_union, ID = F, xy = T)
+
+names(precip_extract) <- c(as.character(time(precip_subset)),'lon', 'lat')
+
+zmb_precip_df <- precip_extract %>%
+  pivot_longer(cols = -c(lon, lat), names_to = 'date', values_to = 'precipitation') %>%
+  mutate(date = lubridate::as_date(date))
+
+zmb_precip_sf <- sf::st_as_sf(
+  zmb_precip_df, coords = c("lon", "lat"), crs = 4326) %>% 
+  sf::st_join(country_shp)
+
+zmb_precip_summary <- zmb_precip_sf %>%
+  dplyr::tibble() %>% 
+  dplyr::select(-geometry) %>% 
+  dplyr::mutate(
+    year = lubridate::year(date),
+    month = lubridate::month(date, label = T),
+    year = dplyr::case_when(
+      month %in% c('Oct','Nov','Dec') ~ year + 1,
+      T ~ year
+    )) %>%
+  dplyr::group_by(year, month, district) %>%
+  dplyr::summarise(precipitation = mean(precipitation, na.rm = T)) %>% 
+  tidyr::pivot_wider(names_from = month, values_from = precipitation, names_prefix = 'precip_') %>% 
+  dplyr::filter(year < 2021) 
+
+
+temp <- here::here(
+  'data',
+  'climate',
+  'timeseries-tas-monthly-mean_era_monthly_era5-0.5x0.5-timeseries_mean_1950-2020.nc') %>%
+  terra::rast()
+temp_times <- time(temp)
+temp_idx <- temp_times > as.POSIXct("2008-09-01") & temp_times < as.POSIXct("2023-01-01")
+temp_subset <- temp[[temp_idx]]
+temp_crop <- terra::crop(temp_subset, terra::ext(country_shp))
+
+temp_extract <- terra::extract(temp_crop, zmb_union, ID = F, xy = T)
+
+names(temp_extract) <- c(as.character(time(temp_subset)),'lon', 'lat')
+
+zmb_temp_df <- temp_extract %>%
+  pivot_longer(cols = -c(lon, lat), names_to = 'date', values_to = 'temperature') %>%
+  mutate(date = lubridate::as_date(date))
+
+zmb_temp_sf <- sf::st_as_sf(
+  zmb_temp_df, coords = c("lon", "lat"), crs = 4326) %>% 
+  sf::st_join(country_shp)
+
+zmb_temp_summary <- zmb_temp_sf %>%
+  dplyr::tibble() %>% 
+  dplyr::select(-geometry) %>% 
+  dplyr::mutate(
+    year = lubridate::year(date),
+    month = lubridate::month(date, label = T),
+    year = dplyr::case_when(
+      month %in% c('Oct','Nov','Dec') ~ year + 1,
+      T ~ year
+    )) %>%
+  dplyr::group_by(year, month, district) %>%
+  dplyr::summarise(temperature = mean(temperature, na.rm = T)) %>% 
+  tidyr::pivot_wider(names_from = month, values_from = temperature, names_prefix = 'temp_') %>% 
+  dplyr::filter(year < 2021) 
+
+
+climate <- crop_yield %>% 
+  dplyr::inner_join(zmb_precip_summary) %>% 
+  dplyr::left_join(zmb_temp_summary)
+
+readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
+```
+
+```{r}
+library(glmnet)
+
+### Split data into training and test sets
+set.seed(100) 
+
+index <- sample(1:nrow(climate), 0.8*nrow(climate)) 
+
+train <- climate[index,] # Create the training data 
+test <- climate[-index,] # Create the test data
+
+# Create X matricies and y vectors from the train and test sets
+# Note that the glmnet function does not work with dataframes, so we need to create a numeric matrix for the training features 
+X_train <- as.matrix(subset(train, select = -c(yield_mt, year, district)))
+y_train <- train$yield_mt
+
+X_test <- as.matrix(subset(test, select = -c(yield_mt, year, district)))
+y_test <- test$yield_mt
+
+#save test set lat/lons for later
+# plotting_coords <- subset(test, select = c(lon,lat))
+
+# Train the ridge regression model, choosing the penalization parameter using cross-validation in the train set.
+cv_ridge <- cv.glmnet(X_train, y_train, 
+                      alpha = 0, # ridge regression
+                      nfolds = 5)
+
+# summarize chosen configuration 
+optimal_lambda <- cv_ridge$lambda.min
+print(paste0("optimal lambda: ", optimal_lambda))
+
+#predict model
+y_pred <- predict(cv_ridge, s = optimal_lambda, newx = X_test)
+
+# Compute R^2 from true and predicted values
+SSE <- sum((y_pred - y_test)^2)
+SST <- sum((y_test - mean(y_test))^2)
+r2 <- (1 - SSE / SST)
+
+print(paste0('r2: ', r2))
+
+#clip bounds so min value = 0 because we know that crop yield cannot be below zero. 
+y_pred[y_pred<0] <- 0
+
+#scatterplot
+ggplot(data = NULL, aes(x=y_pred, y=y_test)) + 
+  geom_point() +
+  labs(x = "Predicted", y = "Observed")
+```
+
+
+
+# Zambian Districts
+
+```{r fig.height=7, fig.width=8, warning=FALSE, message=FALSE}
+africa <- ne_countries(scale = "medium", returnclass = "sf") %>% 
+  dplyr::filter(continent == 'Africa')
+
+extent <- terra::ext(zmb_union)
+extent <- terra::as.polygons(extent)
+terra::crs(extent) <- "epsg:4326"
+
+provinces <- here::here('data', 'geo_boundaries', 'gadm36_ZMB_1.shp') %>% 
+  sf::read_sf() %>% 
+  dplyr::rename('province' = NAME_1)
+
+ybreaks <- c(-8, -10, -12, -14, -16, -18)
+ylabs <- paste0(ybreaks,'°S')
+
+xbreaks <- c(22, 24, 26, 28, 30, 32, 34)
+xlabs <- paste0(xbreaks,'°E')
+
+inset <- ggplot() +
+  geom_sf(data = africa, fill = "white", linewidth = 1) +
+  geom_sf(data = extent, fill = NA, linewidth = 1, color = 'red') +
+  theme_void() +
+  theme(panel.border = element_rect(fill = NA),
+        panel.background = element_rect(fill = alpha("white", .5)))
+
+main <- ggplot() +
+  geom_sf(data = country_shp, linewidth = .5, color = 'black', fill = "grey60") +
+  geom_sf(data = provinces, linewidth = 1, color = 'black', fill = NA) +
+  geom_sf_label(data = provinces, aes(label = province) )+
+  scale_fill_viridis_d() +
+  scale_size_identity() + 
+  scale_x_continuous(breaks = xbreaks, labels = xlabs) +
+  scale_y_continuous(breaks = ybreaks, labels = ylabs) +
+  labs(x = NULL, y = NULL) +
+  theme(legend.position = "right")
+
+ggdraw() +
+  draw_plot(main) +
+  draw_plot(inset, x = 0.7, y = .06, width = .3, height = .3)
+```
+
+# Zambian Maize Growing Season
+
 ```{r}
 ggplot(data = zmb_precip_summary) +
   aes(x = month, y = precipitation) +
@@ -99,6 +286,38 @@ ggplot(data = zmb_precip_summary) +
              y = 20, label = "Harvest", 
              hjust = 0.5, vjust = 0.5, size = 3) 
 ```
+
+# Zambian Cropland
+
+```{r fig.height=8, fig.width=8, warning=FALSE, message=FALSE}
+country_vect <- country_shp %>%
+  sf::st_union() %>%
+  terra::vect()
+  
+crop_land <- here::here("data", "land_cover", "ZMB_cropland_2019.tif") %>%
+  terra::rast() %>%
+  terra::crop(country_vect, mask=TRUE) %>% 
+  terra::aggregate(fact=33, fun='mean', na.rm = TRUE)
+
+crop_land <- crop_land * 100
+
+ybreaks <- c(-8, -10, -12, -14, -16, -18)
+ylabs <- paste0(ybreaks,'°S')
+
+xbreaks <- c(22, 24, 26, 28, 30, 32, 34)
+xlabs <- paste0(xbreaks,'°E')
+
+ggplot() +
+  tidyterra::geom_spatraster(data = crop_land) +
+  geom_sf(data = country_shp, color = 'white', fill = NA, linewidth = .7) +
+  scale_fill_viridis_c(na.value = NA, guide = guide_colorbar(title.position = "top")) +
+  scale_x_continuous(breaks = xbreaks, labels = xlabs) +
+  scale_y_continuous(breaks = ybreaks, labels = ylabs) +
+  labs(fill = "Cropland Percentage") +
+  theme(legend.position = "bottom")
+```
+
+# Model Results
 
 ```{r}
 cat('Train on levels\n\tCoefficient of determination')
@@ -146,23 +365,7 @@ cat(paste0("\n\tTest: ", r2_pears(best_anom_test_pred$yield_anom,
                                    best_anom_test_pred$prediction)))
 ```
 
-```{r}
-latex_new_lines <- function(each_line) { 
-  if ("character" != class(each_line)) {
-    stop("latex_lines expects a character vector")
-  }
-  ret <- paste0("\\normalsize{$", each_line[1], "$}")
-  while(0 != length(each_line <- tail(each_line, n=-1))) {
-    ret <- paste0("\\overset{", ret, "}{\\normalsize{$", each_line[1],"$}}")
-  }
-  return(ret)
-}
-
-plot_label <- function(R2, r2, n) {
-  TeX(latex_new_lines(c('R^2=\\R2','r^2=\\r2', 'n=\\n')), 
-      user_defined = list("\\R2" = R2, "\\r2" = r2, "\\n" = n))
-}
-```
+# Best General Model
 
 ```{r fig.height=3.5, fig.width=7}
 val_R2  <- r2_general(train_pred$log_yield, train_pred$kfold_cv_predictions)
@@ -174,8 +377,8 @@ test_r2 <- r2_pears(test_pred$log_yield, test_pred$prediction)
 train_n <- length(train_pred$prediction)
 test_n  <- length(test_pred$prediction)
 
-val_label  <- plot_label(R2 = val_R2, r2 = val_r2, n = train_n)
-test_label <- plot_label(R2 = test_R2, r2 = test_r2, n = test_n)
+val_label  <- plot_label_3(R2 = val_R2, r2 = val_r2, n = train_n)
+test_label <- plot_label_3(R2 = test_R2, r2 = test_r2, n = test_n)
 
 p1 <- ggplot() +
   geom_point(data = summary_predictions,
@@ -215,6 +418,8 @@ p2 <- ggExtra::ggMarginal(
 cowplot::plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
 ```
 
+# Demeaned Best General Model
+
 ```{r fig.height=3.5, fig.width=7}
 val_R2  <- r2_general(train_pred$demean_yield, train_pred$demean_cv_pred)
 test_R2 <- r2_general(test_pred$demean_yield, test_pred$demean_pred)
@@ -225,8 +430,8 @@ test_r2 <- r2_pears(test_pred$demean_yield, test_pred$demean_pred)
 train_n <- length(train_pred$prediction)
 test_n  <- length(test_pred$prediction)
 
-val_label  <- plot_label(R2 = val_R2, r2 = val_r2, n = train_n)
-test_label <- plot_label(R2 = test_R2, r2 = test_r2, n = test_n)
+val_label  <- plot_label_3(R2 = val_R2, r2 = val_r2, n = train_n)
+test_label <- plot_label_3(R2 = test_R2, r2 = test_r2, n = test_n)
 
 p1 <- ggplot() +
   geom_point(data = train_pred,
@@ -266,6 +471,8 @@ p2 <- ggExtra::ggMarginal(
 plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
 ```
 
+# Anomaly of Best General Model
+
 ```{r fig.height=3.5, fig.width=7}
 val_R2  <- r2_general(anom_train_pred$yield_anom, anom_train_pred$kfold_cv_predictions)
 test_R2 <- r2_general(anom_test_pred$yield_anom, anom_test_pred$prediction)
@@ -276,8 +483,8 @@ test_r2 <- r2_pears(anom_test_pred$yield_anom, anom_test_pred$prediction)
 train_n <- length(anom_train_pred$kfold_cv_predictions)
 test_n  <- length(anom_test_pred$prediction)
 
-val_label  <- plot_label(R2 = val_R2, r2 = val_r2, n = train_n)
-test_label <- plot_label(R2 = test_R2, r2 = test_r2, n = test_n)
+val_label  <- plot_label_3(R2 = val_R2, r2 = val_r2, n = train_n)
+test_label <- plot_label_3(R2 = test_R2, r2 = test_r2, n = test_n)
 
 p1 <- ggplot() +
   geom_point(data = anom_train_pred,
@@ -317,6 +524,8 @@ p2 <- ggExtra::ggMarginal(
 plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
 ```
 
+# Best Over Time Model
+
 ```{r fig.height=3.5, fig.width=7}
 val_R2  <- r2_general(best_anom_train_pred$yield_anom, best_anom_train_pred$kfold_cv_predictions)
 test_R2 <- r2_general(best_anom_test_pred$yield_anom, best_anom_test_pred$prediction)
@@ -327,8 +536,8 @@ test_r2 <- r2_pears(best_anom_test_pred$yield_anom, best_anom_test_pred$predicti
 train_n <- length(best_anom_train_pred$kfold_cv_predictions)
 test_n  <- length(best_anom_test_pred$prediction)
 
-val_label  <- plot_label(R2 = val_R2, r2 = val_r2, n = train_n)
-test_label <- plot_label(R2 = test_R2, r2 = test_r2, n = test_n)
+val_label  <- plot_label_3(R2 = val_R2, r2 = val_r2, n = train_n)
+test_label <- plot_label_3(R2 = test_R2, r2 = test_r2, n = test_n)
 
 p1 <- ggplot() +
   geom_point(data = best_anom_train_pred,
@@ -367,93 +576,6 @@ p2 <- ggExtra::ggMarginal(
 ) 
 plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
 ```
-
-```{r fig.height=7, fig.width=8, warning=FALSE, message=FALSE}
-  
-library(rnaturalearth)
-library(rnaturalearthdata)
-library(ggspatial)
-
-africa <- ne_countries(scale = "medium", returnclass = "sf") %>% 
-  dplyr::filter(continent == 'Africa')
-
-extent <- terra::ext(zmb_union)
-extent <- terra::as.polygons(extent)
-terra::crs(extent) <- "epsg:4326"
-
-provinces <- here::here('data', 'geo_boundaries', 'gadm36_ZMB_1.shp') %>% 
-  sf::read_sf() %>% 
-  dplyr::rename('province' = NAME_1)
-
-ybreaks <- c(-8, -10, -12, -14, -16, -18)
-ylabs <- paste0(ybreaks,'°S')
-
-xbreaks <- c(22, 24, 26, 28, 30, 32, 34)
-xlabs <- paste0(xbreaks,'°E')
-
-inset <- ggplot() +
-  geom_sf(data = africa, fill = "white", linewidth = 1) +
-  geom_sf(data = extent, fill = NA, linewidth = 1, color = 'red') +
-  theme_void() +
-  theme(panel.border = element_rect(fill = NA),
-        panel.background = element_rect(fill = alpha("white", .5)))
-
-main <- ggplot() +
-  geom_sf(data = country_shp, linewidth = .5, color = 'black', fill = "grey60") +
-  geom_sf(data = provinces, linewidth = 1, color = 'black', fill = NA) +
-  geom_sf_label(data = provinces, aes(label = province) )+
-  scale_fill_viridis_d() +
-  scale_size_identity() + 
-  scale_x_continuous(breaks = xbreaks, labels = xlabs) +
-  scale_y_continuous(breaks = ybreaks, labels = ylabs) +
-  labs(x = NULL, y = NULL) +
-  theme(legend.position = "right")
-
-ggdraw() +
-  draw_plot(main) +
-  draw_plot(inset, x = 0.7, y = .06, width = .3, height = .3)
-
-# ggplot() +
-#   geom_sf(data = country_shp, linewidth = .5, color = 'black', fill = "grey60") +
-#   geom_sf(data = provinces, linewidth = 2, color = 'black', fill = NA) +
-#   geom_sf_label(data = country_shp, aes(label = district) )+
-#   scale_fill_viridis_d() +
-#   scale_size_identity() + 
-#   scale_x_continuous(breaks = xbreaks, labels = xlabs) +
-#   scale_y_continuous(breaks = ybreaks, labels = ylabs) +
-#   labs(x = NULL, y = NULL) +
-#   theme(legend.position = "right")
-```
-
-```{r fig.height=8, fig.width=8, warning=FALSE, message=FALSE}
-country_vect <- country_shp %>%
-  sf::st_union() %>%
-  terra::vect()
-  
-crop_land <- here::here("data", "land_cover", "ZMB_cropland_2019.tif") %>%
-  terra::rast() %>%
-  terra::crop(country_vect, mask=TRUE) %>% 
-  terra::aggregate(fact=33, fun='mean', na.rm = TRUE)
-
-ybreaks <- c(-8, -10, -12, -14, -16, -18)
-ylabs <- paste0(ybreaks,'°S')
-
-xbreaks <- c(22, 24, 26, 28, 30, 32, 34)
-xlabs <- paste0(xbreaks,'°E')
-
-ggplot() +
-  tidyterra::geom_spatraster(data = crop_land) +
-  geom_sf(data = country_shp, color = 'white', fill = NA, linewidth = .7) +
-  scale_fill_viridis_c(na.value = NA, guide = guide_colorbar(title.position = "top")) +
-  scale_x_continuous(breaks = xbreaks, labels = xlabs) +
-  scale_y_continuous(breaks = ybreaks, labels = ylabs) +
-  labs(fill = "Cropland Percentage") +
-  theme(legend.position = "bottom")
-```
-
-
-
-
 
 
 
