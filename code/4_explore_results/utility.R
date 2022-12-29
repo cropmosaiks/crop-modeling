@@ -353,3 +353,93 @@ plot_label_3 <- function(R2, r2, n) {
   TeX(latex_new_lines(c('R^2=\\R2','r^2=\\r2', 'n=\\n')), 
       user_defined = list("\\R2" = R2, "\\r2" = r2, "\\n" = n))
 }
+
+
+
+
+
+
+
+
+
+# precip <- here::here(
+#   'data',
+#   'climate',
+#   'timeseries-pr-monthly-mean_era_monthly_era5-0.5x0.5-timeseries_mean_1950-2020.nc') %>%
+#   terra::rast()
+# precip_times <- time(precip)
+# precip_idx <- precip_times > as.POSIXct("2008-09-01") & precip_times < as.POSIXct("2023-01-01")
+# precip_subset <- precip[[precip_idx]]
+# precip_crop <- terra::crop(precip_subset, terra::ext(country_shp))
+# 
+# precip_extract <- terra::extract(precip_crop, zmb_union, ID = F, xy = T)
+# 
+# names(precip_extract) <- c(as.character(time(precip_subset)),'lon', 'lat')
+# 
+# zmb_precip_df <- precip_extract %>%
+#   pivot_longer(cols = -c(lon, lat), names_to = 'date', values_to = 'precipitation') %>%
+#   mutate(date = lubridate::as_date(date))
+# 
+# zmb_precip_sf <- sf::st_as_sf(
+#   zmb_precip_df, coords = c("lon", "lat"), crs = 4326) %>% 
+#   sf::st_join(country_shp)
+# 
+# zmb_precip_summary <- zmb_precip_sf %>%
+#   dplyr::tibble() %>% 
+#   dplyr::select(-geometry) %>% 
+#   dplyr::mutate(
+#     year = lubridate::year(date),
+#     month = lubridate::month(date, label = T),
+#     year = dplyr::case_when(
+#       month %in% c('Oct','Nov','Dec') ~ year + 1,
+#       T ~ year
+#     )) %>%
+#   dplyr::group_by(year, month, district) %>%
+#   dplyr::summarise(precipitation = mean(precipitation, na.rm = T)) %>% 
+#   tidyr::pivot_wider(names_from = month, values_from = precipitation, names_prefix = 'precip_') %>% 
+#   dplyr::filter(year < 2021) 
+# 
+# 
+# temp <- here::here(
+#   'data',
+#   'climate',
+#   'timeseries-tas-monthly-mean_era_monthly_era5-0.5x0.5-timeseries_mean_1950-2020.nc') %>%
+#   terra::rast()
+# temp_times <- time(temp)
+# temp_idx <- temp_times > as.POSIXct("2008-09-01") & temp_times < as.POSIXct("2023-01-01")
+# temp_subset <- temp[[temp_idx]]
+# temp_crop <- terra::crop(temp_subset, terra::ext(country_shp))
+# 
+# temp_extract <- terra::extract(temp_crop, zmb_union, ID = F, xy = T)
+# 
+# names(temp_extract) <- c(as.character(time(temp_subset)),'lon', 'lat')
+# 
+# zmb_temp_df <- temp_extract %>%
+#   pivot_longer(cols = -c(lon, lat), names_to = 'date', values_to = 'temperature') %>%
+#   mutate(date = lubridate::as_date(date))
+# 
+# zmb_temp_sf <- sf::st_as_sf(
+#   zmb_temp_df, coords = c("lon", "lat"), crs = 4326) %>% 
+#   sf::st_join(country_shp)
+# 
+# zmb_temp_summary <- zmb_temp_sf %>%
+#   dplyr::tibble() %>% 
+#   dplyr::select(-geometry) %>% 
+#   dplyr::mutate(
+#     year = lubridate::year(date),
+#     month = lubridate::month(date, label = T),
+#     year = dplyr::case_when(
+#       month %in% c('Oct','Nov','Dec') ~ year + 1,
+#       T ~ year
+#     )) %>%
+#   dplyr::group_by(year, month, district) %>%
+#   dplyr::summarise(temperature = mean(temperature, na.rm = T)) %>% 
+#   tidyr::pivot_wider(names_from = month, values_from = temperature, names_prefix = 'temp_') %>% 
+#   dplyr::filter(year < 2021) 
+# 
+# 
+# climate <- crop_yield %>% 
+#   dplyr::inner_join(zmb_precip_summary) %>% 
+#   dplyr::left_join(zmb_temp_summary)
+# 
+# readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
