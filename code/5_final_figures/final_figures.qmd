@@ -85,7 +85,8 @@ districts <- districts_plus %>%
 ```
 
 ```{r}
-crop_yield <- here::here('data', 'crop_yield', 'cfs_maize_districts_zambia_2009_2022.csv') %>% 
+crop_yield <- here::here('data', 'crop_yield',
+                         'cfs_maize_districts_zambia_2009_2022.csv') %>% 
   readr::read_csv() %>% 
   select(year, district, yield_mt)
 
@@ -148,7 +149,7 @@ ndvi <- here::here('data', 'climate', 'NDVI', 'NDVI.csv') %>%
   dplyr::summarise(ndvi = mean(ndvi, na.rm = TRUE)) %>% 
   dplyr::ungroup() %>% 
   dplyr::group_by(district, month) %>% 
-  dplyr::mutate(ndvi = mean(ndvi, na.rm = TRUE)) %>% 
+  dplyr::mutate(ndvi = case_when(is.na(ndvi) ~ mean(ndvi, na.rm = TRUE), T ~ ndvi)) %>% 
   tidyr::pivot_wider(names_from = 'month', values_from = 'ndvi', names_prefix = "ndvi_")
 
 climate <- temp %>% 
@@ -156,10 +157,8 @@ climate <- temp %>%
   dplyr::left_join(ndvi) %>% 
   dplyr::left_join(crop_yield) %>% 
   dplyr::ungroup() %>% 
-  dplyr::mutate(across(.cols = 3:38, .fns = , ~(scale(.) %>% as.vector))) %>% 
   dplyr::relocate(yield_mt, .after = year)
 
-round(colMeans(climate[, 4:39]), 10) 
 
 readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
 ```
@@ -171,13 +170,17 @@ library(glmnet)
 ### Split data into training and test sets
 set.seed(42) 
 
-climate <- climate %>% 
-  mutate(yield_mt = log10(1+yield_mt))
+clim <- climate %>% 
+  dplyr::mutate(
+    across(.cols = 4:39, .fns = , ~(scale(.) %>% as.vector)),
+    yield_mt = log10(1+yield_mt))
 
-df <- climate 
-# df <- dplyr::select(climate, 1:15)
-# df <- dplyr::select(climate, 1:3, 16:27)
-# df <- dplyr::select(climate, 1:3, 28:39)
+# round(colMeans(clim[, 4:39]), 10) 
+
+df <- clim
+# df <- dplyr::select(clim, 1:15)
+# df <- dplyr::select(clim, 1:3, 16:27)
+# df <- dplyr::select(clim, 1:3, 28:39)
 
 index <- sample(1:nrow(df), 0.8*nrow(df)) 
 
