@@ -65,6 +65,8 @@ fig-cap-location: bottom
 ```{r message=F, warning=F}
 ####################### R ENVIRONMENT #######################
 knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+library(tidyverse)
+library(here)
 
 source(here::here('code', '4_explore_results', 'utility.R'))
 ```
@@ -274,28 +276,95 @@ ggdraw() +
 
 # Zambian Maize Growing Season
 
+Ideas:
+- redo x-axis to capture growing season - does this mean subset to only growing season months? this makes us unable to include satellite imagery span for sentinel
+DONE - label planting, CFS, and harvest
+DONE - label prime imagery months may - oct - did this in a different way (separate bars for Sentinel & Landsat)
+- add temperature? I downloaded monthly mean temp at same resolution but not sure if it would add anything
+- Use climate data to see if any districts are drier/wetter than others on avg
+
 ```{r}
+# manually define path to data
+# zmb_precip_summary_path = here('data', 'climate', 'precipitation_monthly_mean.csv')
+# zmb_precip_summary = read.csv(zmb_precip_summary_path)
+
+# change custom months to only reflect growing season for clarity
+#custom_months_subset <- c("Oct", "Nov", "Dec", "Jan", "Feb", "Mar", 
+#                   "Apr", "May", "Jun")
+
+# custom_months <- c("Oct", "Nov", "Dec", "Jan", "Feb", "Mar",
+#                    "Apr", "May", "Jun", "Jul", "Aug", "Sep")
+# 
+# zmb_precip_summary <- here::here('data', 'climate', 'precipitation_monthly_mean.csv') %>% 
+#   readr::read_csv() %>% 
+#   mutate(month = factor(month, levels = custom_months))
+
 ggplot(data = zmb_precip_summary) +
   aes(x = month, y = precipitation) +
-  geom_col(fill = "dodgerblue") +
-  scale_y_continuous(expand = expansion(add = c(0, 20))) +
-### SOWING
-  geom_segment(x = "Oct", xend = "Dec", y = 80, yend = 80, 
+  labs(x = "Month", y = "Precipitation (mm)") + # TO DO: confirm with cullen units are mm
+  geom_col(fill = "dodgerblue3", color = "black", width = 0.80) +
+  scale_y_continuous(expand = expansion(add = c(0, 20)), # removes buffer between x-axis and bars
+                     breaks = seq(0, 275, 50)) + 
+  theme_classic() +
+  theme(panel.border = element_rect(color = "black",
+                                    fill = NA,
+                                    size = 1),
+        axis.text.x = element_text(colour = "black"),
+        axis.text.y = element_text(colour = "black")) +
+  #scale_x_discrete(breaks = NULL) # supress vertical background lines
+# ### SOWING
+#   geom_segment(x = "Oct", xend = "Dec", y = 80, yend = 80,
+#                lineend = 'round', size = 2) +
+#   geom_label(x = "Dec",
+#              y = 80, label = "Sowing",
+#              hjust = 1.65, vjust = .5, size = 3) +
+# ### GROWING
+#   geom_segment(x = "Nov", xend = "May", y = 60, yend = 60,
+#                lineend = 'round', size = 2) +
+#   geom_label(x = "Feb",
+#              y = 60, label = "Growing",
+#              hjust = 1.1, vjust = .5, size = 3) +
+
+### PLANTING - combines SOWING and GROWING into one time period for clarity
+  geom_segment(x = "Oct", xend = "May", y = 80, yend = 80,
                lineend = 'round', size = 2) +
-  geom_label(x = "Dec",
-             y = 80, label = "Sowing",
+  geom_label(x = "Mar",
+             y = 80, label = "Planting ",
              hjust = 1.65, vjust = .5, size = 3) +
-### GROWING 
-  geom_segment(x = "Nov", xend = "May", y = 60, yend = 60, 
+  ### SENTINEL SATELLITE IMAGERY
+  geom_segment(x = "Oct", xend = "Sep", y = 140, yend = 140,
                lineend = 'round', size = 2) +
-  geom_label(x = "Feb",
-             y = 60, label = "Growing",
-             hjust = 1.1, vjust = .5, size = 3) +
-### SURVEY
-  geom_segment(x = "Mar", xend = "Apr", y = 40, yend = 40, 
+  # geom_label(x = "May",
+  #            y = 150, label = "Sentinel Satellite Imagery ",
+  #            hjust = 1.65, vjust = .5, size = 3) +
+  geom_text(aes(x = "Jul",
+                 label = "Sentinel Satellite Imagery ", 
+                 y = 150), 
+             angle = 0, 
+             size = 3,
+             color = "black") +
+  ### LANDSAT SATELLITE IMAGERY
+  geom_segment(x = "May", xend = "Sep", y = 110, yend = 110,
                lineend = 'round', size = 2) +
-  geom_label(x = "Apr",
-             y = 40, label = "CFS",
+  #geom_label(x = "Jul", nudge_x = 1, # trying to get label to right side more, nudge_x doesnt do anything
+  #           y = 110, label = "Landsat Satellite Imagery ",
+  #           hjust = 1.65, vjust = .5, size = 3) +
+  geom_segment(x = "Oct", xend = "Oct", y = 110, yend = 110,
+               lineend = 'round', size = 2) +
+  geom_text(aes(x = "Jul",
+                 label = "Landsat Satellite Imagery ", 
+                 y = 120), 
+             angle = 0, 
+             size = 3,
+             color = "black") +
+  # geom_label(x = "Oct",
+  #            y = 110, label = "Landsat Satellite Imagery ",
+  #           hjust = 1.65, vjust = .5, size = 3) + # adding second segment to show that landsat satellite imagery extends into Oct
+### CFS SURVEY
+  geom_segment(x = "Apr", xend = "May", y = 40, yend = 40, 
+               lineend = 'round', size = 2) +
+  geom_label(x = "May",
+             y = 40, label = "CFS ", # tried to rename CFS ttoSurvey for clarity (acronyms are hard to remember for readers, but Crop Forecast Survey is too long, and Survey is too long for the short line, should we have an * with CFS = Crop Forecast Survey?)
              hjust = 1.3, vjust = .5, size = 3) +
 ### HARVEST  
   geom_segment(x = "Apr", xend = "Jun", y = 20, yend = 20, 
@@ -303,6 +372,7 @@ ggplot(data = zmb_precip_summary) +
   geom_label(x = "May",
              y = 20, label = "Harvest", 
              hjust = 0.5, vjust = 0.5, size = 3) 
+
 ```
 
 # Zambian Cropland
