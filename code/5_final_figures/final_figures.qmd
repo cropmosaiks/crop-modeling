@@ -72,6 +72,14 @@ source(here::here('code', '4_explore_results', 'utility.R'))
 # Climate exploration 
 
 ```{r}
+ndvi <- readr::read_csv(here::here('data', 'climate', 'modis_ndvi.csv'))
+pre_tmp <- readr::read_csv(here::here('data', 'climate', 'cru_pre_tmp.csv'))
+
+climate <- dplyr::left_join(pre_tmp, ndvi)
+```
+
+
+```{r}
 districts_plus <- here::here('data', 'climate', 'NDVI', 'ZMB_ADM2.geojson') %>% 
   sf::read_sf() %>% 
   dplyr::select(shapeName) %>% 
@@ -85,11 +93,6 @@ districts <- districts_plus %>%
 ```
 
 ```{r}
-crop_yield <- here::here('data', 'crop_yield',
-                         'cfs_maize_districts_zambia_2009_2022.csv') %>% 
-  readr::read_csv() %>% 
-  select(year, district, yield_mt)
-
 tp <- here::here('data', 'climate', 'temp_precip', 'temp_precip.csv') %>% 
   readr::read_csv() %>% 
   dplyr::select(-c(asdf_id, Level, Shape_Area, Shape_Leng, 
@@ -114,13 +117,14 @@ tp <- here::here('data', 'climate', 'temp_precip', 'temp_precip.csv') %>%
 
 temp <- tp %>% 
   dplyr::filter(tp == "temp") %>% 
-  dplyr::group_by(district, year, month) %>% 
+  dplyr::group_by(district, year, month) %>%
   dplyr::summarise(temp = mean(value, na.rm = TRUE)) %>% 
   tidyr::pivot_wider(names_from = month, values_from = temp, names_prefix = "temp_")
 
 precip <- tp %>% 
   dplyr::filter(tp == "precip") %>% 
-  dplyr::group_by(district, year, month) %>% 
+  dplyr::group_by(district, year, month) %>%
+  # dplyr::group_by(month) %>%
   dplyr::summarise(precip = mean(value, na.rm = TRUE)) %>% 
   tidyr::pivot_wider(names_from = month, values_from = precip, names_prefix = "precip_")
 
@@ -160,7 +164,7 @@ climate <- temp %>%
   dplyr::relocate(yield_mt, .after = year)
 
 
-readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
+# readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
 ```
 
 
@@ -173,7 +177,8 @@ set.seed(42)
 clim <- climate %>% 
   dplyr::mutate(
     across(.cols = 4:39, .fns = , ~(scale(.) %>% as.vector)),
-    yield_mt = log10(1+yield_mt))
+    yield_mt = log10(1+yield_mt),
+    district = factor(district))
 
 # round(colMeans(clim[, 4:39]), 10) 
 
@@ -189,10 +194,14 @@ test <- df[-index,] # Create the test data
 
 # Create X matricies and y vectors from the train and test sets
 # Note that the glmnet function does not work with dataframes, so we need to create a numeric matrix for the training features 
-X_train <- as.matrix(subset(train, select = -c(yield_mt, year, district)))
+X_train <- as.matrix(subset(train, select = -c(yield_mt, year
+                                               , district
+                                               )))
 y_train <- train$yield_mt
 
-X_test <- as.matrix(subset(test, select = -c(yield_mt, year, district)))
+X_test <- as.matrix(subset(test, select = -c(yield_mt, year
+                                             , district
+                                             )))
 y_test <- test$yield_mt
 
 #save test set lat/lons for later

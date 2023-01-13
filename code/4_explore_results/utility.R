@@ -22,9 +22,9 @@ librarian::shelf(
   quiet = T
 )
 ####################### FILE NAMES #######################
-one_sensor_date  <- "2022-12-25"
+one_sensor_date  <- "2022-12-29"# "2022-12-25"
 one_anomaly_date <- "2022-12-25"
-two_sensor_date  <- "2022-12-18"
+two_sensor_date  <- "2022-12-30"# "2022-12-18"
 two_anomaly_date <- "2022-12-18"
 
 one_sensor_fn  <- paste0("results_", one_sensor_date, ".csv")
@@ -180,6 +180,10 @@ high_res_predictions <- high_res_predictions %>%
       prediction < 0 ~ 0,
       T ~ prediction)) 
 
+dummy_df <- country_shp %>% 
+  tibble::as_tibble() %>% 
+  dplyr::select(district) 
+
 # here::here('data', 'land_cover', 'ZMB_cropland_percentage_15k-points.feather') %>% 
 #   arrow::read_feather()
 
@@ -197,6 +201,112 @@ high_res_predictions <- high_res_predictions %>%
 #   crop_land, 
 #   here::here("data", "land_cover", "ZMB_cropland_2019_cropped.tif"),
 #   filetype = 'GTiff', overwrite=T)
+
+
+
+# base_dir <- here::here("data","climate", "Vegetation Indices",
+#                    "MODIS Terra C6.0 - Vegetation Indices Monthly L3 Global 0.05Deg CMG")
+# 
+# result <- tibble::tibble()
+# 
+# years <- 2000:2022
+# 
+# for (year in years) {
+#   directory <- here::here(base_dir, year) %>% 
+#     list.files()
+#   # cat(year, '\t', directory, '\n')
+#   for (dir in directory) {
+#     cat(year, '\t', dir, '\n')
+#     file <- here::here(base_dir, year, dir) %>%
+#       list.files(full.names = T)
+#     ndvi <- terra::rast(file)
+#     terra::crs(ndvi) <- 'epsg:4326'
+#     ndvi <- subset(ndvi, 1)
+#     ndvi <- terra::crop(ndvi, terra::ext(country_shp))
+#     ndvi <- ndvi * 0.0001
+#     ndvi <- exactextractr::exact_extract(ndvi, country_shp, fun = 'mean', progress = F)
+#     ndvi_df <- cbind(ndvi, dummy_df)
+#     ndvi_df <- dplyr::mutate(ndvi_df, year = year, doy = dir)
+#     result <- rbind(result, ndvi_df)
+#   }
+#   cat('\n')
+# }
+# 
+# results <- result %>% 
+#   dplyr::mutate(
+#     date = strptime(paste(year, doy), format = "%Y %j"),
+#     month = lubridate::month(date)) %>% 
+#   dplyr::select(district, year, month, ndvi) %>% 
+#   dplyr::mutate(year = dplyr::case_when(month %in% 10:12 ~ year + 1, T ~ as.numeric(year))) %>% 
+#   dplyr::filter(year >= 2001, year <= 2022) %>%
+#   dplyr::arrange(month, year) %>% 
+#   tidyr::pivot_wider(names_from = month, values_from = ndvi, names_prefix = "ndvi_")
+# 
+# readr::write_csv(results, here::here('data', 'climate', 'modis_ndvi.csv'))
+
+
+
+
+
+
+
+# climate_sum_fun <- function(.rasters, .var = 'pre') {
+#   output <- tibble::tibble()
+#   for (raster in .rasters) {
+#     precip <- here::here('data','climate',raster) %>%
+#       terra::rast()
+#     precip <- precip[as.character(.var)]
+#     precip_times <- time(precip)
+#     names(precip) <- precip_times
+#     # precip_idx <- precip_times > as.POSIXct("2008-09-16") & precip_times < as.POSIXct("2023-01-01")
+#     precip_idx <- precip_times < as.POSIXct("2023-01-01")
+#     precip_subset <- precip[[precip_idx]]
+#     precip_crop <- terra::crop(precip_subset, terra::ext(country_shp))
+#     precip_extract <- exactextractr::exact_extract(precip_crop, country_shp, fun = 'mean')
+#     precip_df <- cbind(precip_extract, dummy_df) 
+#     names(precip_df) <- c(as.character(time(precip_subset)),'district')
+#     zmb_precip_df <- precip_df %>%
+#       pivot_longer(cols = -c(district), names_to = 'date', values_to = .var) %>%
+#       mutate(date = lubridate::as_date(date),
+#              month = lubridate::month(date),
+#              year = lubridate::year(date)) %>% 
+#       dplyr::select(-date)
+#     output <- rbind(output, zmb_precip_df)
+#   }
+#   output <- output %>% 
+#     dplyr::arrange(month, year) %>% 
+#     dplyr::mutate(year = dplyr::case_when(month %in% 10:12 ~ year + 1, T ~ year)) %>% 
+#     dplyr::filter(year >= 2001, year <= 2021) %>% 
+#     tidyr::pivot_wider(names_from = month, values_from = !!.var, names_prefix = paste0(.var, "_"))
+#   return(output)
+# }
+# pre_files <- c(
+#   'cru_ts4.06.1991.2000.pre.dat.nc',
+#   'cru_ts4.06.2001.2010.pre.dat.nc', 
+#   'cru_ts4.06.2011.2020.pre.dat.nc', 
+#   'cru_ts4.06.2021.2021.pre.dat.nc')
+# 
+# tmp_files <- c(
+#   'cru_ts4.06.1991.2000.tmp.dat.nc',
+#   'cru_ts4.06.2001.2010.tmp.dat.nc', 
+#   'cru_ts4.06.2011.2020.tmp.dat.nc', 
+#   'cru_ts4.06.2021.2021.tmp.dat.nc')
+# 
+# precipitation <- climate_sum_fun(.rasters = pre_files, .var = "pre")
+# 
+# temperature <- climate_sum_fun(.rasters = tmp_files, .var = "tmp") 
+# 
+# climate <- dplyr::left_join(precipitation, temperature)
+# 
+# readr::write_csv(climate, here::here('data', 'climate', 'cru_pre_tmp.csv'))
+
+
+
+####################### CROP YIELD ####################### 
+crop_yield <- here::here('data', 'crop_yield',
+                         'cfs_maize_districts_zambia_2009_2022.csv') %>% 
+  readr::read_csv() %>% 
+  dplyr::select(year, district, yield_mt)
 
 ####################### CLIMATE ####################### 
 # custom_months <- month.abb

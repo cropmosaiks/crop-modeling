@@ -178,6 +178,7 @@ vignettes/*.pdf
 # keep folders, ignore contents
 
 *.nc
+*.hdf
 
 data/crop_yield/*
 !data/crop_yield/*.gitkeep
