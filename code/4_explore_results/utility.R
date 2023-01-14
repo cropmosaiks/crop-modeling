@@ -184,6 +184,18 @@ dummy_df <- country_shp %>%
   tibble::as_tibble() %>% 
   dplyr::select(district) 
 
+
+####################### CROP YIELD ####################### 
+crop_yield <- here::here('data', 'crop_yield',
+                         'cfs_maize_districts_zambia_2009_2022.csv') %>% 
+  readr::read_csv() %>% 
+  dplyr::select(year, district, yield_mt)
+
+####################### CLIMATE ####################### 
+# custom_months <- month.abb
+custom_months <- c("Oct", "Nov", "Dec", "Jan", "Feb", "Mar", 
+                   "Apr", "May", "Jun", "Jul", "Aug", "Sep")
+
 # here::here('data', 'land_cover', 'ZMB_cropland_percentage_15k-points.feather') %>% 
 #   arrow::read_feather()
 
@@ -249,7 +261,17 @@ dummy_df <- country_shp %>%
 
 
 
-
+# districts_plus <- here::here('data', 'climate', 'NDVI', 'ZMB_ADM2.geojson') %>% 
+#   sf::read_sf() %>% 
+#   dplyr::select(shapeName) %>% 
+#   dplyr::rename(district_new = shapeName)
+# 
+# districts <- districts_plus %>% 
+#   sf::st_centroid() %>% 
+#   sf::st_join(country_shp, join = st_within) %>% 
+#   dplyr::tibble() %>% 
+#   dplyr::select(-geometry)
+# 
 # climate_sum_fun <- function(.rasters, .var = 'pre') {
 #   output <- tibble::tibble()
 #   for (raster in .rasters) {
@@ -302,16 +324,80 @@ dummy_df <- country_shp %>%
 
 
 
-####################### CROP YIELD ####################### 
-crop_yield <- here::here('data', 'crop_yield',
-                         'cfs_maize_districts_zambia_2009_2022.csv') %>% 
-  readr::read_csv() %>% 
-  dplyr::select(year, district, yield_mt)
 
-####################### CLIMATE ####################### 
-# custom_months <- month.abb
-custom_months <- c("Oct", "Nov", "Dec", "Jan", "Feb", "Mar", 
-                   "Apr", "May", "Jun", "Jul", "Aug", "Sep")
+
+
+# tp <- here::here('data', 'climate', 'temp_precip', 'temp_precip.csv') %>% 
+#   readr::read_csv() %>% 
+#   dplyr::select(-c(asdf_id, Level, Shape_Area, Shape_Leng, 
+#                    gqid, shapeGroup, shapeID, shapeType)) %>% 
+#   dplyr::rename(district_new = shapeName) %>% 
+#   tidyr::pivot_longer(cols = -district_new, names_to = 'date', values_to = 'value') %>% 
+#   tidyr::separate(date, into = c('tp','date', 'metric'), sep = "\\.") %>%  
+#   tidyr::separate(date, into = c('year', 'month'), sep = 4) %>% 
+#   dplyr::mutate(
+#     tp = case_when(tp == 'cru_ts_405_tmp_monthly_mean' ~ 'temp', T ~ 'precip'),
+#     year = as.numeric(year),
+#     month = as.numeric(month),
+#     year = dplyr::case_when(
+#       month %in% 10:12 ~ year + 1,
+#       T ~ year
+#     )) %>% 
+#   dplyr::filter(
+#     year >= 2009, 
+#     year < 2021, 
+#     metric %in% c('mean')) %>% 
+#   dplyr::left_join(districts)
+# 
+# temp <- tp %>% 
+#   dplyr::filter(tp == "temp") %>% 
+#   dplyr::group_by(district, year, month) %>%
+#   dplyr::summarise(temp = mean(value, na.rm = TRUE)) %>% 
+#   tidyr::pivot_wider(names_from = month, values_from = temp, names_prefix = "temp_")
+# 
+# precip <- tp %>% 
+#   dplyr::filter(tp == "precip") %>% 
+#   dplyr::group_by(district, year, month) %>%
+#   # dplyr::group_by(month) %>%
+#   dplyr::summarise(precip = mean(value, na.rm = TRUE)) %>% 
+#   tidyr::pivot_wider(names_from = month, values_from = precip, names_prefix = "precip_")
+# 
+# ndvi <- here::here('data', 'climate', 'NDVI', 'NDVI.csv') %>% 
+#   readr::read_csv() %>% 
+#   dplyr::select(-c(asdf_id, Level, Shape_Area, Shape_Leng, 
+#                    gqid, shapeGroup, shapeID, shapeType)) %>% 
+#   dplyr::rename(district_new = shapeName) %>% 
+#   tidyr::pivot_longer(cols = -district_new, names_to = 'date', values_to = 'ndvi') %>% 
+#   tidyr::separate(date, into = c(NA,'date', 'metric'), sep = "\\.") %>%  
+#   tidyr::separate(date, into = c('year', 'month'), sep = 4) %>% 
+#   dplyr::mutate(
+#     year = as.numeric(year),
+#     month = as.numeric(month),
+#     year = dplyr::case_when(
+#       month %in% 10:12 ~ year + 1,
+#       T ~ year
+#     )) %>% 
+#   dplyr::filter(
+#     year >= 2009, 
+#     year < 2021, 
+#     metric %in% c('mean')) %>% 
+#   dplyr::left_join(districts) %>% 
+#   dplyr::select(-metric) %>% 
+#   dplyr::group_by(district, year, month) %>% 
+#   dplyr::summarise(ndvi = mean(ndvi, na.rm = TRUE)) %>% 
+#   dplyr::ungroup() %>% 
+#   dplyr::group_by(district, month) %>% 
+#   dplyr::mutate(ndvi = case_when(is.na(ndvi) ~ mean(ndvi, na.rm = TRUE), T ~ ndvi)) %>% 
+#   tidyr::pivot_wider(names_from = 'month', values_from = 'ndvi', names_prefix = "ndvi_")
+# 
+# climate <- temp %>% 
+#   dplyr::left_join(precip) %>% 
+#   dplyr::left_join(ndvi) %>% 
+#   dplyr::left_join(crop_yield) %>% 
+#   dplyr::ungroup() %>% 
+#   dplyr::relocate(yield_mt, .after = year)
+# readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
+
 
 # precip <- here::here(
 #   'data',
