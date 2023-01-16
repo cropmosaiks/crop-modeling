@@ -69,7 +69,55 @@ knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 source(here::here('code', '4_explore_results', 'utility.R'))
 ```
 
+
+```{r}
+one_sensor_ndvi_results <- here::here("data", "results", one_sensor_ndvi_fn) %>% 
+  read_csv(show_col_types = FALSE) 
+
+two_sensor_ndvi_results <- here::here("data", "results", two_sensor_ndvi_fn) %>%
+  read_csv(show_col_types = FALSE)  
+
+one_sensor_pre_tmp_ndvi_results <- here::here("data", "results", one_sensor_pre_tmp_ndvi_fn) %>% 
+  read_csv(show_col_types = FALSE) 
+
+two_sensor_pre_tmp_ndvi_results <- here::here("data", "results", two_sensor_pre_tmp_ndvi_fn) %>%
+  read_csv(show_col_types = FALSE)  
+```
+
 # Climate exploration 
+
+```{r}
+# base_dir <- here::here("data","climate", "modis_1km")
+# 
+# result <- tibble::tibble()
+# 
+# for (file in files) {
+#   ndvi <- terra::rast(file)
+#   ydoy <- terra::sources(ndvi) %>% 
+#     stringr::str_split_i(pattern = "\\.", i = 2) %>% 
+#     stringr::str_remove("A") %>% 
+#     stringr::str_replace(pattern = "(.{4})", replacement = "\\1 ") %>% 
+#     stringr::str_split_1(pattern = " ")
+#   ndvi <- exactextractr::exact_extract(ndvi, country_shp, fun = 'mean', progress = F)
+#   ndvi_df <- cbind(ndvi, dummy_df) %>% 
+#     dplyr::mutate(year = ydoy[1], doy = ydoy[2])
+#   result <- rbind(result, ndvi_df)
+#   cat(ydoy[1], "\t", ydoy[2], "\n")
+# }
+# 
+# results <- result %>%
+#   dplyr::mutate(
+#     year = as.numeric(year),
+#     date = strptime(paste(year, doy), format = "%Y %j"),
+#     month = lubridate::month(date),
+#     year = dplyr::case_when(month %in% 10:12 ~ year + 1, T ~ as.numeric(year))) %>%
+#   dplyr::select(district, year, month, ndvi) %>%
+#   dplyr::filter(year >= 2001, year <= 2022) %>%
+#   dplyr::arrange(month, year) %>%
+#   tidyr::pivot_wider(names_from = month, values_from = ndvi, names_prefix = "ndvi_")
+
+```
+
 
 ```{r}
 ndvi <- readr::read_csv(here::here('data', 'climate', 'modis_ndvi.csv'))

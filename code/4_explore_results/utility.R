@@ -22,10 +22,16 @@ librarian::shelf(
   quiet = T
 )
 ####################### FILE NAMES #######################
-one_sensor_date  <- "2022-12-29"# "2022-12-25"
+one_sensor_date  <- "2022-12-25"
 one_anomaly_date <- "2022-12-25"
-two_sensor_date  <- "2022-12-30"# "2022-12-18"
+two_sensor_date  <- "2022-12-18"
 two_anomaly_date <- "2022-12-18"
+
+one_sensor_ndvi_date  <- "2023-01-14"
+two_sensor_ndvi_date  <- "2023-01-14"
+
+one_sensor_pre_tmp_ndvi_date  <- "2023-01-14"
+two_sensor_pre_tmp_ndvi_date  <- "2023-01-14"
 
 one_sensor_fn  <- paste0("results_", one_sensor_date, ".csv")
 two_sensor_fn  <- paste0("2_sensor_results_", two_sensor_date, ".csv")
@@ -34,6 +40,11 @@ two_anomaly_fn <- paste0("2_sensor_anomaly_results_", two_anomaly_date, ".csv")
 pred_suffix   <- 'landsat-8-c2-l2_bands-1-2-3-4-5-6-7_ZMB_20k-points_1000-features_yr-2013-2021_mn-4-9_lm-True_cm-True_wa-True'
 high_res_fn   <- paste0('high-res-pred_k-fold-cv_', pred_suffix, '_he-True.feather')
 
+one_sensor_ndvi_fn  <- paste0("results_", one_sensor_ndvi_date, "_ndvi.csv")
+two_sensor_ndvi_fn  <- paste0("2_sensor_results_", two_sensor_ndvi_date, "_ndvi.csv")
+
+one_sensor_pre_tmp_ndvi_fn  <- paste0("results_", one_sensor_pre_tmp_ndvi_date, "_pre_tmp_ndvi.csv")
+two_sensor_pre_tmp_ndvi_fn  <- paste0("2_sensor_results_", two_sensor_pre_tmp_ndvi_date, "_pre_tmp_ndvi.csv")
 
 
 lsc <- 'landsat-c2-l2'

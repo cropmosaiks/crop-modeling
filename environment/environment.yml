@@ -56,7 +56,8 @@ dependencies:
   - cartopy
   - netcdf4
   - statsmodels
-  - pyprojroot 
+  - pyprojroot
+  - p-tqdm 
   - pip:
     - -r requirements.txt
 
