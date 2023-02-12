@@ -506,9 +506,9 @@ dist_plot <- function(data, x, y, clr, p_type = "box", y_lims = NULL) {
   }
 }
 
-r2_general <-function(actual, predictions) { 
+r2_general <-function(actual, predictions, round = 2) { 
   r2 <- 1 - sum((predictions - actual) ^ 2) / sum((actual - mean(actual))^2)
-  return(round(r2, 2))
+  return(round(r2, round))
 }
 
 r2_pears <- function(actual, predictions) { 

@@ -58,6 +58,7 @@ dependencies:
   - statsmodels
   - pyprojroot
   - p-tqdm 
+  - glum
   - pip:
     - -r requirements.txt
 
