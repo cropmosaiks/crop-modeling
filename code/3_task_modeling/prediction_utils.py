@@ -171,6 +171,7 @@ def _initialize_results_arrays(arr_shapes, return_preds, return_models):
     results_dict["hp_warning"].fill(None)
     return results_dict
 
+
 ## LS: It's very weird that we sometimes use a custom ridge function and sometimes use the sklearn function.
 ## I assume the MOSAIKS authors have a good reason for this. If we are going to switch to all custom ridge, we
 ## can use this basic function:
@@ -446,6 +447,7 @@ def kfold_solve_custom_split_col(
     return_model=False,
     fit_model_after_tuning=True,
     random_state=0,
+    verbose=False,
     **kwargs_solve,
 ):
     """A general skeleton function for computing k-fold cross validation solves.
@@ -519,11 +521,16 @@ def kfold_solve_custom_split_col(
     test_numeric_idxs = []
     locations_test = []
     
-    print("on fold (of {0}): ".format(num_folds), end="")
+    if verbose:
+        print("on fold (of {0}): ".format(num_folds), end="")
+    
     i = 0
     split_col_unique = np.unique(split_col)
     for train_grp_num, val_grp_num in kf.split(split_col_unique):
-        print(i+1, end="\n")
+        
+        if verbose:
+            print(i+1, end="\n")
+            
         i += 1
         
         
@@ -578,7 +585,8 @@ def kfold_solve_custom_split_col(
         hp_warnings.append(solve_results["hp_warning"])
 
     # Return results
-    print("\n")
+    if verbose:
+        print("\n")
     rets = {
         "metrics_test": np.array(kfold_metrics_test, dtype=object),
         "metrics_train": np.array(kfold_metrics_train,dtype=object),
