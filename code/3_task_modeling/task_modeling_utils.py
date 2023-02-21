@@ -117,8 +117,8 @@ def kfold_rr_multi_lambda_tuning(
 
 def model_1_sensor(params):
 #########################################     SET PARAMS    #########################################
-    file         = params[0][0]
-    hot_encode   = params[1][0]
+    file         = params[0]
+    hot_encode   = params[1]
     f            = file.split(sep="_")
     satellite    = f[0]
     bands        = f[1].replace("bands-", "")

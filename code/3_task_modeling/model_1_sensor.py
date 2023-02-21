@@ -27,15 +27,15 @@ len(paramlist)
 
 
 #### No progress bar
-multiprocessing.set_start_method('spawn')
 workers = os.cpu_count()
 if __name__ == "__main__":
+    multiprocessing.set_start_method('spawn')
     with multiprocessing.Pool(processes=workers) as pool:
         output = []
         for result in pool.imap_unordered(model_1_sensor, paramlist):
             output.append(result)
-results = pd.concat(output).reset_index(drop=True)
-today = date.today().strftime("%Y-%m-%d")
-file_name = f'results_{today}.csv'
-print(f"Saving results as: {file_name}\n\n")           
-results.to_csv(here("data","results", file_name))
+    results = pd.concat(output).reset_index(drop=True)
+    today = date.today().strftime("%Y-%m-%d")
+    file_name = f'results_{today}.csv'
+    print(f"Saving results as: {file_name}\n\n")           
+    results.to_csv(here("data","results", file_name))

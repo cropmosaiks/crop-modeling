@@ -225,3 +225,8 @@ dask-worker-space/
 # mac file
 DS_Store
 
+################## SLURM StdOut/StdErr ###############
+
+slurm/*.out
+slurm/*.err
+slurm/logfile
