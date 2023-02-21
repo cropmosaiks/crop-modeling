@@ -13,6 +13,8 @@ from sklearn.model_selection import train_test_split, KFold, GridSearchCV, cross
 from sklearn.metrics import r2_score
 from scipy.stats import spearmanr,  pearsonr
 
+directory = here("data", "random_features", "summary")
+
 def str2bool(string):
     return string.lower() in ("yes", "true", "t", "1")
 
@@ -114,7 +116,6 @@ def kfold_rr_multi_lambda_tuning(
     return(lambdas, best_scores, model)
 
 
-
 def model_1_sensor(params):
 #########################################     SET PARAMS    #########################################
     file         = params[0]
@@ -134,6 +135,7 @@ def model_1_sensor(params):
     month_range  = list(range(int(mns[0]), int(mns[1])+1))
 
 #########################################     READ DATA    #########################################
+    
     fn = f"{directory}/{file}"
     features = pd.read_feather(fn)
     features.drop(['crop_perc'], axis=1, errors='ignore', inplace=True)
