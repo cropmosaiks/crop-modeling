@@ -51,7 +51,7 @@ def kfold_rr_multi_lambda_tuning(
     n_splits=5,
     start=0, 
     end=12, 
-    static_lam=1e-16,
+    static_lam=1,
     verbose=True,
     show_linalg_warning=False,
     fit_model_after_tuning=True
@@ -133,6 +133,7 @@ def model_1_sensor(params):
     weighted_avg = str2bool(f[9].replace("wa-", ""))
     years        = range(int(yrs[0]), int(yrs[1])+1)
     month_range  = list(range(int(mns[0]), int(mns[1])+1))
+    print(f"{file}\n{hot_encode}")
 
 #########################################     READ DATA    #########################################
     
@@ -169,8 +170,8 @@ def model_1_sensor(params):
             grid=alphas.get('alpha'), 
             start=[0, x_train.shape[1]-72],
             end=[x_train.shape[1]-72, x_train.shape[1]], 
-            static_lam=1e-16,
-            verbose=False,
+            static_lam=1,
+            verbose=True,
             show_linalg_warning=False,
             fit_model_after_tuning=True
         )
