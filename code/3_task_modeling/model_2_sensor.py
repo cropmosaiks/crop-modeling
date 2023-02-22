@@ -8,23 +8,23 @@ from pyhere import here
 from task_modeling_utils import *
 from mpi4py.futures import MPIPoolExecutor
 
-point_pattern = re.compile("20k-points")
-wa_pattern = re.compile("cm-False")
 directory = here("data", "random_features", "summary")
 files = os.listdir(directory)
-files = [f for f in files if f not in ('.gitkeep', '.ipynb_checkpoints')]
-files = [f for f in files if not (bool(point_pattern.search(f)) & bool(wa_pattern.search(f)))]
-paramlist = list(itertools.product(files, [True, False]))
+files = list(f for f in files if f not in ('.gitkeep', '.ipynb_checkpoints'))
+paramlist = list(itertools.combinations(files, 2))
+paramlist = list(itertools.product(paramlist, [True, False]))
+paramlist = list(tuple(merge(paramlist[i])) for i in range(len(paramlist)))
 
 if __name__ == "__main__":
     output = []
     executor = MPIPoolExecutor()
-    for result in executor.map(model_1_sensor, paramlist):
+    for result in executor.map(model_2_sensor, paramlist):
         output.append(result)
     executor.shutdown()
     results = pd.concat(output).reset_index(drop=True)
     today = date.today().strftime("%Y-%m-%d")
-    file_name = f'results_{today}.csv'
+    file_name = f'2_sensor_results_{today}.csv'
     print(f"Saving results as: {file_name}\n\n")
     results.to_csv(here("data","results", file_name), index=False)
-
+    
+    

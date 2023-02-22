@@ -62,8 +62,7 @@ def kfold_rr_multi_lambda_tuning(
         warnings.filterwarnings(action="ignore", category=LinAlgWarning, module="glum")
     
     assert (len(start) == len(end)), "Start and end indexes must have same length"
-      
-    tic = time.time()
+  
     kfold = KFold(n_splits=n_splits)
     alpha = {'alpha': [1]}
     
@@ -111,12 +110,10 @@ def kfold_rr_multi_lambda_tuning(
     else:
         model = np.nan
         
-    print(f"Total time: {(time.time()-tic)/60:0.2f} minutes")
-    
     return(lambdas, best_scores, model)
 
 
-def model_1_sensor(params):
+def model_1_sensor(params, n_splits=5):
 #########################################     SET PARAMS    #########################################
     file         = params[0]
     hot_encode   = params[1]
@@ -133,7 +130,6 @@ def model_1_sensor(params):
     weighted_avg = str2bool(f[9].replace("wa-", ""))
     years        = range(int(yrs[0]), int(yrs[1])+1)
     month_range  = list(range(int(mns[0]), int(mns[1])+1))
-    print(f"{file}\n{hot_encode}")
 
 #########################################     READ DATA    #########################################
     
@@ -161,13 +157,16 @@ def model_1_sensor(params):
 #########################################     K-FOLD CV    ###########################################
     ### SETUP
     ridge  = Ridge()  
-    kfold  = KFold(n_splits=5)
+    kfold  = KFold(n_splits=n_splits)
     alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
+    tic = time.time()
     ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER(S)
     if hot_encode:
         best_lambdas, best_scores, best_model = kfold_rr_multi_lambda_tuning(
-            X=x_train, y=y_train, 
+            X=x_train,
+            y=y_train, 
             grid=alphas.get('alpha'), 
+            n_splits=n_splits,
             start=[0, x_train.shape[1]-72],
             end=[x_train.shape[1]-72, x_train.shape[1]], 
             static_lam=1,
@@ -176,6 +175,7 @@ def model_1_sensor(params):
             fit_model_after_tuning=True
         )
     else:
+        tic = time.time()
         search = GridSearchCV(ridge, alphas, scoring = 'r2', cv = kfold).fit(x_train, y_train)
         best_model   = search.best_estimator_
         best_scores  = search.best_score_
@@ -184,6 +184,7 @@ def model_1_sensor(params):
     val_predictions   = cross_val_predict(best_model, X=x_train, y=y_train, cv=kfold)   
     train_predictions = best_model.predict(x_train)
     test_predictions  = best_model.predict(x_test)
+    print(f"File: {file}\nOne-Hot Encoding: {True}\nTotal time: {(time.time()-tic)/60:0.2f} minutes")
 
 #########################################     DE-MEAN R2    #########################################    
     crop_yield["prediction"] = np.maximum(best_model.predict(x_all), 0)
@@ -241,7 +242,7 @@ def model_1_sensor(params):
     return pd.DataFrame(data=d, index=[0])
 
 
-def model_2_sensor(params):
+def model_2_sensor(params, n_splits=5):
 #########################################     SET PARAMS    #########################################    
     f1         = params[0]
     f2         = params[1]
@@ -280,13 +281,7 @@ def model_2_sensor(params):
     features = features_1.join(features_2).reset_index()
     features = features[~features.isna().any(axis = 1)]
 
-#########################################    JOIN CLIMATE VARS    ######################################### 
-    ndvi_cols = climate_df.columns[climate_df.columns.to_series().str.contains('ndvi')]
-    keep_cols = [*ndvi_cols, *drop_cols]
-    climate_df = climate_df.loc[:, keep_cols]
-
-    features = features.set_index(drop_cols).join(climate_df.set_index(drop_cols)).reset_index()
-    features = features[features.year <= max(climate_df.year)]
+    n_districts = len(features.district.unique())
 
     crop_yield = features.copy().loc[:, tuple(drop_cols)]
     crop_yield["log_yield"] = np.log10(crop_yield.yield_mt.to_numpy() + 1)
@@ -309,19 +304,38 @@ def model_2_sensor(params):
     y_all = np.log10(features.yield_mt.to_numpy() + 1)
     x_train, x_test, y_train, y_test = train_test_split(x_all, y_all, test_size=0.2, random_state=0)
 
-#########################################     K-FOLD CV   ###########################################
+#########################################     K-FOLD CV    ###########################################
     ### SETUP
+    ridge  = Ridge()  
+    kfold  = KFold(n_splits=n_splits)
     alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
-    kfold = KFold()
-    ridge = Ridge()    
-    ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER
-    ridge_reg = GridSearchCV(ridge, alphas, scoring = 'r2', cv = kfold)
-    ridge_reg.fit(x_train, y_train)
-    best_model = ridge_reg.best_estimator_
-    ### PREDICT - PREDICTING WITH BEST HYPERPARAMETER
-    val_predictions = cross_val_predict(best_model, X = x_train, y = y_train, cv = kfold)   
+    tic = time.time()
+    ### LAMBDA INDICIES
+    start = [0, features_1.shape[1], features_2.shape[1]]
+    end   = [features_1.shape[1], features_2.shape[1], x_train.shape[1]] 
+    if hot_encode:
+        start.append(x_train.shape[1]-n_districts)
+        end.append(x_train.shape[1]-n_districts)
+        end.sort()
+    ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER(S)
+    tic = time.time()
+    best_lambdas, best_scores, best_model = kfold_rr_multi_lambda_tuning(
+        X=x_train,
+        y=y_train, 
+        grid=alphas.get('alpha'), 
+        n_splits=n_splits,
+        start=start,
+        end=end, 
+        static_lam=1,
+        verbose=True,
+        show_linalg_warning=False,
+        fit_model_after_tuning=True
+    )
+    ### PREDICT WITH BEST HYPERPARAMETER(S)
+    val_predictions   = cross_val_predict(best_model, X=x_train, y=y_train, cv=kfold)   
     train_predictions = best_model.predict(x_train)
     test_predictions  = best_model.predict(x_test)
+    print(f"File: {file}\nOne-Hot Encoding: {True}\nTotal time: {(time.time()-tic)/60:0.2f} minutes")
 
 #########################################     DE-MEAN R2    #########################################    
     crop_yield["prediction"] = np.maximum(best_model.predict(x_all), 0)
@@ -339,15 +353,6 @@ def model_2_sensor(params):
     test_split["demean_cv_prediction"] = np.repeat(np.nan, len(x_test))
 
     predictions = pd.concat([train_split, test_split])
-
-#########################################     SAVE MODELS   #########################################  
-    # fn_1 = f'{satellite1[0]}_{bands1}_{points1}_{limit_months1}_{crop_mask1}_{weighted_avg1}'
-    # fn_2 = f'{satellite2[0]}_{bands2}_{points2}_{limit_months2}_{crop_mask2}_{weighted_avg2}'
-    # model_fn_suffix = f'fn-1_{fn_1}_fn-2_{fn_2}'
-    # k_model_fn = f'kfold-cv_rr-model_{model_fn_suffix}_he-{hot_encode}.pkl'
-
-    # with open(here('models', k_model_fn),'wb') as f:
-    #     pickle.dump(best_model, f)
 
 #########################################     SAVE RESULTS    #########################################
     d = {
@@ -377,8 +382,8 @@ def model_2_sensor(params):
         'train_n': len(x_train),
         'test_n' : len(x_test),
 
-        'best_reg_param': list(ridge_reg.best_params_.values())[0],
-        'mean_of_val_R2': ridge_reg.best_score_,
+        'best_reg_param': [best_lambdas],
+        'mean_of_val_R2': [best_scores],
         'val_R2': r2_score(y_train, val_predictions),
         'val_r' : pearsonr(val_predictions, y_train)[0],
         'val_r2': pearsonr(val_predictions, y_train)[0] ** 2,
@@ -395,7 +400,7 @@ def model_2_sensor(params):
         'demean_cv_r':  pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0],
         'demean_cv_r2': pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0] ** 2,
     }
-    return pd.DataFrame(data=d, index=[0])
+    df = pd.DataFrame(data=d)
 
 
 def model_1_sensor_anomaly(params):
