@@ -175,7 +175,6 @@ def model_1_sensor(params, n_splits=5):
             fit_model_after_tuning=True
         )
     else:
-        tic = time.time()
         search = GridSearchCV(ridge, alphas, scoring = 'r2', cv = kfold).fit(x_train, y_train)
         best_model   = search.best_estimator_
         best_scores  = search.best_score_
@@ -318,7 +317,6 @@ def model_2_sensor(params, n_splits=5):
         end.append(x_train.shape[1]-n_districts)
         end.sort()
     ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER(S)
-    tic = time.time()
     best_lambdas, best_scores, best_model = kfold_rr_multi_lambda_tuning(
         X=x_train,
         y=y_train, 
