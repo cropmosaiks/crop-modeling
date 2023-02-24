@@ -310,8 +310,8 @@ def model_2_sensor(params, n_splits=5):
     alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
     tic = time.time()
     ### LAMBDA INDICIES
-    start = [0, features_1.shape[1], features_2.shape[1]]
-    end   = [features_1.shape[1], features_2.shape[1], x_train.shape[1]] 
+    start = [0, features_1.shape[1]]
+    end   = [features_1.shape[1], x_train.shape[1]] 
     if hot_encode:
         start.append(x_train.shape[1]-n_districts)
         end.append(x_train.shape[1]-n_districts)
