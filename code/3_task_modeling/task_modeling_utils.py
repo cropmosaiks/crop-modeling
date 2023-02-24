@@ -170,7 +170,7 @@ def model_1_sensor(params, n_splits=5):
             start=[0, x_train.shape[1]-72],
             end=[x_train.shape[1]-72, x_train.shape[1]], 
             static_lam=1,
-            verbose=True,
+            verbose=False,
             show_linalg_warning=False,
             fit_model_after_tuning=True
         )
