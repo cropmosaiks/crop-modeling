@@ -130,7 +130,8 @@ def model_1_sensor(params, n_splits=5):
     weighted_avg = str2bool(f[9].replace("wa-", ""))
     years        = range(int(yrs[0]), int(yrs[1])+1)
     month_range  = list(range(int(mns[0]), int(mns[1])+1))
-
+    
+    print(file)
 #########################################     READ DATA    #########################################
     
     fn = f"{directory}/{file}"
@@ -253,6 +254,8 @@ def model_2_sensor(params, n_splits=5):
     satellite2, bands2, country_code, points2, yrs2, mns2,\
     num_features2, limit_months2, crop_mask2, weighted_avg2 = split_fn(f2)
 
+    print(f"\nFiles:\n\t{f1}\n\t{f2}\n\tHE: {hot_encode}\n")
+
 #########################################     READ DATA    #########################################
     features_1 = pd.read_feather(here('data', 'random_features', 'summary', f1))
     features_2 = pd.read_feather(here('data', 'random_features', 'summary', f2))
@@ -333,7 +336,7 @@ def model_2_sensor(params, n_splits=5):
     val_predictions   = cross_val_predict(best_model, X=x_train, y=y_train, cv=kfold)   
     train_predictions = best_model.predict(x_train)
     test_predictions  = best_model.predict(x_test)
-    print(f"File: {file}\nOne-Hot Encoding: {True}\nTotal time: {(time.time()-tic)/60:0.2f} minutes")
+    print(f"\nFiles:\n\t{f1}\n\t{f2}\n\tHE: {hot_encode}\n\tTotal time: {(time.time()-tic)/60:0.2f} minutes\n")
 
 #########################################     DE-MEAN R2    #########################################    
     crop_yield["prediction"] = np.maximum(best_model.predict(x_all), 0)
