@@ -18,7 +18,7 @@ paramlist = list(itertools.product(paramlist, [True, False]))
 paramlist = list(tuple(merge(paramlist[i])) for i in range(len(paramlist)))
 
 if i == 1:
-    paramlist = paramlist[0:49]
+    paramlist = paramlist[0:4]
 elif i == 2:
     paramlist = paramlist[250:499]
 elif i == 3:

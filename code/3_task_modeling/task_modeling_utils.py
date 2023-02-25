@@ -401,7 +401,7 @@ def model_2_sensor(params, n_splits=5):
         'demean_cv_r':  pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0],
         'demean_cv_r2': pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0] ** 2,
     }
-    df = pd.DataFrame(data=d)
+    df = pd.DataFrame(data=d, index=[0])
 
 
 def model_1_sensor_anomaly(params):

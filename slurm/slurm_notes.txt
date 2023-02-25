@@ -1,0 +1,17 @@
+SLURM NOTES:
+
+# Submit job
+sbatch slurm/model_2.sh
+
+# Check status
+squeue -u cmolitor
+scontrol show job <job id>
+
+# Cancel job
+scancel <job id>
+
+# Print log
+cat slurm/<job>.log
+
+# Count specific words in log
+grep -o -i <word> slurm/3004537.log | wc -l
