@@ -16,9 +16,10 @@ files = list(f for f in files if f not in ('.gitkeep', '.ipynb_checkpoints'))
 paramlist = list(itertools.combinations(files, 2))
 paramlist = list(itertools.product(paramlist, [True, False]))
 paramlist = list(tuple(merge(paramlist[i])) for i in range(len(paramlist)))
+paramlist = sorted(paramlist, key=lambda tup: tup[2])
 
 if i == 1:
-    paramlist = paramlist[0:4]
+    paramlist = paramlist[0:249]
 elif i == 2:
     paramlist = paramlist[250:499]
 elif i == 3:
@@ -35,10 +36,11 @@ elif i == 8:
     paramlist = paramlist[1750:1892]
 
 if __name__ == "__main__":
-    output = []
+#    output = []
     executor = MPIPoolExecutor()
-    for result in executor.map(model_2_sensor, paramlist):
-        output.append(result)
+    output = executor.map(model_2_sensor, paramlist)
+    # for result in executor.map(model_2_sensor, paramlist):
+    #    output.append(result)
     executor.shutdown()
     results = pd.concat(output).reset_index(drop=True)
     today = date.today().strftime("%Y-%m-%d")
