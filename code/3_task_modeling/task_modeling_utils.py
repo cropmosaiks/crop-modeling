@@ -3,6 +3,9 @@ import numpy as np
 import warnings
 import time
 import pyarrow
+import os
+import psutil
+import gc
 from glum import GeneralizedLinearRegressor as glm
 from scipy.linalg import LinAlgWarning
 from pyhere import here
@@ -254,12 +257,11 @@ def model_2_sensor(params, n_splits=5):
     satellite2, bands2, country_code, points2, yrs2, mns2,\
     num_features2, limit_months2, crop_mask2, weighted_avg2 = split_fn(f2)
 
-    print(f"\nFiles:\n\t{f1}\n\t{f2}\n\tHE: {hot_encode}\n")
+    print(f"\nBegin with paramters:\n\t{f1}\n\t{f2}\n\tOne-hot encoding: {hot_encode}\n")
 
 #########################################     READ DATA    #########################################
     features_1 = pd.read_feather(here('data', 'random_features', 'summary', f1))
     features_2 = pd.read_feather(here('data', 'random_features', 'summary', f2))
-    climate_df = pd.read_csv(here('data', 'climate', 'climate_summary.csv'))
 
 #########################################     CLEAN DATA    #########################################  
     min_year = max(min(features_1.year), min(features_2.year))
@@ -283,10 +285,25 @@ def model_2_sensor(params, n_splits=5):
     features = features_1.join(features_2).reset_index()
     features = features[~features.isna().any(axis = 1)]
 
+#########################################     CLEAN AND COPY    ######################################### 
+    n_fts_1 = features_1.shape[1]
     n_districts = len(features.district.unique())
-
+    
     crop_yield = features.copy().loc[:, tuple(drop_cols)]
     crop_yield["log_yield"] = np.log10(crop_yield.yield_mt.to_numpy() + 1)
+    
+    # pid = os.getpid()
+    # python_process = psutil.Process(pid)
+    # print(f"Process: {pid}\n\tMemory use: {python_process.memory_info()[0]/2.**30:0.2f}\n\tMemory %: {psutil.virtual_memory().percent}")
+    del features_1, features_2
+    gc.collect()
+    # print(f"Process: {pid}\n\tMemory use: {python_process.memory_info()[0]/2.**30:0.2f}\n\tMemory %: {psutil.virtual_memory().percent}")
+
+#########################################    STANDARDIZE FEATURES    #########################################    
+    features = features.set_index(drop_cols) 
+    features_scaled = StandardScaler().fit_transform(features.values)
+    features = pd.DataFrame(features_scaled, index=features.index).reset_index()
+    features.columns = features.columns.astype(str)
 
 #########################################    HOT ENCODE    ######################################### 
     if hot_encode:
@@ -295,17 +312,16 @@ def model_2_sensor(params, n_splits=5):
     else:
         pass
 
-#########################################    STANDARDIZE FEATURES    #########################################    
-    features = features.set_index(drop_cols) 
-    features_scaled = StandardScaler().fit_transform(features.values)
-    features = pd.DataFrame(features_scaled, index=features.index).reset_index()
-    features.columns = features.columns.astype(str)
-
 #########################################     K-FOLD SPLIT    #########################################
     x_all = features.drop(drop_cols, axis = 1) 
     y_all = np.log10(features.yield_mt.to_numpy() + 1)
     x_train, x_test, y_train, y_test = train_test_split(x_all, y_all, test_size=0.2, random_state=0)
 
+    # print(f"Process: {pid}\n\tMemory use: {python_process.memory_info()[0]/2.**30:0.2f}\n\tMemory %: {psutil.virtual_memory().percent}")
+    del features
+    gc.collect()
+    # print(f"Process: {pid}\n\tMemory use: {python_process.memory_info()[0]/2.**30:0.2f}\n\tMemory %: {psutil.virtual_memory().percent}")
+    
 #########################################     K-FOLD CV    ###########################################
     ### SETUP
     ridge  = Ridge()  
@@ -313,8 +329,8 @@ def model_2_sensor(params, n_splits=5):
     alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
     tic = time.time()
     ### LAMBDA INDICIES
-    start = [0, features_1.shape[1]]
-    end   = [features_1.shape[1], x_train.shape[1]] 
+    start = [0, n_fts_1]
+    end   = [n_fts_1, x_train.shape[1]] 
     if hot_encode:
         start.append(x_train.shape[1]-n_districts)
         end.append(x_train.shape[1]-n_districts)
