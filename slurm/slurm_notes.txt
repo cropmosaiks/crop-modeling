@@ -1,5 +1,11 @@
 SLURM NOTES:
 
+# Check available modules
+module avail
+
+# Change job file from dos to unix formatting
+dos2unix slurm/model_2.sh 
+
 # Submit job
 sbatch slurm/model_2.sh
 
@@ -15,3 +21,14 @@ cat slurm/<job>.log
 
 # Count specific words in log
 grep -o -i <word> slurm/3004537.log | wc -l
+
+# Show cluster default values
+scontrol show config
+
+# Show cluster partition and defaults
+scontrol show partition
+
+# Show resources
+sstat --format=AveCPU,AvePages,AveRSS,AveVMSize,JobID -j 3010346
+
+
