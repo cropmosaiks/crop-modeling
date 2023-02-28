@@ -336,7 +336,15 @@ def model_2_sensor(params, n_splits=5):
     val_predictions   = cross_val_predict(best_model, X=x_train, y=y_train, cv=kfold)   
     train_predictions = best_model.predict(x_train)
     test_predictions  = best_model.predict(x_test)
-    print(f"\nFiles:\n\t{f1}\n\t{f2}\n\tHE: {hot_encode}\n\tTotal time: {(time.time()-tic)/60:0.2f} minutes\n")
+    print(f"""
+Final:
+    {f1}
+    {f2}
+    One-hot encoding: {hot_encode}
+    Val R2:  {r2_score(y_train, val_predictions):0.4f} 
+    Test R2: {r2_score(y_test, test_predictions):0.4f}
+    Total time: {(time.time()-tic)/60:0.2f} minutes
+""")
 
 #########################################     DE-MEAN R2    #########################################    
     crop_yield["prediction"] = np.maximum(best_model.predict(x_all), 0)
@@ -401,7 +409,7 @@ def model_2_sensor(params, n_splits=5):
         'demean_cv_r':  pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0],
         'demean_cv_r2': pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0] ** 2,
     }
-    df = pd.DataFrame(data=d, index=[0])
+    return pd.DataFrame(data=d, index=[0])
 
 
 def model_1_sensor_anomaly(params):

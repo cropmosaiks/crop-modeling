@@ -1,8 +1,7 @@
 #!/bin/bash -l
 
 # Just get 50 cores, don't care on what nodes
-#SBATCH --ntasks=50          
-# #SBATCH --mem=10G
+#SBATCH --ntasks=51          
 #SBATCH --output slurm/%j.out # File to save job's STDOUT (%j = JobId)
 #SBATCH --error slurm/%j.err  # File to save job's STDERR
 
