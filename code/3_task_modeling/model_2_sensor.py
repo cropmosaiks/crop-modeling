@@ -36,11 +36,8 @@ elif i == 8:
     paramlist = paramlist[1750:1892]
 
 if __name__ == "__main__":
-#    output = []
     executor = MPIPoolExecutor()
     output = executor.map(model_2_sensor, paramlist)
-    # for result in executor.map(model_2_sensor, paramlist):
-    #    output.append(result)
     executor.shutdown()
     results = pd.concat(output).reset_index(drop=True)
     today = date.today().strftime("%Y-%m-%d")

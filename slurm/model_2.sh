@@ -1,13 +1,10 @@
-#!/bin/bash -l
-
-# Just get 50 cores, don't care on what nodes
-#SBATCH --ntasks=51          
+#!/bin/bash -l                
+#SBATCH --ntasks=50           # Do this many tasks at once
+#SBATCH --cpus-per-task=4     # Give each task n cpus         
 #SBATCH --output slurm/%j.out # File to save job's STDOUT (%j = JobId)
 #SBATCH --error slurm/%j.err  # File to save job's STDERR
-
-# Send an e-mail when a job starts, stops, or fails
 #SBATCH --mail-user=cullen_molitor@ucsb.edu
-#SBATCH --mail-type=ALL 
+#SBATCH --mail-type=ALL       # Send an e-mail when a job starts, stops, or fails
 
 module purge
 module load openmpi/3.1.3

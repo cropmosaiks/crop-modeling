@@ -353,12 +353,12 @@ def model_2_sensor(params, n_splits=5):
     train_predictions = best_model.predict(x_train)
     test_predictions  = best_model.predict(x_test)
     print(f"""
-Final:
+Finish:
     {f1}
     {f2}
     One-hot encoding: {hot_encode}
-    Val R2:  {r2_score(y_train, val_predictions):0.4f} 
-    Test R2: {r2_score(y_test, test_predictions):0.4f}
+    Final Val R2:  {r2_score(y_train, val_predictions):0.4f} 
+    Final Test R2: {r2_score(y_test, test_predictions):0.4f}
     Total time: {(time.time()-tic)/60:0.2f} minutes
 """)
 
