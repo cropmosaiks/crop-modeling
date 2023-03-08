@@ -1,8 +1,6 @@
 import os
-import re
 import pandas as pd
 import itertools
-import multiprocessing
 from datetime import date
 from pyhere import here
 from task_modeling_utils import *
@@ -19,7 +17,7 @@ paramlist = list(tuple(merge(paramlist[i])) for i in range(len(paramlist)))
 paramlist = sorted(paramlist, key=lambda tup: tup[2])
 
 if i == 1:
-    paramlist = paramlist[0:249]
+    paramlist = paramlist[0:10]
 elif i == 2:
     paramlist = paramlist[250:499]
 elif i == 3:
@@ -36,10 +34,17 @@ elif i == 8:
     paramlist = paramlist[1750:1892]
 
 if __name__ == "__main__":
+    output = []
     executor = MPIPoolExecutor()
-    output = executor.map(model_2_sensor, paramlist)
+    for result in executor.map(model_2_sensor, paramlist):
+        output.append(result)
     executor.shutdown()
     results = pd.concat(output).reset_index(drop=True)
+    
+    # executor = MPIPoolExecutor()
+    # output = executor.map(model_2_sensor, paramlist)
+    # executor.shutdown()
+    # results = pd.concat(output).reset_index(drop=True)
     today = date.today().strftime("%Y-%m-%d")
     file_name = f'2_sensor_results_{i}_{today}.csv'
     print(f"Saving results as: {file_name}\n\n")

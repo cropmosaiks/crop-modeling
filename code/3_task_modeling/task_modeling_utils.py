@@ -2,19 +2,16 @@ import pandas as pd
 import numpy as np
 import warnings
 import time
-import pyarrow
-import os
-import psutil
 import gc
 from glum import GeneralizedLinearRegressor as glm
 from scipy.linalg import LinAlgWarning
 from pyhere import here
 
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import Ridge, RidgeCV
+from sklearn.linear_model import Ridge
 from sklearn.model_selection import train_test_split, KFold, GridSearchCV, cross_val_predict
 from sklearn.metrics import r2_score
-from scipy.stats import spearmanr,  pearsonr
+from scipy.stats import pearsonr
 
 directory = here("data", "random_features", "summary")
 
@@ -47,6 +44,12 @@ def merge(x, bases = (tuple, list)):
             yield e
 
 
+#########################################
+#########################################
+########### MULTI LAMBDA FUN ############
+#########################################
+#########################################
+
 def kfold_rr_multi_lambda_tuning(
     X, 
     y,
@@ -55,7 +58,7 @@ def kfold_rr_multi_lambda_tuning(
     start=0, 
     end=12, 
     static_lam=1,
-    verbose=True,
+    verbose=0,
     show_linalg_warning=False,
     fit_model_after_tuning=True
 ):
@@ -83,7 +86,7 @@ def kfold_rr_multi_lambda_tuning(
         
         for pen in grid:
             
-            if verbose:
+            if verbose > 1:
                 print(pen, end=" ")
                 
             penalties[start[i]:end[i]] = [pen for j in range(end[i]-start[i])]
@@ -96,8 +99,8 @@ def kfold_rr_multi_lambda_tuning(
         best_lambda = grid[np.argmax(scores)]
         penalties[start[i]:end[i]] = [best_lambda for j in range(end[i]-start[i])]
         
-        if verbose:
-            print(f'''\n\tBest \u03BB {i+1}: {best_lambda}\n\tVal R2 {i+1}: {scores[np.argmax(scores)]:0.4f}''') 
+        if verbose > 0:
+            print(f'''\n\tBest \u03BB {i+1}: {best_lambda}\n\tVal R2 {i+1}: {scores[np.argmax(scores)]:0.4f}\n''') 
         
         lambdas.append(best_lambda)
         best_scores.append(scores[np.argmax(scores)])
@@ -115,6 +118,12 @@ def kfold_rr_multi_lambda_tuning(
         
     return(lambdas, best_scores, model)
 
+
+#########################################
+#########################################
+########### ONE SENSOR MODEL ############
+#########################################
+#########################################
 
 def model_1_sensor(params, n_splits=5):
 #########################################     SET PARAMS    #########################################
@@ -174,7 +183,7 @@ def model_1_sensor(params, n_splits=5):
             start=[0, x_train.shape[1]-72],
             end=[x_train.shape[1]-72, x_train.shape[1]], 
             static_lam=1,
-            verbose=False,
+            verbose=1,
             show_linalg_warning=False,
             fit_model_after_tuning=True
         )
@@ -203,8 +212,6 @@ def model_1_sensor(params, n_splits=5):
     test_split['cv_prediction'] = np.repeat(np.nan, len(x_test))
     test_split["demean_cv_yield"] = np.repeat(np.nan, len(x_test))
     test_split["demean_cv_prediction"] = np.repeat(np.nan, len(x_test))
-
-    predictions = pd.concat([train_split, test_split])
 
 #########################################     SAVE RESULTS    #########################################
     d = {
@@ -244,6 +251,12 @@ def model_1_sensor(params, n_splits=5):
     }
     return pd.DataFrame(data=d, index=[0])
 
+
+#########################################
+#########################################
+########### TWO SENSOR MODEL ############
+#########################################
+#########################################
 
 def model_2_sensor(params, n_splits=5):
 #########################################     SET PARAMS    #########################################    
@@ -292,12 +305,7 @@ def model_2_sensor(params, n_splits=5):
     crop_yield = features.copy().loc[:, tuple(drop_cols)]
     crop_yield["log_yield"] = np.log10(crop_yield.yield_mt.to_numpy() + 1)
     
-    # pid = os.getpid()
-    # python_process = psutil.Process(pid)
-    # print(f"Process: {pid}\n\tMemory use: {python_process.memory_info()[0]/2.**30:0.2f}\n\tMemory %: {psutil.virtual_memory().percent}")
-    del features_1, features_2
-    gc.collect()
-    # print(f"Process: {pid}\n\tMemory use: {python_process.memory_info()[0]/2.**30:0.2f}\n\tMemory %: {psutil.virtual_memory().percent}")
+    del features_1, features_2; gc.collect()
 
 #########################################    STANDARDIZE FEATURES    #########################################    
     features = features.set_index(drop_cols) 
@@ -316,18 +324,14 @@ def model_2_sensor(params, n_splits=5):
     x_all = features.drop(drop_cols, axis = 1) 
     y_all = np.log10(features.yield_mt.to_numpy() + 1)
     x_train, x_test, y_train, y_test = train_test_split(x_all, y_all, test_size=0.2, random_state=0)
-
-    # print(f"Process: {pid}\n\tMemory use: {python_process.memory_info()[0]/2.**30:0.2f}\n\tMemory %: {psutil.virtual_memory().percent}")
-    del features
-    gc.collect()
-    # print(f"Process: {pid}\n\tMemory use: {python_process.memory_info()[0]/2.**30:0.2f}\n\tMemory %: {psutil.virtual_memory().percent}")
+    
+    del features; gc.collect()
     
 #########################################     K-FOLD CV    ###########################################
     ### SETUP
-    ridge  = Ridge()  
+    tic = time.time()
     kfold  = KFold(n_splits=n_splits)
     alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
-    tic = time.time()
     ### LAMBDA INDICIES
     start = [0, n_fts_1]
     end   = [n_fts_1, x_train.shape[1]] 
@@ -344,7 +348,7 @@ def model_2_sensor(params, n_splits=5):
         start=start,
         end=end, 
         static_lam=1,
-        verbose=True,
+        verbose=1,
         show_linalg_warning=False,
         fit_model_after_tuning=True
     )
@@ -376,8 +380,6 @@ Finish:
     test_split['cv_prediction'] = np.repeat(np.nan, len(x_test))
     test_split["demean_cv_yield"] = np.repeat(np.nan, len(x_test))
     test_split["demean_cv_prediction"] = np.repeat(np.nan, len(x_test))
-
-    predictions = pd.concat([train_split, test_split])
 
 #########################################     SAVE RESULTS    #########################################
     d = {
@@ -428,6 +430,12 @@ Finish:
     return pd.DataFrame(data=d, index=[0])
 
 
+#########################################
+#########################################
+########## ONE ANOMALY MODEL ############
+#########################################
+#########################################
+
 def model_1_sensor_anomaly(params):
 #########################################     SET PARAMS    #########################################
     file         = params
@@ -447,7 +455,6 @@ def model_1_sensor_anomaly(params):
 
     alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
     kfold  = KFold()
-    logo   = LeaveOneGroupOut()
     ridge  = Ridge() 
 #########################################     READ DATA    #########################################
     fn = f"{directory}/{file}"
@@ -516,6 +523,12 @@ def model_1_sensor_anomaly(params):
     }
     return pd.DataFrame(data=d, index=[0])
 
+
+#########################################
+#########################################
+########## TWO ANOMALY MODEL ############
+#########################################
+#########################################
 
 def model_2_sensor_anomaly(params):
 #########################################     SET PARAMS    #########################################    
