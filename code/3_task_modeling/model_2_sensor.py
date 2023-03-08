@@ -17,7 +17,7 @@ paramlist = list(tuple(merge(paramlist[i])) for i in range(len(paramlist)))
 paramlist = sorted(paramlist, key=lambda tup: tup[2])
 
 if i == 1:
-    paramlist = paramlist[0:10]
+    paramlist = paramlist[0:5]
 elif i == 2:
     paramlist = paramlist[250:499]
 elif i == 3:

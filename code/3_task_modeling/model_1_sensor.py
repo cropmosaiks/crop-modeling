@@ -11,6 +11,7 @@ files = os.listdir(directory)
 files = [f for f in files if f not in ('.gitkeep', '.ipynb_checkpoints')]
 paramlist = list(itertools.product(files, [True, False]))
 paramlist = sorted(paramlist, key=lambda tup: tup[1])
+paramlist = paramlist[0:5]
 
 if __name__ == "__main__":
     output = []

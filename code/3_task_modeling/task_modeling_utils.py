@@ -13,7 +13,6 @@ from sklearn.model_selection import train_test_split, KFold, GridSearchCV, cross
 from sklearn.metrics import r2_score
 from scipy.stats import pearsonr
 
-directory = here("data", "random_features", "summary")
 
 def str2bool(string):
     return string.lower() in ("yes", "true", "t", "1")
@@ -129,28 +128,17 @@ def model_1_sensor(params, n_splits=5):
 #########################################     SET PARAMS    #########################################
     file         = params[0]
     hot_encode   = params[1]
-    f            = file.split(sep="_")
-    satellite    = f[0]
-    bands        = f[1].replace("bands-", "")
-    country_code = f[2]
-    points       = f[3].replace("k-points", "")
-    num_features = f[4].replace("-features", "")
-    yrs          = f[5].replace("yr-", "").split(sep="-")
-    mns          = f[6].replace("mn-", "").split(sep="-")
-    limit_months = str2bool(f[7].replace("lm-", ""))
-    crop_mask    = str2bool(f[8].replace("cm-", ""))
-    weighted_avg = str2bool(f[9].replace("wa-", ""))
-    years        = range(int(yrs[0]), int(yrs[1])+1)
-    month_range  = list(range(int(mns[0]), int(mns[1])+1))
-    
-    print(file)
-#########################################     READ DATA    #########################################
-    
-    fn = f"{directory}/{file}"
-    features = pd.read_feather(fn)
-    features.drop(['crop_perc'], axis=1, errors='ignore', inplace=True)
-
     drop_cols = ['district', 'year', 'yield_mt']
+    satellite, bands, country_code, points, yrs, mns,\
+    n_features, limit_months, crop_mask, weighted_avg = split_fn(file)
+
+    print(f"\nBegin with paramters:\n\t{file}\n\tOne-hot encoding: {hot_encode}\n")
+
+#########################################     READ, CLEAN, AND COPY   #########################################
+    features = pd.read_feather(here('data', 'random_features', 'summary', file))
+    features.drop(['crop_perc'], axis=1, errors='ignore', inplace=True)
+    
+    n_districts = len(features.district.unique())
 
     crop_yield = features.copy().loc[:, tuple(drop_cols)]
     crop_yield["log_yield"] = np.log10(crop_yield.yield_mt.to_numpy() + 1)
@@ -180,7 +168,7 @@ def model_1_sensor(params, n_splits=5):
             y=y_train, 
             grid=alphas.get('alpha'), 
             n_splits=n_splits,
-            start=[0, x_train.shape[1]-72],
+            start=[0, x_train.shape[1]-n_districts],
             end=[x_train.shape[1]-72, x_train.shape[1]], 
             static_lam=1,
             verbose=1,
@@ -196,8 +184,14 @@ def model_1_sensor(params, n_splits=5):
     val_predictions   = cross_val_predict(best_model, X=x_train, y=y_train, cv=kfold)   
     train_predictions = best_model.predict(x_train)
     test_predictions  = best_model.predict(x_test)
-    print(f"File: {file}\nOne-Hot Encoding: {True}\nTotal time: {(time.time()-tic)/60:0.2f} minutes")
-
+    print(f"""
+Finish:
+    {file}
+    One-hot encoding: {hot_encode}
+    Final Val R2:  {r2_score(y_train, val_predictions):0.4f} 
+    Final Test R2: {r2_score(y_test, test_predictions):0.4f}
+    Total time: {(time.time()-tic)/60:0.2f} minutes
+""")
 #########################################     DE-MEAN R2    #########################################    
     crop_yield["prediction"] = np.maximum(best_model.predict(x_all), 0)
 
@@ -215,12 +209,13 @@ def model_1_sensor(params, n_splits=5):
 
 #########################################     SAVE RESULTS    #########################################
     d = {
-        'country'     : country_code,
-        'satellite'   : satellite,
+        'country'     : country_code[0],
+        'satellite'   : satellite[0],
         'bands'       : bands,
-        'num_features': num_features,
+        'num_features': n_features,
         'points'      : points, 
-        'month_range' : f'{min(month_range)}-{max(month_range)}',
+        'month_range' : mns,
+        'year_range'  : yrs,
 
         'limit_months': limit_months,
         'crop_mask'   : crop_mask,
@@ -299,6 +294,7 @@ def model_2_sensor(params, n_splits=5):
     features = features[~features.isna().any(axis = 1)]
 
 #########################################     CLEAN AND COPY    ######################################### 
+    yrs = f'{min(features.year)}-{max(features.year)}'
     n_fts_1 = features_1.shape[1]
     n_districts = len(features.district.unique())
     
@@ -383,7 +379,8 @@ Finish:
 
 #########################################     SAVE RESULTS    #########################################
     d = {
-        'country': country_code,
+        'country': country_code[0],
+        'year_range': yrs,
 
         'satellite_1'   : satellite1[0],
         'bands_1'       : bands1,
@@ -457,8 +454,7 @@ def model_1_sensor_anomaly(params):
     kfold  = KFold()
     ridge  = Ridge() 
 #########################################     READ DATA    #########################################
-    fn = f"{directory}/{file}"
-    features = pd.read_feather(fn)
+    features = pd.read_feather(here('data', 'random_features', 'summary', file))
 
     drop_cols = ['district', 'year', 'yield_mt', 'crop_perc']
 
