@@ -31,4 +31,8 @@ scontrol show partition
 # Show resources
 sstat --format=AveCPU,AvePages,AveRSS,AveVMSize,JobID -j 3010346
 
+# Show MPI Version
+mpirun --version
+ompi_info
+
 

@@ -3,6 +3,7 @@ import numpy as np
 import warnings
 import time
 import gc
+import sys
 from glum import GeneralizedLinearRegressor as glm
 from scipy.linalg import LinAlgWarning
 from pyhere import here
@@ -52,15 +53,53 @@ def merge(x, bases = (tuple, list)):
 def kfold_rr_multi_lambda_tuning(
     X, 
     y,
-    grid=np.logspace(-8, 8, base = 10, num = 17), 
-    n_splits=5,
-    start=0, 
-    end=12, 
-    static_lam=1,
-    verbose=0,
-    show_linalg_warning=False,
-    fit_model_after_tuning=True
+    grid=np.logspace(-8, 8, base = 10, num = 17), # The range of lambdas to search over
+    n_splits=5, # The number of folds to use for cross-validation
+    start=0, # The starting indices of groups of features that share a lambda
+    end=12, # The ending indices of groups of features that share a lambda
+    static_lam=1, # The default lambda value to use for features not in any group
+    verbose=0, # Verbosity level
+    show_linalg_warning=False, # Whether to show warnings related to linear algebra operations
+    fit_model_after_tuning=True # Whether to fit the final model using the selected lambdas
 ):
+    """
+    Performs k-fold cross-validated ridge regression with multiple lambda values,
+    where different groups of features can share the same lambda value. 
+    
+    Parameters
+    ----------
+        X : ndarray of shape (n_samples, n_features)
+            The input data.  
+        y : ndarray of shape (n_samples,)
+            The target values.
+        grid : ndarray of shape (n_lambdas,), optional (default=np.logspace(-8, 8, base = 10, num = 17))
+            The range of lambda values to search over.
+        n_splits : int, optional (default=5)
+            The number of folds to use for cross-validation.
+        start : int or list of ints, optional (default=0)
+            The starting indices of groups of features that share a lambda.
+            If an int is provided, it is assumed that all features share the same lambda.
+        end : int or list of ints, optional (default=12)
+            The ending indices of groups of features that share a lambda.
+            If an int is provided, it is assumed that all features share the same lambda.
+        static_lam : float, optional (default=1)
+            The default lambda value to use for features not in any group.
+        verbose : int, optional (default=0)
+            Verbosity level. If > 0, prints out the best lambda value and validation R^2 for each group of features.
+            If > 1, also prints out the lambda value being currently searched over.
+        show_linalg_warning : bool, optional (default=False)
+            Whether to show warnings related to linear algebra operations. 
+        fit_model_after_tuning : bool, optional (default=True)
+            Whether to fit the final model using the selected lambdas.  
+    Returns
+    -------
+        lambdas : list of floats
+            The selected lambda values for each group of features.
+        best_scores : list of floats
+            The validation R^2 scores achieved with the selected lambda values for each group of features.
+        model : GeneralizedLinearRegressor or np.nan
+            The fitted model with the selected lambda values, or np.nan if `fit_model_after_tuning` is False.
+    """
     if show_linalg_warning:
         pass
     else:
@@ -86,7 +125,7 @@ def kfold_rr_multi_lambda_tuning(
         for pen in grid:
             
             if verbose > 1:
-                print(pen, end=" ")
+                print(f'{pen:.0e}', end = " ")
                 
             penalties[start[i]:end[i]] = [pen for j in range(end[i]-start[i])]
             
@@ -94,13 +133,13 @@ def kfold_rr_multi_lambda_tuning(
             search = GridSearchCV(ridge, alpha, scoring = 'r2', cv = kfold).fit(X, y)
             
             scores.append(search.best_score_)
-            
         best_lambda = grid[np.argmax(scores)]
         penalties[start[i]:end[i]] = [best_lambda for j in range(end[i]-start[i])]
         
         if verbose > 0:
             print(f'''\n\tBest \u03BB {i+1}: {best_lambda}\n\tVal R2 {i+1}: {scores[np.argmax(scores)]:0.4f}\n''') 
-        
+            sys.stdout.flush()
+            
         lambdas.append(best_lambda)
         best_scores.append(scores[np.argmax(scores)])
         
@@ -124,18 +163,16 @@ def kfold_rr_multi_lambda_tuning(
 #########################################
 #########################################
 
-def model_1_sensor(params, n_splits=5):
+def model_1_sensor(fn, he, n_splits=5):
 #########################################     SET PARAMS    #########################################
-    file         = params[0]
-    hot_encode   = params[1]
-    drop_cols = ['district', 'year', 'yield_mt']
+    drop_cols  = ['district', 'year', 'yield_mt']
     satellite, bands, country_code, points, yrs, mns,\
-    n_features, limit_months, crop_mask, weighted_avg = split_fn(file)
+    n_features, limit_months, crop_mask, weighted_avg = split_fn(fn)
 
-    print(f"\nBegin with paramters:\n\t{file}\n\tOne-hot encoding: {hot_encode}\n")
+    print(f"\nBegin with paramters:\n\t{fn}\n\tOne-hot encoding: {he}\n", flush=True)
 
 #########################################     READ, CLEAN, AND COPY   #########################################
-    features = pd.read_feather(here('data', 'random_features', 'summary', file))
+    features = pd.read_feather(here('data', 'random_features', 'summary', fn))
     features.drop(['crop_perc'], axis=1, errors='ignore', inplace=True)
     
     n_districts = len(features.district.unique())
@@ -144,7 +181,7 @@ def model_1_sensor(params, n_splits=5):
     crop_yield["log_yield"] = np.log10(crop_yield.yield_mt.to_numpy() + 1)
 
 ########################################     HOT ENCODE    ###########################################
-    if hot_encode:
+    if he:
         drop_cols.remove("district")
         features = pd.get_dummies(features, columns=["district"], drop_first=False)
     else:
@@ -162,7 +199,7 @@ def model_1_sensor(params, n_splits=5):
     alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
     tic = time.time()
     ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER(S)
-    if hot_encode:
+    if he:
         best_lambdas, best_scores, best_model = kfold_rr_multi_lambda_tuning(
             X=x_train,
             y=y_train, 
@@ -186,12 +223,12 @@ def model_1_sensor(params, n_splits=5):
     test_predictions  = best_model.predict(x_test)
     print(f"""
 Finish:
-    {file}
-    One-hot encoding: {hot_encode}
+    {fn}
+    One-hot encoding: {he}
     Final Val R2:  {r2_score(y_train, val_predictions):0.4f} 
     Final Test R2: {r2_score(y_test, test_predictions):0.4f}
     Total time: {(time.time()-tic)/60:0.2f} minutes
-""")
+""", flush=True)
 #########################################     DE-MEAN R2    #########################################    
     crop_yield["prediction"] = np.maximum(best_model.predict(x_all), 0)
 
@@ -220,7 +257,7 @@ Finish:
         'limit_months': limit_months,
         'crop_mask'   : crop_mask,
         'weighted_avg': weighted_avg,
-        'hot_encode': hot_encode,
+        'hot_encode': he,
 
         'total_n': len(x_all),
         'train_n': len(x_train),
@@ -244,7 +281,7 @@ Finish:
         'demean_cv_r':  pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0],
         'demean_cv_r2': pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0] ** 2,
     }
-    return pd.DataFrame(data=d, index=[0])
+    return d
 
 
 #########################################
@@ -253,11 +290,8 @@ Finish:
 #########################################
 #########################################
 
-def model_2_sensor(params, n_splits=5):
+def model_2_sensor(f1, f2, he, n_splits=5):
 #########################################     SET PARAMS    #########################################    
-    f1         = params[0]
-    f2         = params[1]
-    hot_encode = params[2]
 
     satellite1, bands1, country_code, points1, yrs1, mns1,\
     num_features1, limit_months1, crop_mask1, weighted_avg1 = split_fn(f1)
@@ -265,7 +299,7 @@ def model_2_sensor(params, n_splits=5):
     satellite2, bands2, country_code, points2, yrs2, mns2,\
     num_features2, limit_months2, crop_mask2, weighted_avg2 = split_fn(f2)
 
-    print(f"\nBegin with paramters:\n\t{f1}\n\t{f2}\n\tOne-hot encoding: {hot_encode}\n")
+    print(f"\nBegin with paramters:\n\t{f1}\n\t{f2}\n\tOne-hot encoding: {he}\n", flush=True)
 
 #########################################     READ DATA    #########################################
     features_1 = pd.read_feather(here('data', 'random_features', 'summary', f1))
@@ -293,6 +327,12 @@ def model_2_sensor(params, n_splits=5):
     features = features_1.join(features_2).reset_index()
     features = features[~features.isna().any(axis = 1)]
 
+#########################################    STANDARDIZE FEATURES    #########################################    
+    features = features.set_index(drop_cols) 
+    features_scaled = StandardScaler().fit_transform(features.values)
+    features = pd.DataFrame(features_scaled, index=features.index).reset_index()
+    features.columns = features.columns.astype(str)
+
 #########################################     CLEAN AND COPY    ######################################### 
     yrs = f'{min(features.year)}-{max(features.year)}'
     n_fts_1 = features_1.shape[1]
@@ -303,14 +343,8 @@ def model_2_sensor(params, n_splits=5):
     
     del features_1, features_2; gc.collect()
 
-#########################################    STANDARDIZE FEATURES    #########################################    
-    features = features.set_index(drop_cols) 
-    features_scaled = StandardScaler().fit_transform(features.values)
-    features = pd.DataFrame(features_scaled, index=features.index).reset_index()
-    features.columns = features.columns.astype(str)
-
 #########################################    HOT ENCODE    ######################################### 
-    if hot_encode:
+    if he:
         drop_cols.remove('district')
         features = pd.get_dummies(features, columns = ["district"], drop_first = False)
     else:
@@ -331,7 +365,7 @@ def model_2_sensor(params, n_splits=5):
     ### LAMBDA INDICIES
     start = [0, n_fts_1]
     end   = [n_fts_1, x_train.shape[1]] 
-    if hot_encode:
+    if he:
         start.append(x_train.shape[1]-n_districts)
         end.append(x_train.shape[1]-n_districts)
         end.sort()
@@ -344,7 +378,7 @@ def model_2_sensor(params, n_splits=5):
         start=start,
         end=end, 
         static_lam=1,
-        verbose=1,
+        verbose=2,
         show_linalg_warning=False,
         fit_model_after_tuning=True
     )
@@ -356,11 +390,11 @@ def model_2_sensor(params, n_splits=5):
 Finish:
     {f1}
     {f2}
-    One-hot encoding: {hot_encode}
+    One-hot encoding: {he}
     Final Val R2:  {r2_score(y_train, val_predictions):0.4f} 
     Final Test R2: {r2_score(y_test, test_predictions):0.4f}
     Total time: {(time.time()-tic)/60:0.2f} minutes
-""")
+""", flush=True)
 
 #########################################     DE-MEAN R2    #########################################    
     crop_yield["prediction"] = np.maximum(best_model.predict(x_all), 0)
@@ -400,7 +434,7 @@ Finish:
         'crop_mask_2'   : crop_mask2,
         'weighted_avg_2': weighted_avg2,
 
-        'hot_encode': hot_encode,
+        'hot_encode': he,
 
         'total_n': len(x_all),
         'train_n': len(x_train),
@@ -424,7 +458,7 @@ Finish:
         'demean_cv_r':  pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0],
         'demean_cv_r2': pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0] ** 2,
     }
-    return pd.DataFrame(data=d, index=[0])
+    return d
 
 
 #########################################

@@ -1,4 +1,4 @@
-name: mosaiks-env
+name: mosaiks-env-mpi
 channels:
   - conda-forge
   - pytorch
