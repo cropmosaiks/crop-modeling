@@ -223,7 +223,7 @@ models/logo*
 dask-worker-space/
 
 # mac file
-DS_Store
+*.DS_Store
 
 ################## SLURM StdOut/StdErr ###############
 
