@@ -6,7 +6,7 @@ from pyhere import here
 from task_modeling_utils import *
 from mpi4py.futures import MPIPoolExecutor
     
-i = 4
+i = 5
 
 files = os.listdir(here("data", "random_features", "summary"))
 files = list(f for f in files if f not in ('.gitkeep', '.ipynb_checkpoints'))
@@ -35,6 +35,9 @@ elif i == 8:
 paramlist = (i for i in paramlist)
 
 if __name__ == "__main__":
+
+    print(f'Iteration: {i} of 8')
+
     max_workers = int(os.environ.get("SLURM_NTASKS", 4)) - 1
 
     executor = MPIPoolExecutor(max_workers=max_workers)
