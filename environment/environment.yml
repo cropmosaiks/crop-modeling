@@ -59,6 +59,7 @@ dependencies:
   - pyprojroot
   - p-tqdm 
   - glum
+  - nb_black
   - pip:
     - -r requirements.txt
 
