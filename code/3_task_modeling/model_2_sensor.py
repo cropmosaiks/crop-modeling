@@ -6,7 +6,7 @@ from pyhere import here
 from task_modeling_utils import *
 from mpi4py.futures import MPIPoolExecutor
     
-i = 5
+i = 8
 
 files = os.listdir(here("data", "random_features", "summary"))
 files = list(f for f in files if f not in ('.gitkeep', '.ipynb_checkpoints'))
