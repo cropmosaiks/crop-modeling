@@ -42,6 +42,46 @@ def merge(x, bases = (tuple, list)):
                 yield e
         else:
             yield e
+            
+
+def merge_files(file_list, file_type='csv', index_col=None):
+    """
+    Merges multiple files of a specified type into a single pandas dataframe.
+
+    Parameters:
+    file_list (list): A list of file paths to be merged.
+    file_type (str, optional): The file type of the input files. Default is 'csv'.
+    index_col (str, optional): The name of the column to use as the index for the merged dataframe. Default is None.
+
+    Returns:
+    pandas.DataFrame: A merged dataframe containing all data from the input files.
+
+    """
+    # check that file_type is supported
+    if file_type not in ['csv', 'txt']:
+        raise ValueError("Unsupported file type. Must be 'csv' or 'txt'.")
+
+    # read and concatenate files in chunks to save memory
+    chunks = []
+    for file in file_list:
+        if file_type == 'csv':
+            chunk_reader = pd.read_csv(file, chunksize=1000)
+        elif file_type == 'txt':
+            chunk_reader = pd.read_csv(file, sep='\t', chunksize=1000)
+        for chunk in chunk_reader:
+            chunks.append(chunk)
+    merged_data = pd.concat(chunks, ignore_index=True)
+
+    # check for duplicate rows and remove them
+    num_duplicates = merged_data.duplicated().sum()
+    if num_duplicates > 0:
+        merged_data.drop_duplicates(inplace=True)
+
+    # set the index of the merged dataframe
+    if index_col:
+        merged_data.set_index(index_col, inplace=True)
+
+    return merged_data
 
 
 #########################################
