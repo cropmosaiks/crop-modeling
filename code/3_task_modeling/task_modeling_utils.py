@@ -84,6 +84,33 @@ def merge_files(file_list, file_type='csv', index_col=None):
     return merged_data
 
 
+def demean_by_group(
+    df, observed="log_yield", predicted="cv_prediction", group=["district", "fold"]
+):
+    """
+    Demeans the observed and predicted columns of a DataFrame based on one or more grouping columns.
+
+    Args:
+        df (pandas.DataFrame): The input DataFrame to be modified.
+        observed (str): The name of the column containing the observed values to be demeaned.
+        predicted (str): The name of the column containing the predicted values to be demeaned.
+        group (list of str): A list of column names to use for grouping the data. The function
+        will calculate the mean of the observed and predicted columns for each unique combination
+        of values in these columns.
+
+    Returns:
+        pandas.DataFrame: The input DataFrame with two new columns added, one for the demeaned
+        observed values and one for the demeaned predicted values.
+    """
+    df[f"demean_{observed}"] = df[observed] - df.groupby(group)[observed].transform(
+        "mean"
+    )
+    df[f"demean_{predicted}"] = df[predicted] - df.groupby(group)[predicted].transform(
+        "mean"
+    )
+    return df
+
+
 #########################################
 #########################################
 ########### MULTI LAMBDA FUN ############
@@ -100,7 +127,8 @@ def kfold_rr_multi_lambda_tuning(
     static_lam=1, # The default lambda value to use for features not in any group
     verbose=0, # Verbosity level
     show_linalg_warning=False, # Whether to show warnings related to linear algebra operations
-    fit_model_after_tuning=True # Whether to fit the final model using the selected lambdas
+    fit_model_after_tuning=True, # Whether to fit the final model using the selected lambdas
+    seed=42
 ):
     """
     Performs k-fold cross-validated ridge regression with multiple lambda values,
@@ -169,7 +197,7 @@ def kfold_rr_multi_lambda_tuning(
                 
             penalties[start[i]:end[i]] = [pen for j in range(end[i]-start[i])]
             
-            ridge = glm(family="normal", P2=penalties, l1_ratio=0, random_state=42)   
+            ridge = glm(family="normal", P2=penalties, l1_ratio=0, random_state=seed)   
             search = GridSearchCV(ridge, alpha, scoring = 'r2', cv = kfold).fit(X, y)
             
             scores.append(search.best_score_)
@@ -188,13 +216,190 @@ def kfold_rr_multi_lambda_tuning(
         for k in range(len(start)):
             penalties[start[k]:end[k]] = [lambdas[k] for j in range(end[k]-start[k])]
             
-        ridge = glm(family="normal", P2=penalties, l1_ratio=0, random_state=42) 
+        ridge = glm(family="normal", P2=penalties, l1_ratio=0, random_state=seed) 
         model = GridSearchCV(ridge, alpha, scoring = 'r2', cv = kfold).fit(X, y).best_estimator_
         
     else:
         model = np.nan
         
     return(lambdas, best_scores, model)
+
+
+#########################################
+#########################################
+########### CLIMATE MODEL ############
+#########################################
+#########################################
+
+def climate_model(
+    variable_groups=["pre", "tmp", "ndvi"],
+    hot_encode=True,
+    anomaly=False,
+    index_cols=["year", "district", "yield_mt"],
+    year_start=2016,
+    n_splits=5,
+    seed=42,
+):
+    #########################################     READ DATA    #########################################
+    data = pd.read_csv(here("data", "climate", "climate_summary.csv"))
+    data = data.dropna()
+
+    #########################################     FILTER DATA    #########################################
+    keep_cols = []
+
+    for var in variable_groups:
+        tmp = data.columns[data.columns.to_series().str.contains(var)].tolist()
+        keep_cols.append(tmp)
+
+    keep_cols = [*index_cols, *[col for cols in keep_cols for col in cols]]
+    data = data.loc[:, keep_cols]
+    data = data[data.year >= year_start]
+
+    #########################################    MAKE A COPY    #########################################
+    crop_yield = data.copy().loc[:, tuple(index_cols)].reset_index(drop=True)
+    crop_yield["log_yield"] = np.log10(crop_yield.yield_mt.to_numpy() + 1)
+
+    ########################################    STANDARDIZE FEATURES    #########################################
+    data = data.set_index(index_cols)
+    data_scaled = StandardScaler().fit_transform(data.values)
+    data = pd.DataFrame(data_scaled, index=data.index).reset_index()
+    data.columns = data.columns.astype(str)
+
+    #########################################     CALCULATE ANOMALY   #########################################
+    if anomaly:
+        data["yield_mt"] = np.log10(data.yield_mt.to_numpy() + 1)
+        data.set_index(["year", "district"], inplace=True)
+        var_cols = data.columns
+        data = data[var_cols] - data.groupby(["district"], as_index=True)[
+            var_cols
+        ].transform("mean")
+        data.reset_index(drop=False, inplace=True)
+    else:
+        pass
+
+    #########################################    HOT ENCODE    #########################################
+    if hot_encode:
+        index_cols.remove("district")
+        data = pd.get_dummies(data, columns=["district"], drop_first=False)
+    else:
+        pass
+
+    #########################################     K-FOLD SPLIT    #########################################
+    x_all = data.drop(index_cols, axis=1)
+    y_all = np.log10(data.yield_mt.to_numpy() + 1)
+    x_train, x_test, y_train, y_test = train_test_split(
+        x_all, y_all, test_size=0.2, random_state=seed
+    )
+    kfold = KFold(n_splits=n_splits)
+    folds = []
+    for i, (train_index, test_index) in enumerate(kfold.split(x_train)):
+        folds.append({"fold": i + 1, "": list(test_index)})
+    folds_df = pd.DataFrame(folds).explode("").set_index("")
+
+    #########################################     K-FOLD CV    #########################################
+    ### SETUP
+    tic = time.time()
+    alphas = {"alpha": np.logspace(-8, 8, base=10, num=17)}
+
+    ### LAMBDA INDICIES
+    i = 0
+    start = [i]
+    end = [x_train.shape[1]]
+
+    for var in variable_groups:
+        i += 12
+        start.append(i)
+        end.append(i)
+    start.sort()
+    end.sort()
+
+    if not hot_encode:
+        start = start[0:-1]
+        end = end[0:-1]
+
+    ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER(S)
+    best_lambdas, best_scores, best_model = kfold_rr_multi_lambda_tuning(
+        X=x_train,
+        y=y_train,
+        grid=alphas.get("alpha"),
+        n_splits=n_splits,
+        start=start,
+        end=end,
+        static_lam=1,
+        verbose=0,
+        show_linalg_warning=False,
+        fit_model_after_tuning=True,
+        seed=seed,
+    )
+    ### PREDICT WITH BEST HYPERPARAMETER(S)
+    val_predictions = cross_val_predict(best_model, X=x_train, y=y_train, cv=kfold)
+    train_predictions = best_model.predict(x_train)
+    test_predictions = best_model.predict(x_test)
+
+    #########################################     DE-MEAN TRAIN R2    #########################################
+    train_split = (
+        pd.DataFrame(folds).explode("").drop("", axis=1).set_index(x_train.index)
+    )
+    train_split["split"] = np.repeat("train", len(x_train))
+    train_split = train_split.join(
+        crop_yield.copy()[crop_yield.index.isin(x_train.index)]
+    )
+    train_split["cv_prediction"] = np.maximum(val_predictions, 0)
+    train_split = demean_by_group(train_split, predicted="cv_prediction")
+    train_split["demean_test_prediction"] = np.repeat(np.nan, len(x_train))
+
+    #########################################     DE-MEAN TEST R2    #########################################
+    test_split = pd.DataFrame(
+        {"split": np.repeat("test", len(x_test))}, index=x_test.index
+    )
+    test_split["fold"] = 6
+    test_split = test_split.join(crop_yield.copy()[crop_yield.index.isin(x_test.index)])
+    test_split["test_prediction"] = np.maximum(best_model.predict(x_test), 0)
+    test_split["cv_prediction"] = np.repeat(np.nan, len(x_test))
+    test_split["demean_cv_prediction"] = np.repeat(np.nan, len(x_test))
+    test_split = demean_by_group(test_split, predicted="test_prediction")
+
+    d = {
+        "variables": [variable_groups],
+        "year_start": year_start,
+        "hot_encode": hot_encode,
+        "anomaly": anomaly,
+        "total_n": len(x_all),
+        "train_n": len(x_train),
+        "test_n": len(x_test),
+        "best_reg_param": [best_lambdas],
+        "mean_of_val_R2": [best_scores],
+        "val_R2": r2_score(y_train, val_predictions),
+        "val_r": pearsonr(val_predictions, y_train)[0],
+        "val_r2": pearsonr(val_predictions, y_train)[0] ** 2,
+        "train_R2": r2_score(y_train, train_predictions),
+        "train_r": pearsonr(train_predictions, y_train)[0],
+        "train_r2": pearsonr(train_predictions, y_train)[0] ** 2,
+        "test_R2": r2_score(y_test, test_predictions),
+        "test_r": pearsonr(test_predictions, y_test)[0],
+        "test_r2": pearsonr(test_predictions, y_test)[0] ** 2,
+        "demean_cv_R2": r2_score(
+            train_split.demean_log_yield, train_split.demean_cv_prediction
+        ),
+        "demean_cv_r": pearsonr(
+            train_split.demean_log_yield, train_split.demean_cv_prediction
+        )[0],
+        "demean_cv_r2": pearsonr(
+            train_split.demean_log_yield, train_split.demean_cv_prediction
+        )[0]
+        ** 2,
+        "demean_test_R2": r2_score(
+            test_split.demean_log_yield, test_split.demean_test_prediction
+        ),
+        "demean_test_r": pearsonr(
+            test_split.demean_log_yield, test_split.demean_test_prediction
+        )[0],
+        "demean_test_r2": pearsonr(
+            test_split.demean_log_yield, test_split.demean_test_prediction
+        )[0]
+        ** 2,
+    }
+    return d
 
 
 #########################################
