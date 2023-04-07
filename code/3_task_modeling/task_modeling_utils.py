@@ -15,6 +15,9 @@ from sklearn.metrics import r2_score
 from scipy.stats import pearsonr
 
 
+import traceback
+import logging
+
 def str2bool(string):
     return string.lower() in ("yes", "true", "t", "1")
 
@@ -120,19 +123,20 @@ def demean_by_group(
 def kfold_rr_multi_lambda_tuning(
     X, 
     y,
-    grid=np.logspace(-8, 8, base = 10, num = 17), # The range of lambdas to search over
-    n_splits=5, # The number of folds to use for cross-validation
-    start=0, # The starting indices of groups of features that share a lambda
-    end=12, # The ending indices of groups of features that share a lambda
-    static_lam=1, # The default lambda value to use for features not in any group
-    verbose=0, # Verbosity level
-    show_linalg_warning=False, # Whether to show warnings related to linear algebra operations
-    fit_model_after_tuning=True, # Whether to fit the final model using the selected lambdas
+    grid=np.logspace(-8, 8, base = 10, num = 17), 
+    n_splits=5, 
+    start=0, 
+    end=12, 
+    static_lam=1, 
+    verbose=0, 
+    show_linalg_warning=False, 
+    fit_model_after_tuning=True, 
     seed=42
 ):
     """
-    Performs k-fold cross-validated ridge regression with multiple lambda values,
-    where different groups of features can share the same lambda value. 
+    Performs k-fold cross-validated ridge regression while tuning multiple 
+    penalization parameters for groups of features. Each group of features
+    can have a unique penalization parameter. 
     
     Parameters
     ----------
@@ -162,11 +166,11 @@ def kfold_rr_multi_lambda_tuning(
     Returns
     -------
         lambdas : list of floats
-            The selected lambda values for each group of features.
+            The selected penalization parameters for each group of features.
         best_scores : list of floats
-            The validation R^2 scores achieved with the selected lambda values for each group of features.
+            The validation R^2 scores achieved with the selected penalization values for each group of features.
         model : GeneralizedLinearRegressor or np.nan
-            The fitted model with the selected lambda values, or np.nan if `fit_model_after_tuning` is False.
+            The fitted model with the selected penalization values, or np.nan if `fit_model_after_tuning` is False.
     """
     if show_linalg_warning:
         pass
@@ -201,6 +205,7 @@ def kfold_rr_multi_lambda_tuning(
             search = GridSearchCV(ridge, alpha, scoring = 'r2', cv = kfold).fit(X, y)
             
             scores.append(search.best_score_)
+            
         best_lambda = grid[np.argmax(scores)]
         penalties[start[i]:end[i]] = [best_lambda for j in range(end[i]-start[i])]
         
@@ -291,10 +296,9 @@ def climate_model(
         x_all, y_all, test_size=0.2, random_state=seed
     )
     kfold = KFold(n_splits=n_splits)
-    folds = []
-    for i, (train_index, test_index) in enumerate(kfold.split(x_train)):
-        folds.append({"fold": i + 1, "": list(test_index)})
-    folds_df = pd.DataFrame(folds).explode("").set_index("")
+    # folds = []
+    # for i, (train_index, test_index) in enumerate(kfold.split(x_train)):
+    #     folds.append({"fold": i + 1, "": list(test_index)})
 
     #########################################     K-FOLD CV    #########################################
     ### SETUP
@@ -337,38 +341,43 @@ def climate_model(
     test_predictions = best_model.predict(x_test)
 
     #########################################     DE-MEAN TRAIN R2    #########################################
-    train_split = (
-        pd.DataFrame(folds).explode("").drop("", axis=1).set_index(x_train.index)
+    # train_split = (
+    #     pd.DataFrame(folds).explode("").drop("", axis=1).set_index(x_train.index)
+    # )
+    # train_split["split"] = np.repeat("train", len(x_train))
+    
+    train_split = pd.DataFrame(
+        np.repeat("train", len(x_train)), columns=["split"], index=x_train.index
     )
-    train_split["split"] = np.repeat("train", len(x_train))
     train_split = train_split.join(
         crop_yield.copy()[crop_yield.index.isin(x_train.index)]
     )
     train_split["cv_prediction"] = np.maximum(val_predictions, 0)
-    train_split = demean_by_group(train_split, predicted="cv_prediction")
+    train_split = demean_by_group(train_split, predicted="cv_prediction", group=["district"])
     train_split["demean_test_prediction"] = np.repeat(np.nan, len(x_train))
 
     #########################################     DE-MEAN TEST R2    #########################################
     test_split = pd.DataFrame(
         {"split": np.repeat("test", len(x_test))}, index=x_test.index
     )
-    test_split["fold"] = 6
+    # test_split["fold"] = 6
     test_split = test_split.join(crop_yield.copy()[crop_yield.index.isin(x_test.index)])
     test_split["test_prediction"] = np.maximum(best_model.predict(x_test), 0)
     test_split["cv_prediction"] = np.repeat(np.nan, len(x_test))
     test_split["demean_cv_prediction"] = np.repeat(np.nan, len(x_test))
-    test_split = demean_by_group(test_split, predicted="test_prediction")
+    test_split = demean_by_group(test_split, predicted="test_prediction", group=["district"])
 
     d = {
-        "variables": [variable_groups],
+        "variables": "_".join(variable_groups),
+        "random_state": seed,
         "year_start": year_start,
         "hot_encode": hot_encode,
         "anomaly": anomaly,
         "total_n": len(x_all),
         "train_n": len(x_train),
         "test_n": len(x_test),
-        "best_reg_param": [best_lambdas],
-        "mean_of_val_R2": [best_scores],
+        "best_reg_param": best_lambdas,
+        "mean_of_val_R2": best_scores,
         "val_R2": r2_score(y_train, val_predictions),
         "val_r": pearsonr(val_predictions, y_train)[0],
         "val_r2": pearsonr(val_predictions, y_train)[0] ** 2,
@@ -378,13 +387,13 @@ def climate_model(
         "test_R2": r2_score(y_test, test_predictions),
         "test_r": pearsonr(test_predictions, y_test)[0],
         "test_r2": pearsonr(test_predictions, y_test)[0] ** 2,
-        "demean_cv_R2": r2_score(
+        "demean_val_R2": r2_score(
             train_split.demean_log_yield, train_split.demean_cv_prediction
         ),
-        "demean_cv_r": pearsonr(
+        "demean_val_r": pearsonr(
             train_split.demean_log_yield, train_split.demean_cv_prediction
         )[0],
-        "demean_cv_r2": pearsonr(
+        "demean_val_r2": pearsonr(
             train_split.demean_log_yield, train_split.demean_cv_prediction
         )[0]
         ** 2,
@@ -402,6 +411,28 @@ def climate_model(
     return d
 
 
+def run_climate_model(params):
+    try:
+        var, yr, he, anom, seed = params
+        if he and anom:
+            return None
+        else:
+            out = climate_model(
+                variable_groups=var,
+                year_start=yr,
+                hot_encode=he,
+                anomaly=anom,
+                index_cols=["year", "district", "yield_mt"],
+                seed=seed
+            )
+            return out
+    except Exception as e:
+        logging.error(f"Exception in run_climate_model: {e}")
+        logging.error(traceback.format_exc())
+        return None
+    
+    
+    
 #########################################
 #########################################
 ########### ONE SENSOR MODEL ############
