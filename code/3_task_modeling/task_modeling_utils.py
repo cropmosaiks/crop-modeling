@@ -10,11 +10,11 @@ from pyhere import here
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Ridge
-from sklearn.model_selection import train_test_split, KFold, GridSearchCV, cross_val_predict
+from sklearn.model_selection import train_test_split, KFold, GridSearchCV, cross_val_predict, cross_val_score
 from sklearn.metrics import r2_score
 from scipy.stats import pearsonr
 
-
+from typing import List, Tuple, Union
 import traceback
 import logging
 
@@ -120,114 +120,150 @@ def demean_by_group(
 #########################################
 #########################################
 
-def kfold_rr_multi_lambda_tuning(
-    X, 
-    y,
-    grid=np.logspace(-8, 8, base = 10, num = 17), 
-    n_splits=5, 
-    start=0, 
-    end=12, 
-    static_lam=1, 
-    verbose=0, 
-    show_linalg_warning=False, 
-    fit_model_after_tuning=True, 
-    seed=42
-):
-    """
-    Performs k-fold cross-validated ridge regression while tuning multiple 
-    penalization parameters for groups of features. Each group of features
-    can have a unique penalization parameter. 
+def find_best_lambda_expanding_grid(
+    X: np.ndarray,
+    y: np.ndarray,
+    initial_grid: np.ndarray,
+    start: int,
+    end: int,
+    penalties: List[float],
+    kfold: KFold,
+) -> Tuple[float, float]:
     
+    best_score = -np.inf
+    best_lambda = 0
+    edge_found = False
+    grid = initial_grid.copy()
+
+    while not edge_found:
+        for pen in grid:
+            penalties[start:end] = [pen] * (end - start)
+
+            ridge = glm(family="normal", P2=penalties, l1_ratio=0)
+            score = np.mean(cross_val_score(ridge, X, y, scoring="r2", cv=kfold))
+
+            if score > best_score:
+                best_score = score
+                best_lambda = pen
+
+        # Expand the search space if an edge case is detected
+        if best_lambda == grid[0]:
+            grid = np.insert(grid, 0, best_lambda / 10)
+        elif best_lambda == grid[-1]:
+            grid = np.append(grid, best_lambda * 10)
+        else:
+            edge_found = True
+
+    return best_lambda, best_score
+
+
+def kfold_rr_multi_lambda_tuning(
+    X: np.ndarray,
+    y: np.ndarray,
+    grid: np.ndarray = np.logspace(-1, 1, base=10, num=3),
+    n_splits: int = 5,
+    start: Union[int, List[int]] = 0,
+    end: Union[int, List[int]] = 12,
+    static_lam: float = 1,
+    verbose: int = 0,
+    show_linalg_warning: bool = False,
+    fit_model_after_tuning: bool = True,
+) -> Tuple[List[float], List[float], Union[glm, float]]:
+    """
+    Performs k-fold cross-validated ridge regression while tuning multiple
+    penalization parameters for groups of features. Each group of features
+    can have a unique penalization parameter.
+
     Parameters
     ----------
-        X : ndarray of shape (n_samples, n_features)
-            The input data.  
-        y : ndarray of shape (n_samples,)
-            The target values.
-        grid : ndarray of shape (n_lambdas,), optional (default=np.logspace(-8, 8, base = 10, num = 17))
-            The range of lambda values to search over.
-        n_splits : int, optional (default=5)
-            The number of folds to use for cross-validation.
-        start : int or list of ints, optional (default=0)
-            The starting indices of groups of features that share a lambda.
-            If an int is provided, it is assumed that all features share the same lambda.
-        end : int or list of ints, optional (default=12)
-            The ending indices of groups of features that share a lambda.
-            If an int is provided, it is assumed that all features share the same lambda.
-        static_lam : float, optional (default=1)
-            The default lambda value to use for features not in any group.
-        verbose : int, optional (default=0)
-            Verbosity level. If > 0, prints out the best lambda value and validation R^2 for each group of features.
-            If > 1, also prints out the lambda value being currently searched over.
-        show_linalg_warning : bool, optional (default=False)
-            Whether to show warnings related to linear algebra operations. 
-        fit_model_after_tuning : bool, optional (default=True)
-            Whether to fit the final model using the selected lambdas.  
+    X : ndarray of shape (n_samples, n_features)
+        The input data.
+    y : ndarray of shape (n_samples,)
+        The target values.
+    grid : ndarray of shape (n_lambdas,), optional (default=np.logspace(-8, 8, base=10, num=17))
+        The range of lambda values to search over.
+    n_splits : int, optional (default=5)
+        The number of folds to use for cross-validation.
+    start : int or list of ints, optional (default=0)
+        The starting indices of groups of features that share a lambda.
+        If an int is provided, it is assumed that all features share the same lambda.
+    end : int or list of ints, optional (default=12)
+        The ending indices of groups of features that share a lambda.
+        If an int is provided, it is assumed that all features share the same lambda.
+    static_lam : float, optional (default=1)
+        The default lambda value to use for features not in any group.
+    verbose : int, optional (default=0)
+        Verbosity level. If > 0, prints out the best lambda value and validation R^2 for each group of features.
+        If > 1, also prints out the lambda value being currently searched over.
+    show_linalg_warning : bool, optional (default=False)
+        Whether to show warnings related to linear algebra operations.
+    fit_model_after_tuning : bool, optional (default=True)
+        Whether to fit the final model using the selected lambdas.
+
     Returns
     -------
-        lambdas : list of floats
-            The selected penalization parameters for each group of features.
-        best_scores : list of floats
-            The validation R^2 scores achieved with the selected penalization values for each group of features.
-        model : GeneralizedLinearRegressor or np.nan
-            The fitted model with the selected penalization values, or np.nan if `fit_model_after_tuning` is False.
+    lambdas : list of floats
+        The selected penalization parameters for each group of features.
+    best_scores : list of floats
+        The validation R^2 scores achieved with the selected penalization values for each group of features.
+    model : GeneralizedLinearRegressor or np.nan
+        The fitted model with the selected penalization values, or np.nan if `fit_model_after_tuning` is False.
     """
-    if show_linalg_warning:
-        pass
-    else:
+    # Ignore linear algebra warnings if show_linalg_warning is False
+    if not show_linalg_warning:
         warnings.filterwarnings(action="ignore", category=LinAlgWarning, module="glum")
-    
-    assert (len(start) == len(end)), "Start and end indexes must have same length"
-  
+
+    # Convert start and end to lists if they are not iterable
+    if not hasattr(start, "__iter__"):
+        start = [start]
+        end = [end]
+
+    # Ensure that start and end lists have the same length
+    assert len(start) == len(end), "Start and end indexes must have the same length"
+
+    # Create the KFold cross-validator
     kfold = KFold(n_splits=n_splits)
-    alpha = {'alpha': [1]}
-    
-    if hasattr(start, '__iter__'):
-        pass
-    else:
-        start = [start]; end = [end]
-        
-    penalties = [static_lam for j in range(X.shape[1])] 
-    lambdas = []; best_scores = []
-    
-    for i in range(len(start)):
-        
+
+    # Initialize penalties with the default static_lam value
+    penalties = [static_lam] * X.shape[1]
+    # Initialize lists for storing best lambdas and their corresponding best_scores
+    lambdas = []
+    best_scores = []
+
+    # Loop through the groups of features
+    for s, e in zip(start, end):
         scores = []
-        
-        for pen in grid:
-            
-            if verbose > 1:
-                print(f'{pen:.0e}', end = " ")
-                
-            penalties[start[i]:end[i]] = [pen for j in range(end[i]-start[i])]
-            
-            ridge = glm(family="normal", P2=penalties, l1_ratio=0, random_state=seed)   
-            search = GridSearchCV(ridge, alpha, scoring = 'r2', cv = kfold).fit(X, y)
-            
-            scores.append(search.best_score_)
-            
-        best_lambda = grid[np.argmax(scores)]
-        penalties[start[i]:end[i]] = [best_lambda for j in range(end[i]-start[i])]
-        
+
+    # Loop through the groups of features
+    for s, e in zip(start, end):
+        # Call the find_best_lambda function instead of the inner loop
+        best_lambda, best_score = find_best_lambda_expanding_grid(
+            X, y, grid, s, e, penalties, kfold
+        )
+
+        penalties[s:e] = [best_lambda] * (e - s)
+
+        # Print the best lambda and validation R^2 if verbosity level is > 0
         if verbose > 0:
-            print(f'''\n\tBest \u03BB {i+1}: {best_lambda}\n\tVal R2 {i+1}: {scores[np.argmax(scores)]:0.4f}\n''') 
+            print(f"""\n\tBest \u03BB: {best_lambda}\n\tVal R2: {best_score:0.4f}\n""")
             sys.stdout.flush()
-            
+
+        # Append the best lambda and its score to the respective lists
         lambdas.append(best_lambda)
-        best_scores.append(scores[np.argmax(scores)])
-        
+        best_scores.append(best_score)
+
+    # Fit the final model using the selected lambdas if fit_model_after_tuning is True
     if fit_model_after_tuning:
-        
-        for k in range(len(start)):
-            penalties[start[k]:end[k]] = [lambdas[k] for j in range(end[k]-start[k])]
-            
-        ridge = glm(family="normal", P2=penalties, l1_ratio=0, random_state=seed) 
-        model = GridSearchCV(ridge, alpha, scoring = 'r2', cv = kfold).fit(X, y).best_estimator_
-        
+        for s, e, lam in zip(start, end, lambdas):
+            penalties[s:e] = [lam] * (e - s)
+
+        ridge = glm(family="normal", P2=penalties, l1_ratio=0)
+        model = ridge.fit(X, y)
     else:
         model = np.nan
-        
-    return(lambdas, best_scores, model)
+
+    return lambdas, best_scores, model
+
 
 
 #########################################
@@ -566,22 +602,29 @@ Finish:
 #########################################
 #########################################
 
-def model_2_sensor(f1, f2, he, n_splits=5):
-#########################################     SET PARAMS    #########################################    
-
+def model_2_sensor(f1, f2, he, split=0, random_state=42, include_climate=False, variable_groups = ['ndvi'], n_splits=5):
+    #########################################     SET PARAMS    #########################################    
     satellite1, bands1, country_code, points1, yrs1, mns1,\
     num_features1, limit_months1, crop_mask1, weighted_avg1 = split_fn(f1)
 
     satellite2, bands2, country_code, points2, yrs2, mns2,\
     num_features2, limit_months2, crop_mask2, weighted_avg2 = split_fn(f2)
 
-    print(f"\nBegin with paramters:\n\t{f1}\n\t{f2}\n\tOne-hot encoding: {he}\n", flush=True)
+    print(f"""Begin with paramters:
+    F1: {f1}
+    F2: {f2}
+    One-hot encoding: {he}
+    Split: {split}
+    Random state: {random_state}
+    """, flush=True)
 
-#########################################     READ DATA    #########################################
+    #########################################     READ DATA    #########################################
     features_1 = pd.read_feather(here('data', 'random_features', 'summary', f1))
     features_2 = pd.read_feather(here('data', 'random_features', 'summary', f2))
+    if include_climate:
+        climate_df = pd.read_csv(here('data', 'climate', 'climate_summary.csv'))
 
-#########################################     CLEAN DATA    #########################################  
+    #########################################     CLEAN DATA    #########################################  
     min_year = max(min(features_1.year), min(features_2.year))
     max_year = min(max(features_1.year), max(features_2.year))
 
@@ -594,7 +637,7 @@ def model_2_sensor(f1, f2, he, n_splits=5):
     features_1.drop(['crop_perc'], axis=1, errors='ignore', inplace=True)
     features_2.drop(['crop_perc'], axis=1, errors='ignore', inplace=True)
 
-#########################################     JOIN FEATURES    #########################################  
+    #########################################     JOIN FEATURES    #########################################  
     drop_cols = ['district', 'year', 'yield_mt']
 
     features_1 = features_1.set_index(drop_cols).add_prefix("f1_")
@@ -603,48 +646,97 @@ def model_2_sensor(f1, f2, he, n_splits=5):
     features = features_1.join(features_2).reset_index()
     features = features[~features.isna().any(axis = 1)]
 
-#########################################    STANDARDIZE FEATURES    #########################################    
-    features = features.set_index(drop_cols) 
+    #########################################    JOIN CLIMATE VARS    #########################################
+    if include_climate:
+        keep_cols = []
+
+        for var in variable_groups:
+            tmp = climate_df.columns[climate_df.columns.to_series().str.contains(var)].tolist()
+            keep_cols.append(tmp)
+
+        keep_cols = [*drop_cols, *[col for cols in keep_cols for col in cols]]
+
+        climate_df = climate_df.loc[:, keep_cols]
+
+        features = (
+            features.set_index(drop_cols).join(climate_df.set_index(drop_cols)).reset_index()
+        )
+        features = features[features.year <= max(climate_df.year)]
+
+    #########################################    STANDARDIZE FEATURES    #########################################
+    features = features.set_index(drop_cols)
     features_scaled = StandardScaler().fit_transform(features.values)
     features = pd.DataFrame(features_scaled, index=features.index).reset_index()
     features.columns = features.columns.astype(str)
 
-#########################################     CLEAN AND COPY    ######################################### 
-    yrs = f'{min(features.year)}-{max(features.year)}'
+    #########################################     CLEAN AND COPY    #########################################
+    yrs = f"{min(features.year)}-{max(features.year)}"
     n_fts_1 = features_1.shape[1]
+    n_fts_2 = features_2.shape[1]
     n_districts = len(features.district.unique())
-    
+
+    if include_climate:
+        n_climate_cols = climate_df.shape[1] - len(drop_cols)
+
+        i = 0
+        n_climate_groups = []
+        for cols in range(n_climate_cols):
+            if cols % 12 == 0:
+                i += 1
+                n_climate_groups.append(i)
+        n_climate_groups
+
     crop_yield = features.copy().loc[:, tuple(drop_cols)]
     crop_yield["log_yield"] = np.log10(crop_yield.yield_mt.to_numpy() + 1)
-    
-    del features_1, features_2; gc.collect()
 
-#########################################    HOT ENCODE    ######################################### 
+    del features_1, features_2
+    gc.collect()
+
+    #########################################    HOT ENCODE    #########################################
     if he:
-        drop_cols.remove('district')
-        features = pd.get_dummies(features, columns = ["district"], drop_first = False)
+        drop_cols.remove("district")
+        features = pd.get_dummies(features, columns=["district"], drop_first=False)
     else:
         pass
 
-#########################################     K-FOLD SPLIT    #########################################
-    x_all = features.drop(drop_cols, axis = 1) 
+    #########################################     K-FOLD SPLIT    #########################################
+    x_all = features.drop(drop_cols, axis=1)
     y_all = np.log10(features.yield_mt.to_numpy() + 1)
-    x_train, x_test, y_train, y_test = train_test_split(x_all, y_all, test_size=0.2, random_state=0)
-    
-    del features; gc.collect()
-    
-#########################################     K-FOLD CV    ###########################################
+    x_train, x_test, y_train, y_test = train_test_split(
+        x_all, y_all, test_size=0.2, random_state=random_state
+    )
+
+    del features
+    gc.collect()
+
+    #########################################     K-FOLD CV    ###########################################
     ### SETUP
     tic = time.time()
-    kfold  = KFold(n_splits=n_splits)
-    alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
+    kfold = KFold(n_splits=n_splits)
+    alphas = {"alpha": np.logspace(-1, 1, base=10, num=3)}
+
     ### LAMBDA INDICIES
     start = [0, n_fts_1]
-    end   = [n_fts_1, x_train.shape[1]] 
-    if he:
-        start.append(x_train.shape[1]-n_districts)
-        end.append(x_train.shape[1]-n_districts)
-        end.sort()
+    end = [n_fts_1, x_train.shape[1]]
+
+    if include_climate:
+        start.append(n_fts_1 + n_fts_2)  
+        end.append(n_fts_1 + n_fts_2)  
+
+        for n in n_climate_groups:
+            x = n * 12
+            y = n_fts_1 + n_fts_2 + x
+            start.append(y)
+            end.append(y)
+
+    if not include_climate and he:
+        start.append(x_train.shape[1] - n_districts)
+        end.append(x_train.shape[1] - n_districts)
+
+    end.sort()
+
+    print(f'Group indicies {start}\n\t\t  {end}', end='\n\n')
+
     ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER(S)
     best_lambdas, best_scores, best_model = kfold_rr_multi_lambda_tuning(
         X=x_train,
@@ -663,78 +755,94 @@ def model_2_sensor(f1, f2, he, n_splits=5):
     train_predictions = best_model.predict(x_train)
     test_predictions  = best_model.predict(x_test)
     print(f"""
-Finish:
+    Finish:
     {f1}
     {f2}
     One-hot encoding: {he}
     Final Val R2:  {r2_score(y_train, val_predictions):0.4f} 
     Final Test R2: {r2_score(y_test, test_predictions):0.4f}
     Total time: {(time.time()-tic)/60:0.2f} minutes
-""", flush=True)
+    """, flush=True)
 
-#########################################     DE-MEAN R2    #########################################    
-    crop_yield["prediction"] = np.maximum(best_model.predict(x_all), 0)
+    #########################################     DE-MEAN TRAIN R2    #########################################
+    train_split = pd.DataFrame(
+        np.repeat("train", len(x_train)), columns=["data_fold"], index=x_train.index
+    )
+    train_split = train_split.join(
+        crop_yield.copy()[crop_yield.index.isin(x_train.index)]
+    )
+    train_split["oos_prediction"] = np.maximum(val_predictions, 0)
+    train_split = demean_by_group(train_split, predicted="oos_prediction", group=["district"])
 
-    train_split = pd.DataFrame(np.repeat('train', len(x_train)), columns = ['split'], index = x_train.index)
-    train_split = train_split.join(crop_yield.copy()[crop_yield.index.isin(x_train.index)])
-    train_split['cv_prediction'] = np.maximum(val_predictions, 0)
-    train_split["demean_cv_yield"] = train_split["log_yield"]-train_split.groupby('district')['log_yield'].transform('mean')
-    train_split["demean_cv_prediction"] = train_split["cv_prediction"]-train_split.groupby('district')['cv_prediction'].transform('mean')
-
-    test_split = pd.DataFrame(np.repeat('test', len(x_test)), columns = ['split'], index = x_test.index)
+    #########################################     DE-MEAN TEST R2    #########################################
+    test_split = pd.DataFrame({"data_fold": np.repeat("test", len(x_test))}, index=x_test.index)
     test_split = test_split.join(crop_yield.copy()[crop_yield.index.isin(x_test.index)])
-    test_split['cv_prediction'] = np.repeat(np.nan, len(x_test))
-    test_split["demean_cv_yield"] = np.repeat(np.nan, len(x_test))
-    test_split["demean_cv_prediction"] = np.repeat(np.nan, len(x_test))
+    test_split["oos_prediction"] = np.maximum(best_model.predict(x_test), 0)
+    test_split = demean_by_group(test_split, predicted="oos_prediction", group=["district"])
 
-#########################################     SAVE RESULTS    #########################################
+    #########################################     OUT OF SAMPLE PREDICTIONS    #########################################
+    oos_preds = pd.concat([train_split, test_split])
+    oos_preds[["split", "random_state"]] = split, random_state
+
+    #########################################     SAVE RESULTS    #########################################
     d = {
-        'country': country_code[0],
-        'year_range': yrs,
-
-        'satellite_1'   : satellite1[0],
-        'bands_1'       : bands1,
-        'num_features_1': num_features1,
-        'points_1'      : points1, 
-        'month_range_1' : mns1,
-        'limit_months_1': limit_months1,
-        'crop_mask_1'   : crop_mask1,
-        'weighted_avg_1': weighted_avg1,
-
-        'satellite_2'   : satellite2[0],
-        'bands_2'       : bands2,
-        'num_features_2': num_features2,
-        'points_2'      : points2, 
-        'month_range_2' : mns2,
-        'limit_months_2': limit_months2,
-        'crop_mask_2'   : crop_mask2,
-        'weighted_avg_2': weighted_avg2,
-
-        'hot_encode': he,
-
-        'total_n': len(x_all),
-        'train_n': len(x_train),
-        'test_n' : len(x_test),
-
-        'best_reg_param': [best_lambdas],
-        'mean_of_val_R2': [best_scores],
-        'val_R2': r2_score(y_train, val_predictions),
-        'val_r' : pearsonr(val_predictions, y_train)[0],
-        'val_r2': pearsonr(val_predictions, y_train)[0] ** 2,
-
-        'train_R2': r2_score(y_train, train_predictions),
-        'train_r' : pearsonr(train_predictions, y_train)[0],
-        'train_r2': pearsonr(train_predictions, y_train)[0] ** 2,
-
-        'test_R2': r2_score(y_test, test_predictions),
-        'test_r' : pearsonr(test_predictions, y_test)[0],
-        'test_r2': pearsonr(test_predictions, y_test)[0] ** 2,
-
-        'demean_cv_R2': r2_score(train_split.demean_cv_yield, train_split.demean_cv_prediction),
-        'demean_cv_r':  pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0],
-        'demean_cv_r2': pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0] ** 2,
+        "split": split,
+        "random_state": random_state,
+        "country": country_code[0],
+        "year_range": yrs,
+        "satellite_1": satellite1[0],
+        "bands_1": bands1,
+        "num_features_1": num_features1,
+        "points_1": points1,
+        "month_range_1": mns1,
+        "limit_months_1": limit_months1,
+        "crop_mask_1": crop_mask1,
+        "weighted_avg_1": weighted_avg1,
+        "satellite_2": satellite2[0],
+        "bands_2": bands2,
+        "num_features_2": num_features2,
+        "points_2": points2,
+        "month_range_2": mns2,
+        "limit_months_2": limit_months2,
+        "crop_mask_2": crop_mask2,
+        "weighted_avg_2": weighted_avg2,
+        "hot_encode": he,
+        "total_n": len(x_all),
+        "train_n": len(x_train),
+        "test_n": len(x_test),
+        "best_reg_param": [best_lambdas],
+        "mean_of_val_R2": [best_scores],
+        "val_R2": r2_score(y_train, val_predictions),
+        "val_r": pearsonr(val_predictions, y_train)[0],
+        "val_r2": pearsonr(val_predictions, y_train)[0] ** 2,
+        "train_R2": r2_score(y_train, train_predictions),
+        "train_r": pearsonr(train_predictions, y_train)[0],
+        "train_r2": pearsonr(train_predictions, y_train)[0] ** 2,
+        "test_R2": r2_score(y_test, test_predictions),
+        "test_r": pearsonr(test_predictions, y_test)[0],
+        "test_r2": pearsonr(test_predictions, y_test)[0] ** 2,
+        "demean_cv_R2": r2_score(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
+        ),
+        "demean_cv_r": pearsonr(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
+        )[0],
+        "demean_cv_r2": pearsonr(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
+        )[0]
+        ** 2,
+        "demean_test_R2": r2_score(
+            test_split.demean_log_yield, test_split.demean_oos_prediction
+        ),
+        "demean_test_r": pearsonr(
+            test_split.demean_log_yield, test_split.demean_oos_prediction
+        )[0],
+        "demean_test_r2": pearsonr(
+            test_split.demean_log_yield, test_split.demean_oos_prediction
+        )[0]
+        ** 2,
     }
-    return d
+    return d, oos_preds
 
 
 #########################################
