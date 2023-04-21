@@ -1,8 +1,7 @@
 #!/bin/bash -l
+
 #SBATCH --ntasks=50           # Do n many tasks at once
-#SBATCH --cpus-per-task=4     # Give each task n cpus             
-#SBATCH --output slurm/%j.out # File to save job's STDOUT (%j = JobId)
-#SBATCH --error slurm/%j.err  # File to save job's STDERR
+#SBATCH --cpus-per-task=4     # Give each task n cpus
 #SBATCH --mail-user=cullen_molitor@ucsb.edu
 #SBATCH --mail-type=ALL   # Send an e-mail when a job starts, stops, or fails
 
@@ -16,4 +15,6 @@ conda activate mosaiks-env
 
 cd $SLURM_SUBMIT_DIR
 
-mpirun -np $SLURM_NTASKS python -m mpi4py.futures ./code/3_task_modeling/model_1_sensor.py >& slurm/$SLURM_JOB_ID.log
+# mpirun -np $SLURM_NTASKS \
+python -m mpi4py.futures ./code/3_task_modeling/model_1_sensor.py \
+> slurm/$SLURM_JOB_ID.log 2>&1

@@ -1,30 +1,77 @@
 import os
-import pandas as pd
-import itertools
-from datetime import date
-from pyhere import here
+import random
+from mpi4py import MPI
 from task_modeling_utils import *
-from mpi4py.futures import MPIPoolExecutor
 
-directory = here("data", "random_features", "summary")
-files = os.listdir(directory)
-files = [f for f in files if f not in ('.gitkeep', '.ipynb_checkpoints')]
-paramlist = itertools.product(files, [True, False])
-paramlist = sorted(paramlist, key=lambda tup: tup[1])
 
-# paramlist = paramlist[0:44]
-
-paramlist = (i for i in paramlist)
 
 if __name__ == "__main__":
+
+    directory = here("data", "random_features", "summary")
+    files = [
+        f for f in os.listdir(directory) if f not in (".gitkeep", ".ipynb_checkpoints")
+    ]
+
+    random.seed(42)
+    n_splits = 10  # Generate n random seeds
+    random_seeds = [random.randint(0, 1_000_000) for _ in range(n_splits)]
+
+    paramlist = get_paramlist(files, random_seeds)
+
     max_workers = int(os.environ.get("SLURM_NTASKS", 4)) - 1
+    output, oos_preds = run_simulation(paramlist, max_workers)
 
-    executor = MPIPoolExecutor(max_workers=max_workers)
-    output = executor.starmap(model_1_sensor, paramlist)
-    executor.shutdown()
+    save_results(output, oos_preds, n_splits)
 
-    results = pd.DataFrame(output)
-    today = date.today().strftime("%Y-%m-%d")
-    file_name = f'results_{today}.csv'
-    print(f"Saving results as: {file_name}\n\n")
-    results.to_csv(here("data","results", file_name), index=False)
+
+# import os
+# import pandas as pd
+# import random
+# from datetime import date
+# from pyhere import here
+# from task_modeling_utils import *
+# from mpi4py.futures import MPIPoolExecutor
+
+# directory = here("data", "random_features", "summary")
+# files = [
+#     f for f in os.listdir(directory) if f not in (".gitkeep", ".ipynb_checkpoints")
+# ]
+
+# random.seed(42)
+# n_splits = 10  # Generate n random seeds
+# random_seeds = [random.randint(0, 1_000_000) for _ in range(n_splits)]
+
+# paramlist = [
+#     (
+#         f,
+#         h,
+#         split,
+#         random_state,
+#     )
+#     for f in files
+#     for h in [False, True]
+#     for split, random_state in enumerate(random_seeds)
+# ]
+# paramlist = (i for i in paramlist)
+
+# if __name__ == "__main__":
+#     max_workers = int(os.environ.get("SLURM_NTASKS", 4)) - 1
+#     output, oos_preds = [], []
+#     executor = MPIPoolExecutor(max_workers=max_workers)
+#     for out, oos in executor.starmap(model_1_sensor, paramlist):
+#         output.append(out)
+#         # oos_preds.append(oos)
+#     executor.shutdown()
+
+#     # Save main output
+#     results = pd.DataFrame(output)
+#     today = date.today().strftime("%Y-%m-%d")
+#     file_name = f'1_sensor_n-splits-{n_splits}_{today}.csv'
+#     print(f"Saving results as: {file_name}\n\n")
+#     results.to_csv(here("data","results", file_name), index=False)
+
+#     # Save out of sample predictions
+#     # oos_results = pd.concat(oos_preds)
+#     # file_name = f'1_sensor_top-mod_oos_preds_n-splits-{n_splits}_{today}.csv'
+#     # print(f"Saving results as: {file_name}\n\n")
+#     # oos_results.to_csv(here("data","results", file_name), index=False)

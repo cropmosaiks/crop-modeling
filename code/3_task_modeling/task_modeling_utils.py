@@ -18,6 +18,111 @@ from typing import List, Tuple, Union
 import traceback
 import logging
 
+
+from datetime import date
+from mpi4py.futures import MPIPoolExecutor
+
+
+def get_paramlist(files, random_seeds):
+    return [
+        {
+            "fn": f,
+            "he": h,
+            "split": split,
+            "random_state": random_state,
+            "n_splits": 5,
+        }
+        for f in files
+        for h in [False, True]
+        for split, random_state in enumerate(random_seeds)
+    ]
+
+
+def call_model_1_sensor(kwargs):
+    return model_1_sensor(**kwargs)
+
+
+def run_simulation(paramlist, max_workers):
+    output, oos_preds = [], []
+    with MPIPoolExecutor(max_workers=max_workers) as executor:
+        for out, oos in executor.map(call_model_1_sensor, paramlist):
+            output.append(out)
+            oos_preds.append(oos)
+    return output, oos_preds
+
+
+def save_results(output, oos_preds, n_splits):
+    today = date.today().strftime("%Y-%m-%d")
+
+    # Save main output
+    results = pd.DataFrame(output)
+    file_name = f'1_sensor_n-splits-{n_splits}_{today}.csv'
+    print(f"Saving results as: {file_name}\n\n")
+    with open(here("data", "results", file_name), "w") as f:
+        results.to_csv(f, index=False)
+
+    # Save out of sample predictions
+    oos_results = pd.concat(oos_preds)
+    file_name = f'1_sensor_top-mod_oos_preds_n-splits-{n_splits}_{today}.csv'
+    print(f"Saving results as: {file_name}\n\n")
+    with open(here("data", "results", file_name), "w") as f:
+        oos_results.to_csv(f, index=False)
+
+
+def get_mean_std_ste(df, groupby_columns, target_columns, confidence_level=0.95):
+    """
+    Group a pandas DataFrame and calculate mean, standard deviation, and standard error
+    for a single column or a list of target columns.
+​
+    Args:
+        df (pandas.DataFrame): The input pandas DataFrame
+        groupby_columns (list): A list of columns to group by
+        target_columns (str or list): A column or a list of columns to calculate the statistics for
+        confidence_level (float, optional): The desired confidence level for the interval (default: 0.95)
+​
+    Returns:
+        pandas.DataFrame: A summarized pandas DataFrame
+    """
+​
+    if isinstance(target_columns, str):
+        target_columns = [target_columns]
+​
+    summary_dfs = []
+​
+    for target_column in target_columns:
+        # Group the DataFrame
+        grouped_df = df.groupby(groupby_columns)[target_column]
+​
+        # Calculate mean, standard deviation, and standard error
+        mean = grouped_df.mean()
+        std = grouped_df.std()
+        sem = grouped_df.sem()
+        sample_size = grouped_df.count()
+        # Create the summarized DataFrame
+        summary_df = pd.DataFrame(
+            {
+                "summary_var": target_column,
+                "mean": mean,
+                "std": std,
+                "sem": sem,
+                "sample_size": sample_size,
+            }
+        ).reset_index()
+​
+        summary_dfs.append(summary_df)
+​
+    # Concatenate the summary DataFrames
+    combined_summary_df = pd.concat(summary_dfs, axis=0, ignore_index=True)
+​
+    return combined_summary_df
+
+
+
+
+
+
+
+
 def str2bool(string):
     return string.lower() in ("yes", "true", "t", "1")
 
@@ -123,24 +228,32 @@ def demean_by_group(
 def find_best_lambda_expanding_grid(
     X: np.ndarray,
     y: np.ndarray,
-    initial_grid: np.ndarray,
+    grid: np.ndarray,
     start: int,
     end: int,
     penalties: List[float],
     kfold: KFold,
 ) -> Tuple[float, float]:
-    
+
     best_score = -np.inf
     best_lambda = 0
     edge_found = False
-    grid = initial_grid.copy()
+    score_dict = {}
 
     while not edge_found:
         for pen in grid:
+            # Skip if this penalty has been tried before
+            if pen in score_dict:
+                continue
+
+            print(f"{pen:.0e}", end = " ")
+
             penalties[start:end] = [pen] * (end - start)
 
             ridge = glm(family="normal", P2=penalties, l1_ratio=0)
             score = np.mean(cross_val_score(ridge, X, y, scoring="r2", cv=kfold))
+
+            score_dict[pen] = score
 
             if score > best_score:
                 best_score = score
@@ -279,7 +392,8 @@ def climate_model(
     index_cols=["year", "district", "yield_mt"],
     year_start=2016,
     n_splits=5,
-    seed=42,
+    split=0,
+    random_state=42,
 ):
     #########################################     READ DATA    #########################################
     data = pd.read_csv(here("data", "climate", "climate_summary.csv"))
@@ -329,17 +443,14 @@ def climate_model(
     x_all = data.drop(index_cols, axis=1)
     y_all = np.log10(data.yield_mt.to_numpy() + 1)
     x_train, x_test, y_train, y_test = train_test_split(
-        x_all, y_all, test_size=0.2, random_state=seed
+        x_all, y_all, test_size=0.2, random_state=random_state
     )
     kfold = KFold(n_splits=n_splits)
-    # folds = []
-    # for i, (train_index, test_index) in enumerate(kfold.split(x_train)):
-    #     folds.append({"fold": i + 1, "": list(test_index)})
 
     #########################################     K-FOLD CV    #########################################
     ### SETUP
     tic = time.time()
-    alphas = {"alpha": np.logspace(-8, 8, base=10, num=17)}
+    alphas = {"alpha": np.logspace(-1, 1, base=10, num=3)}
 
     ### LAMBDA INDICIES
     i = 0
@@ -369,43 +480,36 @@ def climate_model(
         verbose=0,
         show_linalg_warning=False,
         fit_model_after_tuning=True,
-        seed=seed,
     )
     ### PREDICT WITH BEST HYPERPARAMETER(S)
     val_predictions = cross_val_predict(best_model, X=x_train, y=y_train, cv=kfold)
     train_predictions = best_model.predict(x_train)
     test_predictions = best_model.predict(x_test)
-
-    #########################################     DE-MEAN TRAIN R2    #########################################
-    # train_split = (
-    #     pd.DataFrame(folds).explode("").drop("", axis=1).set_index(x_train.index)
-    # )
-    # train_split["split"] = np.repeat("train", len(x_train))
     
+    #########################################     DE-MEAN TRAIN R2    #########################################
     train_split = pd.DataFrame(
-        np.repeat("train", len(x_train)), columns=["split"], index=x_train.index
+        np.repeat("train", len(x_train)), columns=["data_fold"], index=x_train.index
     )
     train_split = train_split.join(
         crop_yield.copy()[crop_yield.index.isin(x_train.index)]
     )
-    train_split["cv_prediction"] = np.maximum(val_predictions, 0)
-    train_split = demean_by_group(train_split, predicted="cv_prediction", group=["district"])
-    train_split["demean_test_prediction"] = np.repeat(np.nan, len(x_train))
+    train_split["oos_prediction"] = np.maximum(val_predictions, 0)
+    train_split = demean_by_group(train_split, predicted="oos_prediction", group=["district"])
 
     #########################################     DE-MEAN TEST R2    #########################################
-    test_split = pd.DataFrame(
-        {"split": np.repeat("test", len(x_test))}, index=x_test.index
-    )
-    # test_split["fold"] = 6
+    test_split = pd.DataFrame({"data_fold": np.repeat("test", len(x_test))}, index=x_test.index)
     test_split = test_split.join(crop_yield.copy()[crop_yield.index.isin(x_test.index)])
-    test_split["test_prediction"] = np.maximum(best_model.predict(x_test), 0)
-    test_split["cv_prediction"] = np.repeat(np.nan, len(x_test))
-    test_split["demean_cv_prediction"] = np.repeat(np.nan, len(x_test))
-    test_split = demean_by_group(test_split, predicted="test_prediction", group=["district"])
+    test_split["oos_prediction"] = np.maximum(best_model.predict(x_test), 0)
+    test_split = demean_by_group(test_split, predicted="oos_prediction", group=["district"])
+
+    #########################################     OUT OF SAMPLE PREDICTIONS    #########################################
+    oos_preds = pd.concat([train_split, test_split])
+    oos_preds[["split", "random_state"]] = split, random_state
 
     d = {
+        "split": split,
+        "random_state": random_state,
         "variables": "_".join(variable_groups),
-        "random_state": seed,
         "year_start": year_start,
         "hot_encode": hot_encode,
         "anomaly": anomaly,
@@ -423,24 +527,24 @@ def climate_model(
         "test_R2": r2_score(y_test, test_predictions),
         "test_r": pearsonr(test_predictions, y_test)[0],
         "test_r2": pearsonr(test_predictions, y_test)[0] ** 2,
-        "demean_val_R2": r2_score(
-            train_split.demean_log_yield, train_split.demean_cv_prediction
+        "demean_cv_R2": r2_score(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
         ),
-        "demean_val_r": pearsonr(
-            train_split.demean_log_yield, train_split.demean_cv_prediction
+        "demean_cv_r": pearsonr(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
         )[0],
-        "demean_val_r2": pearsonr(
-            train_split.demean_log_yield, train_split.demean_cv_prediction
+        "demean_cv_r2": pearsonr(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
         )[0]
         ** 2,
         "demean_test_R2": r2_score(
-            test_split.demean_log_yield, test_split.demean_test_prediction
+            test_split.demean_log_yield, test_split.demean_oos_prediction
         ),
         "demean_test_r": pearsonr(
-            test_split.demean_log_yield, test_split.demean_test_prediction
+            test_split.demean_log_yield, test_split.demean_oos_prediction
         )[0],
         "demean_test_r2": pearsonr(
-            test_split.demean_log_yield, test_split.demean_test_prediction
+            test_split.demean_log_yield, test_split.demean_oos_prediction
         )[0]
         ** 2,
     }
@@ -459,7 +563,8 @@ def run_climate_model(params):
                 hot_encode=he,
                 anomaly=anom,
                 index_cols=["year", "district", "yield_mt"],
-                seed=seed
+                split=seed[0],
+                random_state=seed[1],
             )
             return out
     except Exception as e:
@@ -475,13 +580,19 @@ def run_climate_model(params):
 #########################################
 #########################################
 
-def model_1_sensor(fn, he, n_splits=5):
+def model_1_sensor(fn, he, split=0, random_state=42, n_splits=5):
 #########################################     SET PARAMS    #########################################
     drop_cols  = ['district', 'year', 'yield_mt']
     satellite, bands, country_code, points, yrs, mns,\
     n_features, limit_months, crop_mask, weighted_avg = split_fn(fn)
 
-    print(f"\nBegin with paramters:\n\t{fn}\n\tOne-hot encoding: {he}\n", flush=True)
+    print(f"""
+Begin with paramters:
+    File: {fn}
+    One-hot encoding: {he}
+    Split: {split}
+    Random_state: {random_state}
+    """, flush=True)
 
 #########################################     READ, CLEAN, AND COPY   #########################################
     features = pd.read_feather(here('data', 'random_features', 'summary', fn))
@@ -502,13 +613,15 @@ def model_1_sensor(fn, he, n_splits=5):
 #########################################     K-FOLD SPLIT    #########################################
     x_all = features.drop(drop_cols, axis = 1) 
     y_all = np.log10(features.yield_mt.to_numpy() + 1)
-    x_train, x_test, y_train, y_test = train_test_split(x_all, y_all, test_size=0.2, random_state=0)
+    x_train, x_test, y_train, y_test = train_test_split(
+        x_all, y_all, test_size=0.2, random_state=random_state
+        )
 
 #########################################     K-FOLD CV    ###########################################
     ### SETUP
     ridge  = Ridge()  
     kfold  = KFold(n_splits=n_splits)
-    alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
+    alphas = {'alpha': np.logspace(-1, 1, base = 10, num = 3)}
     tic = time.time()
     ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER(S)
     if he:
@@ -535,29 +648,39 @@ def model_1_sensor(fn, he, n_splits=5):
     test_predictions  = best_model.predict(x_test)
     print(f"""
 Finish:
-    {fn}
+    File: {fn}
     One-hot encoding: {he}
+    Split: {split}
+    Random_state: {random_state}
     Final Val R2:  {r2_score(y_train, val_predictions):0.4f} 
     Final Test R2: {r2_score(y_test, test_predictions):0.4f}
     Total time: {(time.time()-tic)/60:0.2f} minutes
-""", flush=True)
-#########################################     DE-MEAN R2    #########################################    
-    crop_yield["prediction"] = np.maximum(best_model.predict(x_all), 0)
+    """, flush=True)
+    
+    #########################################     DE-MEAN TRAIN R2    #########################################
+    train_split = pd.DataFrame(
+        np.repeat("train", len(x_train)), columns=["data_fold"], index=x_train.index
+    )
+    train_split = train_split.join(
+        crop_yield.copy()[crop_yield.index.isin(x_train.index)]
+    )
+    train_split["oos_prediction"] = np.maximum(val_predictions, 0)
+    train_split = demean_by_group(train_split, predicted="oos_prediction", group=["district"])
 
-    train_split = pd.DataFrame(np.repeat('train', len(x_train)), columns = ['split'], index = x_train.index)
-    train_split = train_split.join(crop_yield.copy()[crop_yield.index.isin(x_train.index)])
-    train_split['cv_prediction'] = np.maximum(val_predictions, 0)
-    train_split["demean_cv_yield"] = train_split["log_yield"]-train_split.groupby('district')['log_yield'].transform('mean')
-    train_split["demean_cv_prediction"] = train_split["cv_prediction"]-train_split.groupby('district')['cv_prediction'].transform('mean')
-
-    test_split = pd.DataFrame(np.repeat('test', len(x_test)), columns = ['split'], index = x_test.index)
+    #########################################     DE-MEAN TEST R2    #########################################
+    test_split = pd.DataFrame({"data_fold": np.repeat("test", len(x_test))}, index=x_test.index)
     test_split = test_split.join(crop_yield.copy()[crop_yield.index.isin(x_test.index)])
-    test_split['cv_prediction'] = np.repeat(np.nan, len(x_test))
-    test_split["demean_cv_yield"] = np.repeat(np.nan, len(x_test))
-    test_split["demean_cv_prediction"] = np.repeat(np.nan, len(x_test))
+    test_split["oos_prediction"] = np.maximum(best_model.predict(x_test), 0)
+    test_split = demean_by_group(test_split, predicted="oos_prediction", group=["district"])
+
+    #########################################     OUT OF SAMPLE PREDICTIONS    #########################################
+    oos_preds = pd.concat([train_split, test_split])
+    oos_preds[["split", "random_state"]] = split, random_state
 
 #########################################     SAVE RESULTS    #########################################
     d = {
+        'split': split,
+        'random_state': random_state,
         'country'     : country_code[0],
         'satellite'   : satellite[0],
         'bands'       : bands,
@@ -589,11 +712,28 @@ Finish:
         'test_r' : pearsonr(test_predictions, y_test)[0],
         'test_r2': pearsonr(test_predictions, y_test)[0] ** 2,
 
-        'demean_cv_R2': r2_score(train_split.demean_cv_yield, train_split.demean_cv_prediction),
-        'demean_cv_r':  pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0],
-        'demean_cv_r2': pearsonr(train_split.demean_cv_yield, train_split.demean_cv_prediction)[0] ** 2,
+        "demean_cv_R2": r2_score(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
+        ),
+        "demean_cv_r": pearsonr(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
+        )[0],
+        "demean_cv_r2": pearsonr(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
+        )[0]
+        ** 2,
+        "demean_test_R2": r2_score(
+            test_split.demean_log_yield, test_split.demean_oos_prediction
+        ),
+        "demean_test_r": pearsonr(
+            test_split.demean_log_yield, test_split.demean_oos_prediction
+        )[0],
+        "demean_test_r2": pearsonr(
+            test_split.demean_log_yield, test_split.demean_oos_prediction
+        )[0]
+        ** 2,
     }
-    return d
+    return d, oos_preds
 
 
 #########################################

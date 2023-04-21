@@ -1,6 +1,6 @@
 #!/bin/bash -l
-#SBATCH --ntasks=50           # Do n many tasks at once
-#SBATCH --cpus-per-task=4     # Give each task n cpus         
+#SBATCH --ntasks=25           # Do n many tasks at once
+#SBATCH --cpus-per-task=8     # Give each task n cpus         
 #SBATCH --output slurm/%j.out # File to save job's STDOUT (%j = JobId)
 #SBATCH --error slurm/%j.err  # File to save job's STDERR
 #SBATCH --mail-user=cullen_molitor@ucsb.edu
