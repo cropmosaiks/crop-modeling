@@ -155,7 +155,7 @@ The following variables were either included or excluded to test their affect on
 
 # Results 
 
-Here we break the results into two sections based on the statistic we are interested in evaluating. We collect the statistics from running each model with varied inputs described in the methods section. The distribution of these statistics are used to visualize the outcome of manipulating those model inputs. There are `r length(one_sensor_results$kfold_val_R2)` unique outcomes from the combinations of these model inputs from 1 sensor and `r length(two_sensor_results$kfold_val_R2)` from combining 2 sensors. 
+Here we break the results into two sections based on the statistic we are interested in evaluating. We collect the statistics from running each model with varied inputs described in the methods section. The distribution of these statistics are used to visualize the outcome of manipulating those model inputs. There are `r length(one_sensor_results$val_R2)` unique outcomes from the combinations of these model inputs from 1 sensor and `r length(two_sensor_results$val_R2)` from combining 2 sensors. 
 
 ## Validation score (R<sup>2</sup>)
 
@@ -164,24 +164,12 @@ The first statistic we evaluate is the coefficient of determination (R<sup>2</su
 **Note**: The scales are forced to be the same between K-Fold and LOGO. The idea was to evaluate the relative difference in performance, but it makes some distributions harder to interpret. Would it help to make them independent?
 
 ```{r echo = FALSE}
-min_lim <- min(
-  min(one_sensor_results$kfold_val_R2), 
-  min(one_sensor_results$logo_val_R2)
-)
-max_lim <- max(
-  max(one_sensor_results$kfold_val_R2), 
-  max(one_sensor_results$logo_val_R2)
-)
+min_lim <- min(one_sensor_results$val_R2)
+max_lim <- max(one_sensor_results$val_R2)
 limits <- c(min_lim, max_lim)
 
-min_lim_two <- min(
-  min(two_sensor_results$kfold_val_R2), 
-  min(two_sensor_results$logo_val_R2)
-)
-max_lim_two <- max(
-  max(two_sensor_results$kfold_val_R2), 
-  max(two_sensor_results$logo_val_R2)
-)
+min_lim_two <- min(two_sensor_results$val_R2)
+max_lim_two <- max(two_sensor_results$val_R2)
 limits_two <- c(min_lim_two, max_lim_two)
 ```
 
@@ -192,13 +180,13 @@ limits_two <- c(min_lim_two, max_lim_two)
 #### One sensor
 
 ```{r}
-hist_plot(one_sensor_results, kfold_val_R2)
+hist_plot(one_sensor_results, val_R2)
 ```
 
 #### Two sensor
 
 ```{r}
-hist_plot(two_sensor_results, kfold_val_R2)
+hist_plot(two_sensor_results, val_R2)
 ```
 
 :::
@@ -213,7 +201,7 @@ hist_plot(two_sensor_results, kfold_val_R2)
 dist_plot(
   data = one_sensor_results, 
   x = hot_encode, 
-  y = kfold_val_R2,
+  y = val_R2,
   clr = month_range,
   y_lims = limits
 )
@@ -225,7 +213,7 @@ dist_plot(
 dist_plot(
   data = two_sensor_results, 
   x = hot_encode, 
-  y = kfold_val_R2,
+  y = val_R2,
   clr = month_range,
   y_lims = limits_two
 )
@@ -243,7 +231,7 @@ dist_plot(
 dist_plot(
   data = one_sensor_results, 
   x = crop_mask, 
-  y = kfold_val_R2,
+  y = val_R2,
   clr = month_range,
   y_lims = limits
 )
@@ -255,7 +243,7 @@ dist_plot(
 dist_plot(
   data = two_sensor_results, 
   x = crop_mask, 
-  y = kfold_val_R2,
+  y = val_R2,
   clr = month_range,
   y_lims = limits_two
 )
@@ -273,7 +261,7 @@ dist_plot(
 dist_plot(
   data = one_sensor_results, 
   x = weighted_avg, 
-  y = kfold_val_R2,
+  y = val_R2,
   clr = month_range,
   y_lims = limits
 )
@@ -285,7 +273,7 @@ dist_plot(
 dist_plot(
   data = two_sensor_results, 
   x = weighted_avg, 
-  y = kfold_val_R2,
+  y = val_R2,
   clr = month_range,
   y_lims = limits_two
 )
@@ -298,24 +286,12 @@ dist_plot(
 To get an idea of the each models ability to predict crop yield over time, we remove spatial variability by subtracting the district means from both observed and predicted yields. These de-meaned values are then evaluated by calculating the coefficient of determination. A high score indicates the model is able to predict well over time, while a low score indicates it performed this task poorly. Here we see the distribution of all de-meaned scores.
 
 ```{r}
-min_lim <- min(
-  min(one_sensor_results$kfold_demean_R2), 
-  min(one_sensor_results$logo_demean_R2)
-)
-max_lim <- max(
-  max(one_sensor_results$kfold_demean_R2), 
-  max(one_sensor_results$logo_demean_R2)
-)
+min_lim <- min(one_sensor_results$demean_cv_R2)
+max_lim <- max(one_sensor_results$demean_cv_R2)
 limits <- c(min_lim, max_lim + 1)
 
-min_lim_two <- min(
-  min(two_sensor_results$kfold_demean_R2), 
-  min(two_sensor_results$logo_demean_R2)
-)
-max_lim_two <- max(
-  max(two_sensor_results$kfold_demean_R2), 
-  max(two_sensor_results$logo_demean_R2)
-)
+min_lim_two <- min(two_sensor_results$demean_cv_R2)
+max_lim_two <- max(two_sensor_results$demean_cv_R2)
 limits_two <- c(min_lim_two, max_lim_two)
 ```
 
@@ -326,13 +302,13 @@ limits_two <- c(min_lim_two, max_lim_two)
 #### One sensor
 
 ```{r}
-hist_plot(one_sensor_results, kfold_demean_R2)
+hist_plot(one_sensor_results, demean_cv_R2)
 ```
 
 #### Two sensor
 
 ```{r}
-hist_plot(two_sensor_results, kfold_demean_R2)
+hist_plot(two_sensor_results, demean_cv_R2)
 ```
 
 :::
@@ -347,7 +323,7 @@ hist_plot(two_sensor_results, kfold_demean_R2)
 dist_plot(
   data = one_sensor_results, 
   x = hot_encode, 
-  y = kfold_demean_R2,
+  y = demean_cv_R2,
   clr = month_range,
   y_lims = limits
 )
@@ -359,7 +335,7 @@ dist_plot(
 dist_plot(
   data = two_sensor_results, 
   x = hot_encode, 
-  y = kfold_demean_R2,
+  y = demean_cv_R2,
   clr = month_range,
   y_lims = limits_two
 )
@@ -377,7 +353,7 @@ dist_plot(
 dist_plot(
   data = one_sensor_results, 
   x = crop_mask, 
-  y = kfold_demean_R2,
+  y = demean_cv_R2,
   clr = month_range,
   y_lims = limits
 )
@@ -389,7 +365,7 @@ dist_plot(
 dist_plot(
   data = two_sensor_results, 
   x = crop_mask, 
-  y = kfold_demean_R2,
+  y = demean_cv_R2,
   clr = month_range,
   y_lims = limits_two
 )
@@ -407,7 +383,7 @@ dist_plot(
 dist_plot(
   data = one_sensor_results, 
   x = weighted_avg, 
-  y = kfold_demean_R2,
+  y = demean_cv_R2,
   clr = month_range,
   y_lims = limits
 )
@@ -419,7 +395,7 @@ dist_plot(
 dist_plot(
   data = two_sensor_results, 
   x = weighted_avg, 
-  y = kfold_demean_R2,
+  y = demean_cv_R2,
   clr = month_range,
   y_lims = limits_two
 )
@@ -431,17 +407,11 @@ dist_plot(
 
 Finally, we evaluate the coefficient of determination (R<sup>2</sup>) calculated from the predicted values and the observed values from each of the 5 validation sets of the models trained on feature anomalies. Here we see the distribution of all validation scores.
 
-**Note**: The scales are forced to be the same between K-Fold and LOGO. The idea was to evaluate the relative difference in performance, but it makes some distributions harder to interpret. Would it help to make them independent?
+**Note**: The scales are forced to be the same between K-Fold. The idea was to evaluate the relative difference in performance, but it makes some distributions harder to interpret. Would it help to make them independent?
 
 ```{r echo = FALSE}
-min_lim <- min(
-  min(one_anomaly_results$kfold_val_R2), 
-  min(one_anomaly_results$logo_val_R2)
-)
-max_lim <- max(
-  max(one_anomaly_results$kfold_val_R2), 
-  max(one_anomaly_results$logo_val_R2)
-)
+min_lim <- min(one_anomaly_results$kfold_val_R2)
+max_lim <- max(one_anomaly_results$kfold_val_R2)
 limits <- c(min_lim, max_lim)
 ```
 
@@ -666,17 +636,6 @@ ggplot() +
 ```
 
 $predicted - observed$ so positive values indicates over-prediction, and negative values indicates under-prediction.
-
-###### High res. predictions
-
-```{r fig.height=10, fig.width=10}
-ggplot() +
-  geom_point(data = high_res_predictions, size = .1,
-             aes(x = lon, y = lat, color = prediction)) +
-  geom_sf(data = country_shp, fill = NA, color = 'black') +
-  facet_wrap(~year) +
-  scale_color_viridis_c()
-```
 
 :::
 

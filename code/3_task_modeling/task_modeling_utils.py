@@ -73,26 +73,26 @@ def get_mean_std_ste(df, groupby_columns, target_columns, confidence_level=0.95)
     """
     Group a pandas DataFrame and calculate mean, standard deviation, and standard error
     for a single column or a list of target columns.
-​
+
     Args:
         df (pandas.DataFrame): The input pandas DataFrame
         groupby_columns (list): A list of columns to group by
         target_columns (str or list): A column or a list of columns to calculate the statistics for
         confidence_level (float, optional): The desired confidence level for the interval (default: 0.95)
-​
+
     Returns:
         pandas.DataFrame: A summarized pandas DataFrame
     """
-​
+
     if isinstance(target_columns, str):
         target_columns = [target_columns]
-​
+
     summary_dfs = []
-​
+
     for target_column in target_columns:
         # Group the DataFrame
         grouped_df = df.groupby(groupby_columns)[target_column]
-​
+
         # Calculate mean, standard deviation, and standard error
         mean = grouped_df.mean()
         std = grouped_df.std()
@@ -108,12 +108,12 @@ def get_mean_std_ste(df, groupby_columns, target_columns, confidence_level=0.95)
                 "sample_size": sample_size,
             }
         ).reset_index()
-​
+
         summary_dfs.append(summary_df)
-​
+
     # Concatenate the summary DataFrames
     combined_summary_df = pd.concat(summary_dfs, axis=0, ignore_index=True)
-​
+
     return combined_summary_df
 
 

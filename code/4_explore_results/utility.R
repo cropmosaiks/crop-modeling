@@ -22,9 +22,9 @@ librarian::shelf(
   quiet = T
 )
 ####################### FILE NAMES #######################
-one_sensor_date  <- "2022-12-25"
+one_sensor_date  <- "2023-03-12"
 one_anomaly_date <- "2022-12-25"
-two_sensor_date  <- "2022-12-18"
+two_sensor_date  <- "2023-04-29"
 two_anomaly_date <- "2022-12-18"
 
 one_sensor_ndvi_date  <- "2023-01-14"
@@ -38,7 +38,7 @@ two_sensor_fn  <- paste0("2_sensor_results_", two_sensor_date, ".csv")
 one_anomaly_fn <- paste0("anomaly_results_", one_anomaly_date, ".csv")
 two_anomaly_fn <- paste0("2_sensor_anomaly_results_", two_anomaly_date, ".csv")
 pred_suffix   <- 'landsat-8-c2-l2_bands-1-2-3-4-5-6-7_ZMB_20k-points_1000-features_yr-2013-2021_mn-4-9_lm-True_cm-True_wa-True'
-high_res_fn   <- paste0('high-res-pred_k-fold-cv_', pred_suffix, '_he-True.feather')
+# high_res_fn   <- paste0('high-res-pred_k-fold-cv_', pred_suffix, '_he-True.feather')
 
 one_sensor_ndvi_fn  <- paste0("results_", one_sensor_ndvi_date, "_ndvi.csv")
 two_sensor_ndvi_fn  <- paste0("2_sensor_results_", two_sensor_ndvi_date, "_ndvi.csv")
@@ -106,8 +106,8 @@ two_anomaly_results <- here::here("data", "results", two_anomaly_fn) %>%
       weighted_avg_1 == F & weighted_avg_2 == F ~ 'FALSE',
       T ~ 'mixed')) 
 
-high_res_predictions <- here::here('data', 'results', high_res_fn) %>% 
-  arrow::read_feather()
+# high_res_predictions <- here::here('data', 'results', high_res_fn) %>% 
+#   arrow::read_feather()
 
 ####################### LEVEL PREDICTIONS ####################### 
 summary_fn    <- 'predictions_fn-1_landsat-8-c2-l2_1-2-3-4-5-6-7_15_True_False_False_fn-2_sentinel-2-l2a_2-3-4-8_15_False_True_False_he-True.csv'
@@ -184,12 +184,12 @@ yield_sf <- summary_predictions %>%
   left_join(country_shp) %>% 
   sf::st_as_sf()
 
-high_res_predictions <- high_res_predictions %>% 
-  mutate(
-    prediction = case_when(
-      prediction > 1.1 ~ 1, 
-      prediction < 0 ~ 0,
-      T ~ prediction)) 
+# high_res_predictions <- high_res_predictions %>% 
+#   mutate(
+#     prediction = case_when(
+#       prediction > 1.1 ~ 1, 
+#       prediction < 0 ~ 0,
+#       T ~ prediction)) 
 
 dummy_df <- country_shp %>% 
   tibble::as_tibble() %>% 
@@ -207,236 +207,6 @@ crop_yield <- here::here('data', 'crop_yield',
 custom_months <- c("Oct", "Nov", "Dec", "Jan", "Feb", "Mar", 
                    "Apr", "May", "Jun", "Jul", "Aug", "Sep")
 
-# here::here('data', 'land_cover', 'ZMB_cropland_percentage_15k-points.feather') %>% 
-#   arrow::read_feather()
-
-# country_vect <- country_shp %>%
-#   sf::st_union() %>%
-#   terra::vect()
-# 
-# crop_land <- here::here("data", "land_cover", "ZMB_cropland_2019.tif") %>%
-#   terra::rast() %>%
-#   terra::crop(country_vect, mask=TRUE) 
-#   
-# crop_land[crop_land == 0] <- NA
-# 
-# terra::writeRaster(
-#   crop_land, 
-#   here::here("data", "land_cover", "ZMB_cropland_2019_cropped.tif"),
-#   filetype = 'GTiff', overwrite=T)
-
-
-
-# base_dir <- here::here("data","climate", "Vegetation Indices",
-#                    "MODIS Terra C6.0 - Vegetation Indices Monthly L3 Global 0.05Deg CMG")
-# 
-# result <- tibble::tibble()
-# 
-# years <- 2000:2022
-# 
-# for (year in years) {
-#   directory <- here::here(base_dir, year) %>% 
-#     list.files()
-#   # cat(year, '\t', directory, '\n')
-#   for (dir in directory) {
-#     cat(year, '\t', dir, '\n')
-#     file <- here::here(base_dir, year, dir) %>%
-#       list.files(full.names = T)
-#     ndvi <- terra::rast(file)
-#     terra::crs(ndvi) <- 'epsg:4326'
-#     ndvi <- subset(ndvi, 1)
-#     ndvi <- terra::crop(ndvi, terra::ext(country_shp))
-#     ndvi <- ndvi * 0.0001
-#     ndvi <- exactextractr::exact_extract(ndvi, country_shp, fun = 'mean', progress = F)
-#     ndvi_df <- cbind(ndvi, dummy_df)
-#     ndvi_df <- dplyr::mutate(ndvi_df, year = year, doy = dir)
-#     result <- rbind(result, ndvi_df)
-#   }
-#   cat('\n')
-# }
-# 
-# results <- result %>% 
-#   dplyr::mutate(
-#     date = strptime(paste(year, doy), format = "%Y %j"),
-#     month = lubridate::month(date)) %>% 
-#   dplyr::select(district, year, month, ndvi) %>% 
-#   dplyr::mutate(year = dplyr::case_when(month %in% 10:12 ~ year + 1, T ~ as.numeric(year))) %>% 
-#   dplyr::filter(year >= 2001, year <= 2022) %>%
-#   dplyr::arrange(month, year) %>% 
-#   tidyr::pivot_wider(names_from = month, values_from = ndvi, names_prefix = "ndvi_")
-# 
-# readr::write_csv(results, here::here('data', 'climate', 'modis_ndvi.csv'))
-
-
-
-
-
-
-# districts_plus <- here::here('data', 'climate', 'NDVI', 'ZMB_ADM2.geojson') %>% 
-#   sf::read_sf() %>% 
-#   dplyr::select(shapeName) %>% 
-#   dplyr::rename(district_new = shapeName)
-# 
-# districts <- districts_plus %>% 
-#   sf::st_centroid() %>% 
-#   sf::st_join(country_shp, join = st_within) %>% 
-#   dplyr::tibble() %>% 
-#   dplyr::select(-geometry)
-# 
-# climate_sum_fun <- function(.rasters, .var = 'pre') {
-#   output <- tibble::tibble()
-#   for (raster in .rasters) {
-#     precip <- here::here('data','climate',raster) %>%
-#       terra::rast()
-#     precip <- precip[as.character(.var)]
-#     precip_times <- time(precip)
-#     names(precip) <- precip_times
-#     # precip_idx <- precip_times > as.POSIXct("2008-09-16") & precip_times < as.POSIXct("2023-01-01")
-#     precip_idx <- precip_times < as.POSIXct("2023-01-01")
-#     precip_subset <- precip[[precip_idx]]
-#     precip_crop <- terra::crop(precip_subset, terra::ext(country_shp))
-#     precip_extract <- exactextractr::exact_extract(precip_crop, country_shp, fun = 'mean')
-#     precip_df <- cbind(precip_extract, dummy_df) 
-#     names(precip_df) <- c(as.character(time(precip_subset)),'district')
-#     zmb_precip_df <- precip_df %>%
-#       pivot_longer(cols = -c(district), names_to = 'date', values_to = .var) %>%
-#       mutate(date = lubridate::as_date(date),
-#              month = lubridate::month(date),
-#              year = lubridate::year(date)) %>% 
-#       dplyr::select(-date)
-#     output <- rbind(output, zmb_precip_df)
-#   }
-#   output <- output %>% 
-#     dplyr::arrange(month, year) %>% 
-#     dplyr::mutate(year = dplyr::case_when(month %in% 10:12 ~ year + 1, T ~ year)) %>% 
-#     dplyr::filter(year >= 2001, year <= 2021) %>% 
-#     tidyr::pivot_wider(names_from = month, values_from = !!.var, names_prefix = paste0(.var, "_"))
-#   return(output)
-# }
-# pre_files <- c(
-#   'cru_ts4.06.1991.2000.pre.dat.nc',
-#   'cru_ts4.06.2001.2010.pre.dat.nc', 
-#   'cru_ts4.06.2011.2020.pre.dat.nc', 
-#   'cru_ts4.06.2021.2021.pre.dat.nc')
-# 
-# tmp_files <- c(
-#   'cru_ts4.06.1991.2000.tmp.dat.nc',
-#   'cru_ts4.06.2001.2010.tmp.dat.nc', 
-#   'cru_ts4.06.2011.2020.tmp.dat.nc', 
-#   'cru_ts4.06.2021.2021.tmp.dat.nc')
-# 
-# precipitation <- climate_sum_fun(.rasters = pre_files, .var = "pre")
-# 
-# temperature <- climate_sum_fun(.rasters = tmp_files, .var = "tmp") 
-# 
-# climate <- dplyr::left_join(precipitation, temperature)
-# 
-# readr::write_csv(climate, here::here('data', 'climate', 'cru_pre_tmp.csv'))
-
-
-
-
-
-
-# tp <- here::here('data', 'climate', 'temp_precip', 'temp_precip.csv') %>% 
-#   readr::read_csv() %>% 
-#   dplyr::select(-c(asdf_id, Level, Shape_Area, Shape_Leng, 
-#                    gqid, shapeGroup, shapeID, shapeType)) %>% 
-#   dplyr::rename(district_new = shapeName) %>% 
-#   tidyr::pivot_longer(cols = -district_new, names_to = 'date', values_to = 'value') %>% 
-#   tidyr::separate(date, into = c('tp','date', 'metric'), sep = "\\.") %>%  
-#   tidyr::separate(date, into = c('year', 'month'), sep = 4) %>% 
-#   dplyr::mutate(
-#     tp = case_when(tp == 'cru_ts_405_tmp_monthly_mean' ~ 'temp', T ~ 'precip'),
-#     year = as.numeric(year),
-#     month = as.numeric(month),
-#     year = dplyr::case_when(
-#       month %in% 10:12 ~ year + 1,
-#       T ~ year
-#     )) %>% 
-#   dplyr::filter(
-#     year >= 2009, 
-#     year < 2021, 
-#     metric %in% c('mean')) %>% 
-#   dplyr::left_join(districts)
-# 
-# temp <- tp %>% 
-#   dplyr::filter(tp == "temp") %>% 
-#   dplyr::group_by(district, year, month) %>%
-#   dplyr::summarise(temp = mean(value, na.rm = TRUE)) %>% 
-#   tidyr::pivot_wider(names_from = month, values_from = temp, names_prefix = "temp_")
-# 
-# precip <- tp %>% 
-#   dplyr::filter(tp == "precip") %>% 
-#   dplyr::group_by(district, year, month) %>%
-#   # dplyr::group_by(month) %>%
-#   dplyr::summarise(precip = mean(value, na.rm = TRUE)) %>% 
-#   tidyr::pivot_wider(names_from = month, values_from = precip, names_prefix = "precip_")
-# 
-# ndvi <- here::here('data', 'climate', 'NDVI', 'NDVI.csv') %>% 
-#   readr::read_csv() %>% 
-#   dplyr::select(-c(asdf_id, Level, Shape_Area, Shape_Leng, 
-#                    gqid, shapeGroup, shapeID, shapeType)) %>% 
-#   dplyr::rename(district_new = shapeName) %>% 
-#   tidyr::pivot_longer(cols = -district_new, names_to = 'date', values_to = 'ndvi') %>% 
-#   tidyr::separate(date, into = c(NA,'date', 'metric'), sep = "\\.") %>%  
-#   tidyr::separate(date, into = c('year', 'month'), sep = 4) %>% 
-#   dplyr::mutate(
-#     year = as.numeric(year),
-#     month = as.numeric(month),
-#     year = dplyr::case_when(
-#       month %in% 10:12 ~ year + 1,
-#       T ~ year
-#     )) %>% 
-#   dplyr::filter(
-#     year >= 2009, 
-#     year < 2021, 
-#     metric %in% c('mean')) %>% 
-#   dplyr::left_join(districts) %>% 
-#   dplyr::select(-metric) %>% 
-#   dplyr::group_by(district, year, month) %>% 
-#   dplyr::summarise(ndvi = mean(ndvi, na.rm = TRUE)) %>% 
-#   dplyr::ungroup() %>% 
-#   dplyr::group_by(district, month) %>% 
-#   dplyr::mutate(ndvi = case_when(is.na(ndvi) ~ mean(ndvi, na.rm = TRUE), T ~ ndvi)) %>% 
-#   tidyr::pivot_wider(names_from = 'month', values_from = 'ndvi', names_prefix = "ndvi_")
-# 
-# climate <- temp %>% 
-#   dplyr::left_join(precip) %>% 
-#   dplyr::left_join(ndvi) %>% 
-#   dplyr::left_join(crop_yield) %>% 
-#   dplyr::ungroup() %>% 
-#   dplyr::relocate(yield_mt, .after = year)
-# readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
-
-
-# precip <- here::here(
-#   'data',
-#   'climate', 
-#   'timeseries-pr-monthly-mean_era_monthly_era5-0.5x0.5-timeseries_mean_1950-2020.nc') %>% 
-#   terra::rast()
-# precip_times <- time(precip)
-# precip_idx <- precip_times > as.POSIXct("2008-09-01") & precip_times < as.POSIXct("2023-01-01")
-# precip_subset <- precip[[precip_idx]]
-# precip_crop <- terra::crop(precip_subset, terra::ext(country_shp))
-# 
-# precip_extract <- terra::extract(precip_crop, zmb_union, ID = F, xy = T)
-# 
-# names(precip_extract) <- c(as.character(time(precip_subset)),'lon', 'lat')
-# 
-# zmb_precip_df <- precip_extract %>% 
-#   pivot_longer(cols = -c(lon, lat), names_to = 'date', values_to = 'precipitation') %>% 
-#   mutate(date = lubridate::as_date(date))
-# 
-# zmb_precip_summary <- zmb_precip_df %>% 
-#   mutate(month = factor(lubridate::month(date, label = T, abbr = T), 
-#                         levels = custom_months)) %>% 
-#   group_by(month) %>%
-#   summarise(precipitation = mean(precipitation))
-# 
-# readr::write_csv(zmb_precip_summary, 
-#                  here::here('data', 'climate', 'precipitation_monthly_mean.csv'))
-
 zmb_precip_summary <- here::here('data', 'climate', 'precipitation_monthly_mean.csv') %>% 
   readr::read_csv() %>% 
   mutate(month = factor(month, levels = custom_months))
@@ -450,7 +220,7 @@ colors <- c("TRUE" = 'dodgerblue', "FALSE" = "firebrick",
 expand_field <- function(fld) {
   switch(
     rlang::as_name(fld),
-    'kfold_val_R2'    = 'K-Fold Validation Score (R$^2$)',
+    'val_R2'    = 'K-Fold Validation Score (R$^2$)',
     'logo_val_R2'     = 'LOGO Validation Score (R$^2$)',
     'kfold_demean_R2' = 'K-Fold De-meaned Score (R$^2$)',
     'logo_demean_R2'  = 'LOGO De-meaned Score (R$^2$)',
@@ -566,87 +336,3 @@ plot_label_3 <- function(R2, r2, n) {
 
 
 
-
-
-
-# precip <- here::here(
-#   'data',
-#   'climate',
-#   'timeseries-pr-monthly-mean_era_monthly_era5-0.5x0.5-timeseries_mean_1950-2020.nc') %>%
-#   terra::rast()
-# precip_times <- time(precip)
-# precip_idx <- precip_times > as.POSIXct("2008-09-01") & precip_times < as.POSIXct("2023-01-01")
-# precip_subset <- precip[[precip_idx]]
-# precip_crop <- terra::crop(precip_subset, terra::ext(country_shp))
-# 
-# precip_extract <- terra::extract(precip_crop, zmb_union, ID = F, xy = T)
-# 
-# names(precip_extract) <- c(as.character(time(precip_subset)),'lon', 'lat')
-# 
-# zmb_precip_df <- precip_extract %>%
-#   pivot_longer(cols = -c(lon, lat), names_to = 'date', values_to = 'precipitation') %>%
-#   mutate(date = lubridate::as_date(date))
-# 
-# zmb_precip_sf <- sf::st_as_sf(
-#   zmb_precip_df, coords = c("lon", "lat"), crs = 4326) %>% 
-#   sf::st_join(country_shp)
-# 
-# zmb_precip_summary <- zmb_precip_sf %>%
-#   dplyr::tibble() %>% 
-#   dplyr::select(-geometry) %>% 
-#   dplyr::mutate(
-#     year = lubridate::year(date),
-#     month = lubridate::month(date, label = T),
-#     year = dplyr::case_when(
-#       month %in% c('Oct','Nov','Dec') ~ year + 1,
-#       T ~ year
-#     )) %>%
-#   dplyr::group_by(year, month, district) %>%
-#   dplyr::summarise(precipitation = mean(precipitation, na.rm = T)) %>% 
-#   tidyr::pivot_wider(names_from = month, values_from = precipitation, names_prefix = 'precip_') %>% 
-#   dplyr::filter(year < 2021) 
-# 
-# 
-# temp <- here::here(
-#   'data',
-#   'climate',
-#   'timeseries-tas-monthly-mean_era_monthly_era5-0.5x0.5-timeseries_mean_1950-2020.nc') %>%
-#   terra::rast()
-# temp_times <- time(temp)
-# temp_idx <- temp_times > as.POSIXct("2008-09-01") & temp_times < as.POSIXct("2023-01-01")
-# temp_subset <- temp[[temp_idx]]
-# temp_crop <- terra::crop(temp_subset, terra::ext(country_shp))
-# 
-# temp_extract <- terra::extract(temp_crop, zmb_union, ID = F, xy = T)
-# 
-# names(temp_extract) <- c(as.character(time(temp_subset)),'lon', 'lat')
-# 
-# zmb_temp_df <- temp_extract %>%
-#   pivot_longer(cols = -c(lon, lat), names_to = 'date', values_to = 'temperature') %>%
-#   mutate(date = lubridate::as_date(date))
-# 
-# zmb_temp_sf <- sf::st_as_sf(
-#   zmb_temp_df, coords = c("lon", "lat"), crs = 4326) %>% 
-#   sf::st_join(country_shp)
-# 
-# zmb_temp_summary <- zmb_temp_sf %>%
-#   dplyr::tibble() %>% 
-#   dplyr::select(-geometry) %>% 
-#   dplyr::mutate(
-#     year = lubridate::year(date),
-#     month = lubridate::month(date, label = T),
-#     year = dplyr::case_when(
-#       month %in% c('Oct','Nov','Dec') ~ year + 1,
-#       T ~ year
-#     )) %>%
-#   dplyr::group_by(year, month, district) %>%
-#   dplyr::summarise(temperature = mean(temperature, na.rm = T)) %>% 
-#   tidyr::pivot_wider(names_from = month, values_from = temperature, names_prefix = 'temp_') %>% 
-#   dplyr::filter(year < 2021) 
-# 
-# 
-# climate <- crop_yield %>% 
-#   dplyr::inner_join(zmb_precip_summary) %>% 
-#   dplyr::left_join(zmb_temp_summary)
-# 
-# readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
