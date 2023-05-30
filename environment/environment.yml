@@ -1,18 +1,16 @@
-name: mosaiks-env-mpi
+name: mosaiks-env
 channels:
   - conda-forge
   - pytorch
   - defaults
 dependencies:
-  - python>=3.8*
+  - python>=3.9*
   - pip=20
   - dask-geopandas
   - dask[complete]
   - dask-ml
   - geopandas
   - jupyterlab
-  - jupyterlab-geojson
-  - jupyter-resource-usage
   - ipywidgets
   - lz4
   - matplotlib-base
@@ -41,7 +39,6 @@ dependencies:
   - xarray-spatial>=0.2.9
   - xarray>=0.18.0
   - xarrayutils
-  - cupy
   - efficientnet-pytorch
   - hvplot==0.7.0  # https://github.com/holoviz/hvplot/issues/576
   - pytorch
@@ -60,6 +57,7 @@ dependencies:
   - p-tqdm 
   - glum
   - nb_black
+  - mpi4py
   - pip:
     - -r requirements.txt
 
