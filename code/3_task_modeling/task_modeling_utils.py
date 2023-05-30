@@ -84,6 +84,7 @@ def get_mean_std_ste(df, groupby_columns, target_columns):
         df (pandas.DataFrame): The input pandas DataFrame
         groupby_columns (list): A list of columns to group by
         target_columns (str or list): A column or a list of columns to calculate the statistics for
+        confidence_level (float, optional): The desired confidence level for the interval (default: 0.95)
 
     Returns:
         pandas.DataFrame: A summarized pandas DataFrame

@@ -1,0 +1,170 @@
+---
+format: html
+---
+
+# Setup
+
+```{r}
+if (!require(librarian,quietly = T)){
+  install.packages('librarian')
+}
+
+librarian::shelf(
+  plotly,
+  tidyverse,
+  lubridate,
+  here,
+  # rlang,
+  # latex2exp,
+  # arrow,
+  sf,
+  terra,
+  # tidyterra,
+  # ggExtra,
+  # cowplot,
+  # rnaturalearth,
+  # rnaturalearthdata,
+  # ggspatial,
+  quiet = T
+)
+
+# custom_months <- month.abb
+custom_months <- c("Oct", "Nov", "Dec", "Jan", "Feb", "Mar", 
+                   "Apr", "May", "Jun", "Jul", "Aug", "Sep")
+
+country_shp <- here::here('data', 'geo_boundaries', 'gadm36_ZMB_2.shp') %>% 
+  sf::read_sf()
+
+country_vect <- country_shp %>%
+  sf::st_union() %>%
+  terra::vect()
+
+dummy_df <- country_shp %>% 
+  tibble::as_tibble() %>% 
+  dplyr::select(district) 
+
+ndvi_url = "https://ladsweb.modaps.eosdis.nasa.gov/archive/Science%20Domain/Land/Vegetation%20Indices/MODIS%20Terra%20C6.0%20-%20Vegetation%20Indices%20Monthly%20L3%20Global%200.05Deg%20CMG/"
+
+pre_url ="https://crudata.uea.ac.uk/cru/data/hrg/cru_ts_4.07/cruts.2304141047.v4.07/pre/"
+
+tmp_url ="https://crudata.uea.ac.uk/cru/data/hrg/cru_ts_4.07/cruts.2304141047.v4.07/pre/"
+
+```
+
+# Climate summary function
+
+```{r}
+climate_sum_fun <- function(.rasters, .var = 'pre') {
+  output <- tibble::tibble()
+  for (raster in .rasters) {
+    clim <- here::here('data','climate', "temp_precip",raster) %>%
+      terra::rast()
+    clim <- clim[as.character(.var)]
+    clim_times <- time(clim)
+    names(clim) <- clim_times
+    clim_idx <- clim_times < as.POSIXct("2023-01-01")
+    clim_subset <- clim[[clim_idx]]
+    clim_crop <- terra::crop(clim_subset, terra::ext(country_shp))
+    clim_extract <- exactextractr::exact_extract(clim_crop, country_shp, fun = 'mean')
+    clim_df <- cbind(clim_extract, dummy_df)
+    names(clim_df) <- c(as.character(time(clim_subset)),'district')
+    zmb_clim_df <- clim_df %>%
+      pivot_longer(cols = -c(district), names_to = 'date', values_to = .var) %>%
+      mutate(date = lubridate::as_date(date),
+             month = lubridate::month(date),
+             year = lubridate::year(date)) %>%
+      dplyr::select(-date)
+    output <- rbind(output, zmb_clim_df)
+  }
+  output <- output %>%
+    dplyr::arrange(month, year) %>%
+    dplyr::mutate(year = dplyr::case_when(month %in% 10:12 ~ year + 1, T ~ year)) %>%
+    dplyr::filter(year >= 2001, year <= 2021) %>%
+    tidyr::pivot_wider(names_from = month, values_from = !!.var, names_prefix = paste0(.var, "_"))
+  return(output)
+}
+```
+
+# Precipitation
+
+```{r}
+pre_files <- c(
+  'cru_ts4.06.1991.2000.pre.dat.nc',
+  'cru_ts4.06.2001.2010.pre.dat.nc',
+  'cru_ts4.06.2011.2020.pre.dat.nc',
+  'cru_ts4.06.2021.2021.pre.dat.nc')
+
+precipitation <- climate_sum_fun(.rasters = pre_files, .var = "pre")
+```
+
+# Temperature
+
+```{r}
+tmp_files <- c(
+  'cru_ts4.06.1991.2000.tmp.dat.nc',
+  'cru_ts4.06.2001.2010.tmp.dat.nc',
+  'cru_ts4.06.2011.2020.tmp.dat.nc',
+  'cru_ts4.06.2021.2021.tmp.dat.nc')
+
+temperature <- climate_sum_fun(.rasters = tmp_files, .var = "tmp")
+```
+
+# NDVI
+
+```{r}
+ndvi_dir <- here::here(
+  "data",
+  "climate", 
+  "Vegetation Indices",
+  "MODIS Terra C6.0 - Vegetation Indices Monthly L3 Global 0.05Deg CMG"
+  )
+result <- tibble::tibble()
+
+years <- 2000:2022
+
+for (year in years) {
+  directory <- here::here(ndvi_dir, year) %>%
+    list.files()
+  # cat(year, '\t', directory, '\n')
+  for (dir in directory) {
+    cat(year, '\t', dir, '\n')
+    file <- here::here(ndvi_dir, year, dir) %>%
+      list.files(full.names = T)
+    ndvi <- terra::rast(file)
+    terra::crs(ndvi) <- 'epsg:4326'
+    ndvi <- subset(ndvi, 1)
+    ndvi <- terra::crop(ndvi, terra::ext(country_shp))
+    ndvi <- ndvi * 0.0001
+    ndvi <- exactextractr::exact_extract(ndvi, country_shp, fun = 'mean', progress = F)
+    ndvi_df <- cbind(ndvi, dummy_df)
+    ndvi_df <- dplyr::mutate(ndvi_df, year = year, doy = dir)
+    result <- rbind(result, ndvi_df)
+  }
+  cat('\n')
+}
+
+ndvi_res <- result %>%
+  dplyr::mutate(
+    date = strptime(paste(year, doy), format = "%Y %j"),
+    month = lubridate::month(date)) %>%
+  dplyr::select(district, year, month, ndvi) %>%
+  dplyr::mutate(year = dplyr::case_when(month %in% 10:12 ~ year + 1, T ~ as.numeric(year))) %>%
+  dplyr::filter(year >= 2001, year <= 2022) %>%
+  dplyr::arrange(month, year) %>%
+  tidyr::pivot_wider(names_from = month, values_from = ndvi, names_prefix = "ndvi_")
+
+```
+
+# Climate
+
+```{r}
+climate <- temperature %>%
+  dplyr::left_join(precipitation) %>%
+  dplyr::left_join(ndvi_res) %>%
+  dplyr::left_join(crop_yield) %>%
+  dplyr::ungroup() %>%
+  dplyr::relocate(yield_mt, .after = year)
+
+readr::write_csv(climate, here::here('data', 'climate', 'climate_summary.csv'))
+
+```
