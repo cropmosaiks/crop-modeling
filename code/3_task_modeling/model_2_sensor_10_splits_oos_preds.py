@@ -14,14 +14,18 @@ if __name__ == "__main__":
     f1 = "landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather"
     f2 = "sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather"
 
+    anom = True
+
     inc_clim = True
+    clim = [None]
+    # clim = [["ndvi"], ["ndvi", "tmp"]]
 
     kwarg_list = [
         {
             "f1": f1,
             "f2": f2,
             "he": True,
-            "anomaly": True,
+            "anomaly": anom,
             "split": split,
             "random_state": random_state,
             "include_climate": inc_clim,
@@ -29,7 +33,7 @@ if __name__ == "__main__":
             "n_splits": 5,
             "return_oos_predictions": True, 
         }
-        for climate in [["ndvi"], ["ndvi", "tmp"]]
+        for climate in clim
         for split, random_state in enumerate(random_seeds)
     ]
 
@@ -44,11 +48,11 @@ if __name__ == "__main__":
     today = date.today().strftime("%Y-%m-%d")
 
     results = pd.DataFrame(output)
-    results_fn = f'2_sensor_top-mod_{n_splits}-splits-_{today}_rcf_climate-{inc_clim}.csv'
+    results_fn = f'2_sensor_top-mod_{n_splits}-splits-_{today}_rcf_climate-{inc_clim}_anom-{anom}.csv'
     print(f"Saving results as: {results_fn}\n\n")
     results.to_csv(here("data","results", results_fn), index=False)
 
     oos_predictions = pd.concat(oos_preds)
-    oos_fn = f'2_sensor_top-mod_oos_predictions_{n_splits}-splits-_{today}_rcf_climate-{inc_clim}.csv'
+    oos_fn = f'2_sensor_top-mod_oos_predictions_{n_splits}-splits-_{today}_rcf_climate-{inc_clim}_anom-{anom}.csv'
     print(f"Saving results as: {oos_fn}\n\n")
     oos_predictions.to_csv(here("data","results", oos_fn), index=False)
