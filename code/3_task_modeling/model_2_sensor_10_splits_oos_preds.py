@@ -17,8 +17,9 @@ if __name__ == "__main__":
     anom = True
 
     inc_clim = True
-    clim = [None]
-    # clim = [["ndvi"], ["ndvi", "tmp"]]
+
+    # inc_clim = False
+    # clim = None
 
     kwarg_list = [
         {
@@ -29,12 +30,12 @@ if __name__ == "__main__":
             "split": split,
             "random_state": random_state,
             "include_climate": inc_clim,
-            "variable_groups": climate,
+            "variable_groups": clim,
             "n_splits": 5,
-            "return_oos_predictions": True, 
+            "return_oos_predictions": True,
         }
-        for climate in clim
-        for split, random_state in enumerate(random_seeds)
+    for clim in [["ndvi"], ["ndvi", "tmp"]]
+    for split, random_state in enumerate(random_seeds)
     ]
 
     output, oos_preds = [], []

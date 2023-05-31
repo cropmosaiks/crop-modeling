@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH --partition=largemem
+#SBATCH --partition=batch     # batch, largemem, gpu, and short
 #SBATCH --ntasks=11           # Do n many tasks at once
 #SBATCH --cpus-per-task=4     # Give each task n cpus         
 #SBATCH --output slurm/%j.out # File to save job's STDOUT (%j = JobId)
@@ -19,5 +19,5 @@ conda activate mosaiks-env-mpi
 cd $SLURM_SUBMIT_DIR
 
 mpirun -np $SLURM_NTASKS \
-python -m mpi4py.futures ./code/3_task_modeling/model_2_sensor_10_splits_climate.py \
+python -m mpi4py.futures ./code/3_task_modeling/model_2_sensor_10_splits_oos_preds.py \
 >& slurm/$SLURM_JOB_ID.log

@@ -816,8 +816,6 @@ Begin with paramters:
 
     features['log_yield'] = np.log10(features['yield_mt'] + 1)
 
-    drop_cols.append('log_yield')
-
     #########################################    JOIN CLIMATE VARS    #########################################
     if include_climate:
         keep_cols = []
@@ -834,7 +832,9 @@ Begin with paramters:
             features.set_index(drop_cols).join(climate_df.set_index(drop_cols)).reset_index()
         )
         features = features[features.year <= max(climate_df.year)]
-        
+
+    drop_cols.append('log_yield')
+
     #########################################     CALCULATE ANOMALY   #########################################
     if anomaly:
         features.set_index(['year', 'district'], inplace=True)
