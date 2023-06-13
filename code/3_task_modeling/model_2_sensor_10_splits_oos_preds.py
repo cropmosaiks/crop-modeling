@@ -49,11 +49,11 @@ if __name__ == "__main__":
     today = date.today().strftime("%Y-%m-%d")
 
     results = pd.DataFrame(output)
-    results_fn = f'2_sensor_top-mod_{n_splits}-splits-_{today}_rcf_climate-{inc_clim}_anom-{anom}.csv'
+    results_fn = f'2_sensor_top-mod_{n_splits}-splits_{today}_rcf_climate-{inc_clim}_anom-{anom}.csv'
     print(f"Saving results as: {results_fn}\n\n")
     results.to_csv(here("data","results", results_fn), index=False)
 
     oos_predictions = pd.concat(oos_preds)
-    oos_fn = f'2_sensor_top-mod_oos_predictions_{n_splits}-splits-_{today}_rcf_climate-{inc_clim}_anom-{anom}.csv'
+    oos_fn = f'2_sensor_top-mod_oos_predictions_{n_splits}-splits_{today}_rcf_climate-{inc_clim}_anom-{anom}.csv'
     print(f"Saving results as: {oos_fn}\n\n")
     oos_predictions.to_csv(here("data","results", oos_fn), index=False)
