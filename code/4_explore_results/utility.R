@@ -277,14 +277,18 @@ dist_plot <- function(data, x, y, clr, p_type = "box", y_lims = NULL) {
   }
 }
 
-r2_general <-function(actual, predictions, round = 2) { 
+r2_general <-function(actual, predictions) { 
   r2 <- 1 - sum((predictions - actual) ^ 2) / sum((actual - mean(actual))^2)
-  return(round(r2, round))
+  return(r2)
 }
 
 r2_pears <- function(actual, predictions) { 
   r2 <- cor(actual, predictions) ^ 2
-  return(round(r2, 2))
+  return(r2)
+}
+
+stderror <- function(x) { 
+  sd(x)/sqrt(length(x))
 }
 
 pred_plot <- function(.data, x, y, label = NULL, x_lims = c(0, .82),
