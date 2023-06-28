@@ -17,10 +17,10 @@ if __name__ == "__main__":
     files = [
         f for f in os.listdir(directory) if f not in (".gitkeep", ".ipynb_checkpoints")
     ]
-    files = [f for f in files if not (f.startswith("landsat-8") and "lm-False" in f)]
-    files = [f for f in files if not (f.startswith("sentinel") and "lm-True" in f)]
+    # files = [f for f in files if not (f.startswith("landsat-8") and "lm-False" in f)]
+    # files = [f for f in files if not (f.startswith("sentinel") and "lm-True" in f)]
     files = [f for f in files if "cm-True" in f]
-    # files = [f for f in files if "wa-False" in f]
+    files = [f for f in files if "wa-False" in f]
 
     combinations = list(itertools.combinations(files, 2))
     combinations = [
@@ -44,9 +44,9 @@ if __name__ == "__main__":
         for split, random_state in enumerate(random_seeds)
     ]
 
-    chunked_kwarg_list = list(chunks(kwarg_list, 60))
-    j = 11
-    for i, chunk in enumerate(chunked_kwarg_list[11:12]):
+    chunked_kwarg_list = list(chunks(kwarg_list, 20))
+    j = 1
+    for i, chunk in enumerate(chunked_kwarg_list):
         with MPIPoolExecutor() as executor:
             output = list(executor.map(unpack_and_run, chunk))
         results = pd.DataFrame(output)

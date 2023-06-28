@@ -769,7 +769,7 @@ def model_2_sensor(
     num_features2, limit_months2, crop_mask2, weighted_avg2 = split_fn(f2)
 
     if variable_groups is None:
-        variable_groups_str = "None"
+        variable_groups_str = "rcf"
     else:
         variable_groups_str = "_".join(variable_groups)
 
@@ -887,8 +887,8 @@ Begin with paramters:
 
     #########################################    STANDARDIZE FEATURES    #########################################
     scaler = StandardScaler().fit(x_train)
-    x_train = pd.DataFrame(scaler.transform(x_train), columns=x_train.columns)
-    x_test = pd.DataFrame(scaler.transform(x_test), columns=x_test.columns)
+    x_train = pd.DataFrame(scaler.transform(x_train), columns=x_train.columns, index=x_train.index)
+    x_test = pd.DataFrame(scaler.transform(x_test), columns=x_test.columns, index=x_test.index)
 
     #########################################     K-FOLD CV    ###########################################
     ### SETUP
@@ -935,6 +935,14 @@ Begin with paramters:
     val_predictions   = cross_val_predict(best_model, X=x_train, y=y_train, cv=kfold)   
     train_predictions = best_model.predict(x_train)
     test_predictions  = best_model.predict(x_test)
+    
+    if anomaly:
+        pass
+    else:
+        val_predictions   = np.maximum(val_predictions, 0)
+        train_predictions = np.maximum(train_predictions, 0)
+        test_predictions  = np.maximum(test_predictions, 0)
+        
     print(f"""
 Finish:
     F1: {f1}
@@ -965,14 +973,14 @@ Finish:
     train_split = train_split.join(
         crop_yield.copy()[crop_yield.index.isin(x_train.index)]
     )
-    train_split["oos_prediction"] = np.maximum(val_predictions, 0)
+    train_split["oos_prediction"] = val_predictions
     train_split["val_fold"] = fold_list
     train_split = demean_by_group(train_split, predicted="oos_prediction", group=["district"])
 
     #########################################     DE-MEAN TEST R2    #########################################
     test_split = pd.DataFrame({"data_fold": np.repeat("test", len(x_test))}, index=x_test.index)
     test_split = test_split.join(crop_yield.copy()[crop_yield.index.isin(x_test.index)])
-    test_split["oos_prediction"] = np.maximum(best_model.predict(x_test), 0)
+    test_split["oos_prediction"] = test_predictions
     test_split["val_fold"] = n_splits + 1
     test_split = demean_by_group(test_split, predicted="oos_prediction", group=["district"])
 
@@ -980,9 +988,10 @@ Finish:
     oos_preds = pd.concat([train_split, test_split])
     oos_preds[["split", "random_state"]] = split, random_state
     oos_preds["variables"] = variable_groups_str
-
+    oos_preds["anomaly"] = anomaly
+    
     #########################################     SCORES    #########################################
-    val_R2 = r2_score(y_train, val_predictions),
+    val_R2 = r2_score(y_train, val_predictions)
     val_r = pearsonr(val_predictions, y_train)[0]
     train_R2 = r2_score(y_train, train_predictions)
     train_r = pearsonr(train_predictions, y_train)[0]
@@ -990,21 +999,22 @@ Finish:
     test_r = pearsonr(test_predictions, y_test)[0]
 
     if anomaly:
-        demean_cv_R2 = np.nan
-        demean_cv_r = np.nan
+        demean_cv_R2   = np.nan
+        demean_cv_r    = np.nan
         demean_test_R2 = np.nan
-        demean_test_r = np.nan
+        demean_test_r  = np.nan
     else:
         demean_cv_R2 = r2_score(train_split.demean_log_yield, train_split.demean_oos_prediction)
-        demean_cv_r = pearsonr(train_split.demean_log_yield, train_split.demean_oos_prediction)[0]
+        demean_cv_r  = pearsonr(train_split.demean_log_yield, train_split.demean_oos_prediction)[0]
         demean_test_R2 = r2_score(test_split.demean_log_yield, test_split.demean_oos_prediction)
-        demean_test_r = pearsonr(test_split.demean_log_yield, test_split.demean_oos_prediction)[0]
+        demean_test_r  = pearsonr(test_split.demean_log_yield, test_split.demean_oos_prediction)[0]
 
     #########################################     SAVE RESULTS    #########################################
     d = {
         "split": split,
         "random_state": random_state,
         "variables": variable_groups_str,
+        "anomaly": anomaly,
         "country": country_code[0],
         "year_range": yrs,
         "satellite_1": satellite1[0],
@@ -1049,214 +1059,3 @@ Finish:
         return d, oos_preds
     else:
         return d
-
-
-#########################################
-#########################################
-########## ONE ANOMALY MODEL ############
-#########################################
-#########################################
-
-def model_1_sensor_anomaly(params):
-#########################################     SET PARAMS    #########################################
-    file         = params
-    f            = file.split(sep="_")
-    satellite    = f[0]
-    bands        = f[1].replace("bands-", "")
-    country_code = f[2]
-    points       = f[3].replace("k-points", "")
-    num_features = f[4].replace("-features", "")
-    yrs          = f[5].replace("yr-", "").split(sep="-")
-    mns          = f[6].replace("mn-", "").split(sep="-")
-    limit_months = str2bool(f[7].replace("lm-", ""))
-    crop_mask    = str2bool(f[8].replace("cm-", ""))
-    weighted_avg = str2bool(f[9].replace("wa-", ""))
-    years        = range(int(yrs[0]), int(yrs[1])+1)
-    month_range  = list(range(int(mns[0]), int(mns[1])+1))
-
-    alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
-    kfold  = KFold()
-    ridge  = Ridge() 
-#########################################     READ DATA    #########################################
-    features = pd.read_feather(here('data', 'random_features', 'summary', file))
-
-    drop_cols = ['district', 'year', 'yield_mt', 'crop_perc']
-
-    if weighted_avg:
-        drop_cols.remove("crop_perc")
-    else:
-        pass
-
-#########################################     CALCULATE ANOMALY   #########################################
-    features['yield_mt'] = np.log10(features['yield_mt'] + 1)
-    features.set_index(['year', 'district'], inplace=True)
-    var_cols = features.columns
-    features = features[var_cols] - features.groupby(['district'], as_index=True)[var_cols].transform('mean')
-    features.reset_index(drop=False, inplace=True)
-
-#########################################     K-FOLD SPLIT    #########################################
-    x_all = features.drop(drop_cols, axis = 1) 
-    y_all = features.yield_mt
-    x_train, x_test, y_train, y_test = train_test_split(x_all, y_all, test_size=0.2, random_state=0)
-
-#########################################     K-FOLD  CV   ###########################################
-    ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER
-    kfold_ridge_reg = GridSearchCV(ridge, alphas, scoring = 'r2', cv = kfold)
-    kfold_ridge_reg.fit(x_train, y_train)
-    kfold_best_model = kfold_ridge_reg.best_estimator_
-    ### PREDICT - PREDICTING WITH BEST HYPERPARAMETER
-    kfold_val_predictions = cross_val_predict(kfold_best_model, X = x_train, y = y_train, cv = kfold)   
-    y_pred_train_k = kfold_best_model.predict(x_train)
-    y_pred_test_k  = kfold_best_model.predict(x_test)
-
-#########################################     SAVE RESULTS    #########################################
-    d = {
-        'country': country_code,
-        'satellite': satellite,
-        'bands': bands,
-        'num_features': num_features,
-        'points': points, 
-        'month_range': f'{min(month_range)}-{max(month_range)}',
-        
-        'limit_months': limit_months,
-        'crop_mask': crop_mask,
-        'weighted_avg': weighted_avg,
-        
-        'kfold_total_n': len(x_all),
-        'kfold_train_n': len(x_train),
-        'kfold_test_n' : len(x_test),
-        
-        'kfold_best_reg_param': list(kfold_ridge_reg.best_params_.values())[0],
-        'kfold_mean_of_val_R2s': kfold_ridge_reg.best_score_,
-        'kfold_val_R2': r2_score(y_train, kfold_val_predictions),
-        'kfold_val_r' : pearsonr(kfold_val_predictions, y_train)[0],
-        'kfold_val_r2': pearsonr(kfold_val_predictions, y_train)[0] ** 2,
-        
-        'kfold_train_R2': r2_score(y_train, y_pred_train_k),
-        'kfold_train_r' : pearsonr(y_pred_train_k, y_train)[0],
-        'kfold_train_r2': pearsonr(y_pred_train_k, y_train)[0] ** 2,
-        
-        'kfold_test_R2': r2_score(y_test, y_pred_test_k),
-        'kfold_test_r' : pearsonr(y_pred_test_k, y_test)[0],
-        'kfold_test_r2': pearsonr(y_pred_test_k, y_test)[0] ** 2,
-        
-    }
-    return pd.DataFrame(data=d, index=[0])
-
-
-#########################################
-#########################################
-########## TWO ANOMALY MODEL ############
-#########################################
-#########################################
-
-def model_2_sensor_anomaly(params):
-#########################################     SET PARAMS    #########################################    
-    f1         = params[0]
-    f2         = params[1]
-
-    satellite1, bands1, country_code, points1, yrs1, mns1,\
-    num_features1, limit_months1, crop_mask1, weighted_avg1 = split_fn(f1)
-    
-    satellite2, bands2, country_code, points2, yrs2, mns2,\
-    num_features2, limit_months2, crop_mask2, weighted_avg2 = split_fn(f2)
-
-#########################################     READ DATA    #########################################
-    features_1 = pd.read_feather(here('data', 'random_features', 'summary', f1))
-    features_2 = pd.read_feather(here('data', 'random_features', 'summary', f2))
-    
-#########################################     CLEAN DATA    #########################################  
-    min_year = max(min(features_1.year), min(features_2.year))
-    max_year = min(max(features_1.year), max(features_2.year))
-    
-    features_1 = features_1[features_1.year >= min_year]
-    features_2 = features_2[features_2.year >= min_year]
-    
-    features_1 = features_1[features_1.year <= max_year]
-    features_2 = features_2[features_2.year <= max_year]
-    
-    features_1.drop(['crop_perc'], axis=1, errors='ignore', inplace=True)
-    features_2.drop(['crop_perc'], axis=1, errors='ignore', inplace=True)
-    
-#########################################     JOIN DATA    #########################################  
-    drop_cols = ['district', 'year', 'yield_mt']
-    
-    features_1 = features_1.set_index(drop_cols).add_prefix("f1_")
-    features_2 = features_2.set_index(drop_cols).add_prefix("f2_")
-    
-    features = features_1.join(features_2).reset_index()
-    features = features[~features.isna().any(axis = 1)]
-
-#########################################    STANDARDIZE FEATURES    #########################################    
-    features = features.set_index(drop_cols) 
-    features_scaled = StandardScaler().fit_transform(features.values)
-    features = pd.DataFrame(features_scaled, index=features.index).reset_index()
-
-#########################################     CALCULATE ANOMALY   #########################################  
-    features['yield_mt'] = np.log10(features.yield_mt + 1)
-    features.set_index(['year', 'district'], inplace=True)
-    var_cols = features.columns
-    features = features[var_cols] - features.groupby(['district'], as_index=True)[var_cols].transform('mean')
-    features.reset_index(drop=False, inplace=True)
-
-#########################################     K-FOLD SPLIT    #########################################    
-    x_all = features.drop(drop_cols, axis=1)
-    y_all = features.yield_mt
-    x_train, x_test, y_train, y_test = train_test_split(x_all, y_all, test_size=0.2, random_state=0)
-
-#########################################     K-FOLD CV   ###########################################  
-    ### SETUP
-    alphas = {'alpha': np.logspace(-8, 8, base = 10, num = 17)}
-    kfold  = KFold()
-    ridge  = Ridge()    
-    
-    ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER
-    ridge_reg = GridSearchCV(ridge, alphas, scoring = 'r2', cv = kfold)
-    ridge_reg.fit(x_train, y_train)
-    best_model = ridge_reg.best_estimator_
-    ### PREDICT - PREDICTING WITH BEST HYPERPARAMETER
-    val_predictions = cross_val_predict(best_model, X = x_train, y = y_train, cv = kfold)   
-    train_predictions = best_model.predict(x_train)
-    test_predictions  = best_model.predict(x_test)
-
-#########################################     SAVE RESULTS    #########################################
-    d = {
-        'country': country_code,
-        
-        'satellite_1'   : satellite1[0],
-        'bands_1'       : bands1,
-        'num_features_1': num_features1,
-        'points_1'      : points1, 
-        'month_range_1' : mns1,
-        'limit_months_1': limit_months1,
-        'crop_mask_1'   : crop_mask1,
-        'weighted_avg_1': weighted_avg1,
-        
-        'satellite_2'   : satellite2[0],
-        'bands_2'       : bands2,
-        'num_features_2': num_features2,
-        'points_2'      : points2, 
-        'month_range_2' : mns2,
-        'limit_months_2': limit_months2,
-        'crop_mask_2'   : crop_mask2,
-        'weighted_avg_2': weighted_avg2,
-
-        'total_n': len(x_all),
-        'train_n': len(x_train),
-        'test_n' : len(x_test),
-        
-        'best_reg_param': list(ridge_reg.best_params_.values())[0],
-        'mean_of_val_R2s': ridge_reg.best_score_,
-        'val_R2': r2_score(y_train, val_predictions),
-        'val_r' : pearsonr(val_predictions, y_train)[0],
-        'val_r2': pearsonr(val_predictions, y_train)[0] ** 2,
-        
-        'train_R2': r2_score(y_train, train_predictions),
-        'train_r' : pearsonr(train_predictions, y_train)[0],
-        'train_r2': pearsonr(train_predictions, y_train)[0] ** 2,
-        
-        'test_R2': r2_score(y_test, test_predictions),
-        'test_r' : pearsonr(test_predictions, y_test)[0],
-        'test_r2': pearsonr(test_predictions, y_test)[0] ** 2,
-    }
-    return pd.DataFrame(data=d, index=[0])

@@ -1,0 +1,1326 @@
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    
+Group indicies [0, 6144, 18144, 18156, 18168]
+		  [6144, 18144, 18156, 18168, 18238]
+
+Group indicies [0, 6144, 18144, 18156, 18168]
+		  [6144, 18144, 18156, 18168, 18238]
+
+Group indicies [0, 6144, 18144, 18156, 18168]
+		  [6144, 18144, 18156, 18168, 18238]
+
+Group indicies [0, 6144, 18144, 18156]
+		  [6144, 18144, 18156, 18226]
+
+Group indicies [0, 6144, 18144, 18156]
+		  [6144, 18144, 18156, 18226]
+
+Group indicies [0, 6144, 18144, 18156]
+		  [6144, 18144, 18156, 18226]
+
+Group indicies [0, 6144, 18144, 18156]
+		  [6144, 18144, 18156, 18226]
+
+Group indicies [0, 6144, 18144, 18156]
+		  [6144, 18144, 18156, 18226]
+
+Group indicies [0, 6144, 18144, 18156]
+		  [6144, 18144, 18156, 18226]
+
+Group indicies [0, 6144, 18144, 18156, 18168]
+		  [6144, 18144, 18156, 18168, 18238]
+
+Group indicies [0, 6144, 18144, 18156, 18168]
+		  [6144, 18144, 18156, 18168, 18238]
+
+Group indicies [0, 6144, 18144, 18156, 18168]
+		  [6144, 18144, 18156, 18168, 18238]
+
+Group indicies [0, 6144, 18144, 18156, 18168]
+		  [6144, 18144, 18156, 18168, 18238]
+
+Group indicies [0, 6144, 18144, 18156]
+		  [6144, 18144, 18156, 18226]
+
+Group indicies [0, 6144, 18144, 18156]
+		  [6144, 18144, 18156, 18226]
+
+Group indicies [0, 6144, 18144, 18156, 18168]
+		  [6144, 18144, 18156, 18168, 18238]
+
+Group indicies [0, 6144, 18144, 18156, 18168]
+		  [6144, 18144, 18156, 18168, 18238]
+
+Group indicies [0, 6144, 18144, 18156]
+		  [6144, 18144, 18156, 18226]
+
+Group indicies [0, 6144, 18144, 18156]
+		  [6144, 18144, 18156, 18226]
+
+Group indicies [0, 6144, 18144, 18156, 18168]
+		  [6144, 18144, 18156, 18168, 18238]
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.474071208465651
+
+	Best λ: 1.0
+	Val R2: 0.4741
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.41855718706830985
+
+	Best λ: 1.0
+	Val R2: 0.4186
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.489866284033657
+
+	Best λ: 1.0
+	Val R2: 0.4899
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4839598510353474
+
+	Best λ: 1.0
+	Val R2: 0.4840
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4160446706411408
+
+	Best λ: 1.0
+	Val R2: 0.4160
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4443312256491273
+
+	Best λ: 1.0
+	Val R2: 0.4443
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4896897256285821
+
+	Best λ: 1.0
+	Val R2: 0.4897
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.48266983986301815
+
+	Best λ: 1.0
+	Val R2: 0.4827
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4427370092791573
+
+	Best λ: 1.0
+	Val R2: 0.4427
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.44806405514834885
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.4481
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.5239870992541545
+
+	Best λ: 1.0
+	Val R2: 0.5240
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.47241521616894105
+
+	Best λ: 1.0
+	Val R2: 0.4724
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.5271601659590335
+
+	Best λ: 10.0
+	Val R2: 0.5272
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.36700327133998173
+
+	Best λ: 10.0
+	Val R2: 0.3670
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.44622777344978176
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.4462
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.489866284033657
+
+	Best λ: 1.0
+	Val R2: 0.4899
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4185571870683099
+
+	Best λ: 1.0
+	Val R2: 0.4186
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.5167852069015152
+
+	Best λ: 10.0
+	Val R2: 0.5168
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.47608300434759326
+
+	Best λ: 10.0
+	Val R2: 0.4761
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.36608784323119764
+
+	Best λ: 10.0
+	Val R2: 0.3661
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.41604467064114087
+
+	Best λ: 1.0
+	Val R2: 0.4160
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4443312256491274
+
+	Best λ: 1.0
+	Val R2: 0.4443
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.48840159033686437
+
+	Best λ: 10.0
+	Val R2: 0.4884
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.4783289945423489
+
+	Best λ: 10.0
+	Val R2: 0.4783
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.49740017330957764
+
+	Best λ: 10.0
+	Val R2: 0.4974
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0])
+Best λ: 100.0
+Best score: 0.49522638053620166
+
+	Best λ: 100.0
+	Val R2: 0.4952
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4896897256285821
+
+	Best λ: 1.0
+	Val R2: 0.4897
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4427370092791576
+
+	Best λ: 1.0
+	Val R2: 0.4427
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4480640551483484
+
+	Best λ: 1.0
+	Val R2: 0.4481
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.36700327133998184
+
+	Best λ: 1.0
+	Val R2: 0.3670
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.5271601659590335
+
+	Best λ: 1.0
+	Val R2: 0.5272
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.424773917772064
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.4248
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.48303174875108257
+
+	Best λ: 10.0
+	Val R2: 0.4830
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4462277734497818
+
+	Best λ: 1.0
+	Val R2: 0.4462
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.5312665992331317
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5313
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998, 0.0009999999999999998])
+Best λ: 0.009999999999999998
+Best score: 0.522078686898915
+
+	Best λ: 0.009999999999999998
+	Val R2: 0.5221
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.5134450167387798
+
+	Best λ: 10.0
+	Val R2: 0.5134
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.5301403138357593
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5301
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.36608784323119775
+
+	Best λ: 1.0
+	Val R2: 0.3661
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.47608300434759326
+
+	Best λ: 1.0
+	Val R2: 0.4761
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.5069304263208727
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5069
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.42220454735104596
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.4222
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.45833047721158976
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.4583
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.3670032713399818
+
+	Best λ: 1.0
+	Val R2: 0.3670
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.5271601659590335
+
+	Best λ: 1.0
+	Val R2: 0.5272
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.4564311607561683
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.4564
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.5343781588778088
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5344
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.5227821822859194
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5228
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.4783289945423489
+
+	Best λ: 1.0
+	Val R2: 0.4783
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998, 0.0009999999999999998])
+Best λ: 0.009999999999999998
+Best score: 0.4663540964287609
+
+	Best λ: 0.009999999999999998
+	Val R2: 0.4664
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.5093587837467932
+
+	Best λ: 10.0
+	Val R2: 0.5094
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998, 0.0009999999999999998])
+Best λ: 0.009999999999999998
+Best score: 0.5214478031590073
+
+	Best λ: 0.009999999999999998
+	Val R2: 0.5214
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.501604157389656
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5016
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.5159006503461653
+
+	Best λ: 10.0
+	Val R2: 0.5159
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998, 0.0009999999999999998])
+Best λ: 0.009999999999999998
+Best score: 0.46492705192107203
+
+	Best λ: 0.009999999999999998
+	Val R2: 0.4649
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.4647949617378636
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.4648
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.3660878432311977
+
+	Best λ: 1.0
+	Val R2: 0.3661
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998, 0.0009999999999999998])
+Best λ: 0.009999999999999998
+Best score: 0.5169936904135559
+
+	Best λ: 0.009999999999999998
+	Val R2: 0.5170
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0])
+Best λ: 1.0
+Best score: 0.36700327133998173
+
+	Best λ: 1.0
+	Val R2: 0.3670
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.5275252797541697
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5275
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.5318972177632966
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5319
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.48820790829523214
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.4882
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998, 0.0009999999999999998, 9.999999999999998e-05, 9.999999999999997e-06, 9.999999999999997e-07, 9.999999999999997e-08, 9.999999999999997e-09])
+Best λ: 9.999999999999997e-09
+Best score: 0.4415293336332267
+
+	Best λ: 9.999999999999997e-09
+	Val R2: 0.4415
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998, 0.0009999999999999998])
+Best λ: 0.009999999999999998
+Best score: 0.5373532223809123
+
+	Best λ: 0.009999999999999998
+	Val R2: 0.5374
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998, 0.0009999999999999998])
+Best λ: 0.009999999999999998
+Best score: 0.4853034632668199
+
+	Best λ: 0.009999999999999998
+	Val R2: 0.4853
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.5100669186695863
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5101
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.4912556926081981
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.4913
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.5189462260414758
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5189
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5732299428116321
+
+	Best λ: 1000000000.0
+	Val R2: 0.5732
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5368446096144499
+
+	Best λ: 1000000000.0
+	Val R2: 0.5368
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0])
+Best λ: 10.0
+Best score: 0.48926552307738563
+
+	Best λ: 10.0
+	Val R2: 0.4893
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.4587831133855066
+
+	Best λ: 1000000000.0
+	Val R2: 0.4588
+
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    Final Val R2:  0.5921 
+    Final Test R2: 0.5622
+    Total time: 69.58 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    Final Val R2:  0.5425 
+    Final Test R2: 0.2889
+    Total time: 70.52 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    Final Val R2:  0.5041 
+    Final Test R2: 0.7256
+    Total time: 73.28 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    Final Val R2:  0.4948 
+    Final Test R2: 0.6001
+    Total time: 73.30 minutes
+    
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.4766469590092687
+
+	Best λ: 1000000000.0
+	Val R2: 0.4766
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5023949328908419
+
+	Best λ: 1000000000.0
+	Val R2: 0.5024
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5543801630917329
+
+	Best λ: 1000000000.0
+	Val R2: 0.5544
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.4942989208370342
+
+	Best λ: 1000000000.0
+	Val R2: 0.4943
+
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    Final Val R2:  0.5153 
+    Final Test R2: 0.6952
+    Total time: 80.28 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    Final Val R2:  0.5553 
+    Final Test R2: 0.6547
+    Total time: 80.90 minutes
+    
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.49717518467416566
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.4972
+
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    Final Val R2:  0.5801 
+    Final Test R2: 0.5522
+    Total time: 83.54 minutes
+    
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5391278589221463
+
+	Best λ: 1000000000.0
+	Val R2: 0.5391
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5352707397737118
+
+	Best λ: 1000000000.0
+	Val R2: 0.5353
+
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    Final Val R2:  0.5485 
+    Final Test R2: 0.6475
+    Total time: 84.83 minutes
+    
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.47199691242953057
+
+	Best λ: 1000000000.0
+	Val R2: 0.4720
+
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    Final Val R2:  0.5412 
+    Final Test R2: 0.2440
+    Total time: 87.96 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    Final Val R2:  0.5669 
+    Final Test R2: 0.5669
+    Total time: 87.96 minutes
+    
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 0.009999999999999998])
+Best λ: 0.09999999999999999
+Best score: 0.5269906130966249
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5270
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.4336049047831354
+
+	Best λ: 1000000000.0
+	Val R2: 0.4336
+
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    Final Val R2:  0.4753 
+    Final Test R2: 0.6504
+    Total time: 89.85 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    Final Val R2:  0.5112 
+    Final Test R2: 0.6705
+    Total time: 93.16 minutes
+    
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5852843033272237
+
+	Best λ: 1000000000.0
+	Val R2: 0.5853
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.43339673684249247
+
+	Best λ: 1000000000.0
+	Val R2: 0.4334
+
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    Final Val R2:  0.6179 
+    Final Test R2: 0.1941
+    Total time: 97.88 minutes
+    
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.567876690331351
+
+	Best λ: 1000000000.0
+	Val R2: 0.5679
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5393850297945486
+
+	Best λ: 1000000000.0
+	Val R2: 0.5394
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5377661118541022
+
+	Best λ: 1000000000.0
+	Val R2: 0.5378
+
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    Final Val R2:  0.5107 
+    Final Test R2: 0.6736
+    Total time: 103.37 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    Final Val R2:  0.5819 
+    Final Test R2: 0.5433
+    Total time: 106.24 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    Final Val R2:  0.5534 
+    Final Test R2: 0.6683
+    Total time: 106.53 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    Final Val R2:  0.5771 
+    Final Test R2: 0.0103
+    Total time: 106.54 minutes
+    
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5897803413316376
+
+	Best λ: 1000000000.0
+	Val R2: 0.5898
+
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi
+    Final Val R2:  0.5974 
+    Final Test R2: 0.3444
+    Total time: 110.07 minutes
+    
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.545103892331786
+
+	Best λ: 1000000000.0
+	Val R2: 0.5451
+
+
+dict_keys([0.09999999999999999, 1.0, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0, 10000000.0, 100000000.0, 1000000000.0])
+Best λ: 1000000000.0
+Best score: 0.5975856873157653
+
+	Best λ: 1000000000.0
+	Val R2: 0.5976
+
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    Final Val R2:  0.5599 
+    Final Test R2: 0.6777
+    Total time: 146.72 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: True
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: True
+    Climate vars: ndvi_tmp
+    Final Val R2:  0.6060 
+    Final Test R2: 0.4248
+    Total time: 150.17 minutes
+    
+Saving results as: 2_sensor_top-mod_10-splits-_2023-06-08_rcf_climate-True_anom-True.csv
+
+
+Saving results as: 2_sensor_top-mod_oos_predictions_10-splits-_2023-06-08_rcf_climate-True_anom-True.csv
+
+
