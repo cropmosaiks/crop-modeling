@@ -123,12 +123,6 @@ def get_mean_std_ste(df, groupby_columns, target_columns):
     return combined_summary_df
 
 
-
-
-
-
-
-
 def str2bool(string):
     return string.lower() in ("yes", "true", "t", "1")
 
@@ -271,7 +265,7 @@ def find_best_lambda_expanding_grid(
         else:
             edge_found = True
 
-    print(f"\n{score_dict.keys()}\nBest \u03BB: {best_lambda}\nBest score: {best_score}")
+    # print(f"\n{score_dict.keys()}\nBest \u03BB: {best_lambda}\nBest score: {best_score}")
 
     return best_lambda, best_score
 
@@ -400,7 +394,12 @@ def climate_model(
     n_splits=5,
     split=0,
     random_state=42,
+    return_oos_predictions=True,
 ):
+    if variable_groups is None:
+        variable_groups_str = "None"
+    else:
+        variable_groups_str = "_".join(variable_groups)
     #########################################     READ DATA    #########################################
     data = pd.read_csv(here("data", "climate", "climate_summary.csv"))
     data = data.dropna()
@@ -420,12 +419,6 @@ def climate_model(
     crop_yield = data.copy().loc[:, tuple(index_cols)].reset_index(drop=True)
     crop_yield["log_yield"] = np.log10(crop_yield.yield_mt.to_numpy() + 1)
 
-    ########################################    STANDARDIZE FEATURES    #########################################
-    data = data.set_index(index_cols)
-    data_scaled = StandardScaler().fit_transform(data.values)
-    data = pd.DataFrame(data_scaled, index=data.index).reset_index()
-    data.columns = data.columns.astype(str)
-
     #########################################     CALCULATE ANOMALY   #########################################
     if anomaly:
         data["yield_mt"] = np.log10(data.yield_mt.to_numpy() + 1)
@@ -434,9 +427,10 @@ def climate_model(
         data = data[var_cols] - data.groupby(["district"], as_index=True)[
             var_cols
         ].transform("mean")
-        data.reset_index(drop=False, inplace=True)
     else:
         pass
+    
+    data.reset_index(drop=False, inplace=True)
 
     #########################################    HOT ENCODE    #########################################
     if hot_encode:
@@ -452,6 +446,15 @@ def climate_model(
         x_all, y_all, test_size=0.2, random_state=random_state
     )
     kfold = KFold(n_splits=n_splits)
+
+    #########################################    STANDARDIZE FEATURES    #########################################
+    scaler = StandardScaler().fit(x_train)
+    x_train = pd.DataFrame(
+        scaler.transform(x_train), columns=x_train.columns, index=x_train.index
+    )
+    x_test = pd.DataFrame(
+        scaler.transform(x_test), columns=x_test.columns, index=x_test.index
+    )
 
     #########################################     K-FOLD CV    #########################################
     ### SETUP
@@ -492,25 +495,75 @@ def climate_model(
     train_predictions = best_model.predict(x_train)
     test_predictions = best_model.predict(x_test)
     
+    if anomaly:
+        pass
+    else:
+        val_predictions   = np.maximum(val_predictions, 0)
+        train_predictions = np.maximum(train_predictions, 0)
+        test_predictions  = np.maximum(test_predictions, 0)
+
     #########################################     DE-MEAN TRAIN R2    #########################################
+    fold_list = []
+    for i in range(n_splits):
+        idx = len(list(kfold.split(y_train))[i][1])
+        fold = np.repeat(i + 1, idx).tolist()
+        fold_list.append(fold)
+    fold_list = [item for sublist in fold_list for item in sublist]
+
     train_split = pd.DataFrame(
         np.repeat("train", len(x_train)), columns=["data_fold"], index=x_train.index
     )
     train_split = train_split.join(
         crop_yield.copy()[crop_yield.index.isin(x_train.index)]
     )
-    train_split["oos_prediction"] = np.maximum(val_predictions, 0)
-    train_split = demean_by_group(train_split, predicted="oos_prediction", group=["district"])
+    train_split["oos_prediction"] = val_predictions
+    train_split["val_fold"] = fold_list
+    train_split = demean_by_group(
+        train_split, predicted="oos_prediction", group=["district"]
+    )
 
     #########################################     DE-MEAN TEST R2    #########################################
-    test_split = pd.DataFrame({"data_fold": np.repeat("test", len(x_test))}, index=x_test.index)
+    test_split = pd.DataFrame(
+        {"data_fold": np.repeat("test", len(x_test))}, index=x_test.index
+    )
     test_split = test_split.join(crop_yield.copy()[crop_yield.index.isin(x_test.index)])
-    test_split["oos_prediction"] = np.maximum(best_model.predict(x_test), 0)
-    test_split = demean_by_group(test_split, predicted="oos_prediction", group=["district"])
+    test_split["oos_prediction"] = test_predictions
+    test_split["val_fold"] = n_splits + 1
+    test_split = demean_by_group(
+        test_split, predicted="oos_prediction", group=["district"]
+    )
 
     #########################################     OUT OF SAMPLE PREDICTIONS    #########################################
     oos_preds = pd.concat([train_split, test_split])
     oos_preds[["split", "random_state"]] = split, random_state
+    oos_preds["variables"] = variable_groups_str
+
+    #########################################     SCORES    #########################################
+    val_R2 = r2_score(y_train, val_predictions)
+    val_r = pearsonr(val_predictions, y_train)[0]
+    train_R2 = r2_score(y_train, train_predictions)
+    train_r = pearsonr(train_predictions, y_train)[0]
+    test_R2 = r2_score(y_test, test_predictions)
+    test_r = pearsonr(test_predictions, y_test)[0]
+
+    if anomaly:
+        demean_cv_R2 = np.nan
+        demean_cv_r = np.nan
+        demean_test_R2 = np.nan
+        demean_test_r = np.nan
+    else:
+        demean_cv_R2 = r2_score(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
+        )
+        demean_cv_r = pearsonr(
+            train_split.demean_log_yield, train_split.demean_oos_prediction
+        )[0]
+        demean_test_R2 = r2_score(
+            test_split.demean_log_yield, test_split.demean_oos_prediction
+        )
+        demean_test_r = pearsonr(
+            test_split.demean_log_yield, test_split.demean_oos_prediction
+        )[0]
 
     d = {
         "split": split,
@@ -524,37 +577,26 @@ def climate_model(
         "test_n": len(x_test),
         "best_reg_param": best_lambdas,
         "mean_of_val_R2": best_scores,
-        "val_R2": r2_score(y_train, val_predictions),
-        "val_r": pearsonr(val_predictions, y_train)[0],
-        "val_r2": pearsonr(val_predictions, y_train)[0] ** 2,
-        "train_R2": r2_score(y_train, train_predictions),
-        "train_r": pearsonr(train_predictions, y_train)[0],
-        "train_r2": pearsonr(train_predictions, y_train)[0] ** 2,
-        "test_R2": r2_score(y_test, test_predictions),
-        "test_r": pearsonr(test_predictions, y_test)[0],
-        "test_r2": pearsonr(test_predictions, y_test)[0] ** 2,
-        "demean_cv_R2": r2_score(
-            train_split.demean_log_yield, train_split.demean_oos_prediction
-        ),
-        "demean_cv_r": pearsonr(
-            train_split.demean_log_yield, train_split.demean_oos_prediction
-        )[0],
-        "demean_cv_r2": pearsonr(
-            train_split.demean_log_yield, train_split.demean_oos_prediction
-        )[0]
-        ** 2,
-        "demean_test_R2": r2_score(
-            test_split.demean_log_yield, test_split.demean_oos_prediction
-        ),
-        "demean_test_r": pearsonr(
-            test_split.demean_log_yield, test_split.demean_oos_prediction
-        )[0],
-        "demean_test_r2": pearsonr(
-            test_split.demean_log_yield, test_split.demean_oos_prediction
-        )[0]
-        ** 2,
+        "val_R2": val_R2,
+        "val_r": val_r,
+        "val_r2": val_r**2,
+        "train_R2": train_R2,
+        "train_r": train_r,
+        "train_r2": train_r**2,
+        "test_R2": test_R2,
+        "test_r": test_r,
+        "test_r2": test_r**2,
+        "demean_cv_R2": demean_cv_R2,
+        "demean_cv_r": demean_cv_r,
+        "demean_cv_r2": demean_cv_r**2,
+        "demean_test_R2": demean_test_R2,
+        "demean_test_r": demean_test_r,
+        "demean_test_r2": demean_test_r**2,
     }
-    return d
+    if return_oos_predictions:
+        return d, oos_preds
+    else:
+        return d
 
 
 def run_climate_model(params):
