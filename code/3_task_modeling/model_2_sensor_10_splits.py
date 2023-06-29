@@ -26,15 +26,18 @@ if __name__ == "__main__":
         t for t in combinations if not ("landsat-c2" in t[0] and "landsat-c2" in t[1])
     ]
 
+    anom = True
+    climate = False
+
     kwarg_list = [
         {
             "f1": f1,
             "f2": f2,
             "he": False,
-            "anomaly": True,
+            "anomaly": anom,
             "split": split,
             "random_state": random_state,
-            "include_climate": False,
+            "include_climate": climate,
             "variable_groups": None,
             "n_splits": 5,
             "return_oos_predictions": False, 
@@ -54,7 +57,7 @@ if __name__ == "__main__":
         elapsed_time = toc - tic
         results = pd.DataFrame(output)
         today = date.today().strftime("%Y-%m-%d")
-        file_name = f'2_sensor_{n_splits}-splits_{today}_{i+1}.csv'  
+        file_name = f'2_sensor_{n_splits}-splits_{today}_{i+1}_rcf_climate-{climate}_anom{anom}.csv'  
         print(f"Saving results as: {file_name}\n\n")
         results.to_csv(here("data","results", file_name), index=False)
         print(f"Elapsed time for iteration {i+1}: {elapsed_time} seconds\n\n")
