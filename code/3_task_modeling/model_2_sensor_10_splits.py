@@ -2,6 +2,7 @@ import os
 import random
 import pandas as pd
 import itertools
+import time
 from pyhere import here
 from datetime import date
 from task_modeling_utils import *
@@ -17,8 +18,6 @@ if __name__ == "__main__":
     files = [
         f for f in os.listdir(directory) if f not in (".gitkeep", ".ipynb_checkpoints")
     ]
-    # files = [f for f in files if not (f.startswith("landsat-8") and "lm-False" in f)]
-    # files = [f for f in files if not (f.startswith("sentinel") and "lm-True" in f)]
     files = [f for f in files if "cm-True" in f]
     files = [f for f in files if "wa-False" in f]
 
@@ -31,8 +30,8 @@ if __name__ == "__main__":
         {
             "f1": f1,
             "f2": f2,
-            "he": True,
-            "anomaly": False,
+            "he": False,
+            "anomaly": True,
             "split": split,
             "random_state": random_state,
             "include_climate": False,
@@ -44,13 +43,19 @@ if __name__ == "__main__":
         for split, random_state in enumerate(random_seeds)
     ]
 
-    chunked_kwarg_list = list(chunks(kwarg_list, 20))
-    j = 1
-    for i, chunk in enumerate(chunked_kwarg_list):
+    chunked_kwarg_list = list(chunks(kwarg_list, 60))
+
+    for i in range(8, len(chunked_kwarg_list)): 
+        chunk = chunked_kwarg_list[i]
+        tic = time.time()
         with MPIPoolExecutor() as executor:
             output = list(executor.map(unpack_and_run, chunk))
+        toc = time.time()
+        elapsed_time = toc - tic
         results = pd.DataFrame(output)
         today = date.today().strftime("%Y-%m-%d")
-        file_name = f'2_sensor_n-splits-{n_splits}_{today}_{i+j}.csv'
+        file_name = f'2_sensor_{n_splits}-splits_{today}_{i+1}.csv'  
         print(f"Saving results as: {file_name}\n\n")
         results.to_csv(here("data","results", file_name), index=False)
+        print(f"Elapsed time for iteration {i+1}: {elapsed_time} seconds\n\n")
+
