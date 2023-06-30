@@ -18,22 +18,24 @@ if __name__ == "__main__":
     files = [
         f for f in os.listdir(directory) if f not in (".gitkeep", ".ipynb_checkpoints")
     ]
+    files = [f for f in files if not (f.startswith("landsat-8") and "lm-False" in f)]
+    files = [f for f in files if not (f.startswith("sentinel") and "lm-True" in f)]
     files = [f for f in files if "cm-True" in f]
-    files = [f for f in files if "wa-False" in f]
-
+    # files = [f for f in files if "wa-False" in f]
+    
     combinations = list(itertools.combinations(files, 2))
     combinations = [
         t for t in combinations if not ("landsat-c2" in t[0] and "landsat-c2" in t[1])
     ]
 
-    anom = True
+    anom = False
     climate = False
 
     kwarg_list = [
         {
             "f1": f1,
             "f2": f2,
-            "he": False,
+            "he": True,
             "anomaly": anom,
             "split": split,
             "random_state": random_state,
