@@ -1,33 +1,37 @@
-import pandas as pd
-import numpy as np
-import warnings
-import time
 import gc
 import sys
-from glum import GeneralizedLinearRegressor as glm
-from scipy.linalg import LinAlgWarning
+import time
+import logging
+import warnings
+import traceback
+import numpy as np
+import pandas as pd
+
 from pyhere import here
+from datetime import date
+from typing import List, Tuple, Union
+from scipy.linalg import LinAlgWarning
+from mpi4py.futures import MPIPoolExecutor
+from glum import GeneralizedLinearRegressor as glm
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import Ridge
-from sklearn.model_selection import train_test_split, KFold, GridSearchCV, cross_val_predict, cross_val_score
+from sklearn.model_selection import (
+    KFold, 
+    train_test_split, 
+    GridSearchCV,
+    cross_val_score,
+    cross_val_predict, 
+)
 from sklearn.metrics import r2_score
 from scipy.stats import pearsonr
 
-from typing import List, Tuple, Union
-import traceback
-import logging
-
-from datetime import date
-from mpi4py.futures import MPIPoolExecutor
 
 def chunks(param_list, n):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(param_list), n):
         yield param_list[i : i + n]
 
-def unpack_and_run(kwargs):
-    return model_2_sensor(**kwargs)
 
 def get_paramlist(files, random_seeds):
     return [
@@ -66,13 +70,6 @@ def save_results(output, oos_preds, n_splits):
     print(f"Saving results as: {file_name}\n\n")
     with open(here("data", "results", file_name), "w") as f:
         results.to_csv(f, index=False)
-
-    # Save out of sample predictions
-    # oos_results = pd.concat(oos_preds)
-    # file_name = f'1_sensor_top-mod_oos_preds_n-splits-{n_splits}_{today}.csv'
-    # print(f"Saving results as: {file_name}\n\n")
-    # with open(here("data", "results", file_name), "w") as f:
-    #     oos_results.to_csv(f, index=False)
 
 
 def get_mean_std_ste(df, groupby_columns, target_columns):
@@ -221,7 +218,7 @@ def demean_by_group(
 
 #########################################
 #########################################
-########### MULTI LAMBDA FUN ############
+########### EXPANDING LAMBDA ############
 #########################################
 #########################################
 
@@ -268,6 +265,13 @@ def find_best_lambda_expanding_grid(
     # print(f"\n{score_dict.keys()}\nBest \u03BB: {best_lambda}\nBest score: {best_score}")
 
     return best_lambda, best_score
+
+
+#########################################
+#########################################
+####### RR MULTI LAMBDA TUNING ##########
+#########################################
+#########################################
 
 
 def kfold_rr_multi_lambda_tuning(
@@ -378,10 +382,9 @@ def kfold_rr_multi_lambda_tuning(
     return lambdas, best_scores, model
 
 
-
 #########################################
 #########################################
-########### CLIMATE MODEL ############
+########### CLIMATE MODEL ###############
 #########################################
 #########################################
 
@@ -400,6 +403,7 @@ def climate_model(
         variable_groups_str = "None"
     else:
         variable_groups_str = "_".join(variable_groups)
+        
     #########################################     READ DATA    #########################################
     data = pd.read_csv(here("data", "climate", "climate_summary.csv"))
     data = data.dropna()
@@ -537,6 +541,9 @@ def climate_model(
     oos_preds = pd.concat([train_split, test_split])
     oos_preds[["split", "random_state"]] = split, random_state
     oos_preds["variables"] = variable_groups_str
+    oos_preds["anomaly"] = anomaly
+    oos_preds["hot_encode"] = hot_encode
+    oos_preds["year_start"] = year_start
 
     #########################################     SCORES    #########################################
     val_R2 = r2_score(y_train, val_predictions)
@@ -598,29 +605,6 @@ def climate_model(
     else:
         return d
 
-
-def run_climate_model(params):
-    try:
-        var, yr, he, anom, seed = params
-        if he and anom:
-            return None
-        else:
-            out = climate_model(
-                variable_groups=var,
-                year_start=yr,
-                hot_encode=he,
-                anomaly=anom,
-                index_cols=["year", "district", "yield_mt"],
-                split=seed[0],
-                random_state=seed[1],
-            )
-            return out
-    except Exception as e:
-        logging.error(f"Exception in run_climate_model: {e}")
-        logging.error(traceback.format_exc())
-        return None
-    
-    
     
 #########################################
 #########################################
@@ -814,6 +798,7 @@ def model_2_sensor(
         variable_groups_str = "rcf"
     else:
         variable_groups_str = "_".join(variable_groups)
+        variable_groups_str = "rcf_" + variable_groups_str
 
     print(f"""
 Begin with paramters:
@@ -1031,6 +1016,7 @@ Finish:
     oos_preds[["split", "random_state"]] = split, random_state
     oos_preds["variables"] = variable_groups_str
     oos_preds["anomaly"] = anomaly
+    oos_preds["hot_encode"] = he
     
     #########################################     SCORES    #########################################
     val_R2 = r2_score(y_train, val_predictions)
