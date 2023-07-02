@@ -1,0 +1,1020 @@
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18215]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+Group indicies [0, 6144, 18144]
+		  [6144, 18144, 18214]
+
+
+	Best λ: 10.0
+	Val R2: 0.7031
+
+
+	Best λ: 10.0
+	Val R2: 0.5531
+
+
+	Best λ: 10.0
+	Val R2: 0.6244
+
+
+	Best λ: 1.0
+	Val R2: 0.5965
+
+
+	Best λ: 1.0
+	Val R2: 0.6446
+
+
+	Best λ: 10.0
+	Val R2: 0.6565
+
+
+	Best λ: 10.0
+	Val R2: 0.7012
+
+
+	Best λ: 1.0
+	Val R2: 0.5739
+
+
+	Best λ: 10.0
+	Val R2: 0.6501
+
+
+	Best λ: 10.0
+	Val R2: 0.6325
+
+
+	Best λ: 10.0
+	Val R2: 0.7022
+
+
+	Best λ: 10.0
+	Val R2: 0.6444
+
+
+	Best λ: 10.0
+	Val R2: 0.6757
+
+
+	Best λ: 10.0
+	Val R2: 0.6726
+
+
+	Best λ: 10.0
+	Val R2: 0.6916
+
+
+	Best λ: 10.0
+	Val R2: 0.6585
+
+
+	Best λ: 10.0
+	Val R2: 0.6091
+
+
+	Best λ: 10.0
+	Val R2: 0.6511
+
+
+	Best λ: 10.0
+	Val R2: 0.6345
+
+
+	Best λ: 10.0
+	Val R2: 0.6940
+
+
+	Best λ: 0.09999999999999999
+	Val R2: 0.5992
+
+
+	Best λ: 10.0
+	Val R2: 0.6098
+
+
+	Best λ: 10.0
+	Val R2: 0.6538
+
+
+	Best λ: 100.0
+	Val R2: 0.6724
+
+
+	Best λ: 10.0
+	Val R2: 0.6401
+
+
+	Best λ: 10.0
+	Val R2: 0.6960
+
+
+	Best λ: 10.0
+	Val R2: 0.6347
+
+
+	Best λ: 10.0
+	Val R2: 0.6707
+
+
+	Best λ: 10.0
+	Val R2: 0.6272
+
+
+	Best λ: 100.0
+	Val R2: 0.6697
+

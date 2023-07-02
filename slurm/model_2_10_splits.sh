@@ -1,7 +1,7 @@
 #!/bin/bash -l
-#SBATCH --partition=batch     # batch, largemem, gpu, highmem
-#SBATCH --ntasks=61           # Do n many tasks at once
-#SBATCH --cpus-per-task=4     # Give each task n cpus         
+#SBATCH --partition=largemem     # batch, largemem, gpu, largemem
+#SBATCH --ntasks=21           # Do n many tasks at once
+#SBATCH --cpus-per-task=2     # Give each task n cpus         
 #SBATCH --output slurm/%j.out # File to save job's STDOUT (%j = JobId)
 #SBATCH --error slurm/%j.err  # File to save job's STDERR
 #SBATCH --mail-user=cullen_molitor@ucsb.edu

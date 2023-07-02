@@ -50,7 +50,8 @@ if __name__ == "__main__":
 
     chunked_kwarg_list = list(chunks(kwarg_list, 60))
 
-    for i in range(8, len(chunked_kwarg_list)): 
+    # for i in range(12, len(chunked_kwarg_list)):
+    for i in range(9, 12):
         chunk = chunked_kwarg_list[i]
         tic = time.time()
         with MPIPoolExecutor() as executor:
@@ -59,7 +60,7 @@ if __name__ == "__main__":
         elapsed_time = toc - tic
         results = pd.DataFrame(output)
         today = date.today().strftime("%Y-%m-%d")
-        file_name = f'2_sensor_{n_splits}-splits_{today}_{i+1}_rcf_climate-{climate}_anom{anom}.csv'  
+        file_name = f'2_sensor_{n_splits}-splits_{today}_{i+1}_rcf_climate-{climate}_anom-{anom}.csv'  
         print(f"Saving results as: {file_name}\n\n")
         results.to_csv(here("data","results", file_name), index=False)
         print(f"Elapsed time for iteration {i+1}: {elapsed_time} seconds\n\n")
