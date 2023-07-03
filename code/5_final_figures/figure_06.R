@@ -19,8 +19,6 @@ test_anom_pred <- oos_anom_preds |>
   dplyr::summarise(
     log_yield = mean(log_yield),
     oos_prediction = mean(oos_prediction),
-    demean_log_yield = mean(demean_log_yield), 
-    demean_oos_prediction = mean(demean_oos_prediction)
   )
 
 summary_anom_stats <- oos_anom_preds |> 
