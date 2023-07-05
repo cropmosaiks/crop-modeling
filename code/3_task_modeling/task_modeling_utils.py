@@ -28,9 +28,13 @@ from scipy.stats import pearsonr
 
 
 def chunks(param_list, n):
-    """Yield successive n-sized chunks from lst."""
+    """Yield successive n-sized chunks from list."""
     for i in range(0, len(param_list), n):
         yield param_list[i : i + n]
+
+
+def unpack_and_run(kwargs):
+    return model_2_sensor(**kwargs)
 
 
 def get_paramlist(files, random_seeds):
@@ -943,7 +947,7 @@ Begin with paramters:
 
     end.sort()
 
-    print(f'Group indicies {start}\n\t\t  {end}', end='\n\n')
+    # print(f'Group indicies {start}\n\t\t  {end}', end='\n\n')
 
     ### GRID SEARCH - FINDING BEST REGULARIZATION PARAMETER(S)
     best_lambdas, best_scores, best_model = kfold_rr_multi_lambda_tuning(
@@ -954,7 +958,7 @@ Begin with paramters:
         start=start,
         end=end, 
         static_lam=1,
-        verbose=2,
+        verbose=0,
         show_linalg_warning=False,
         fit_model_after_tuning=True
     )
@@ -969,22 +973,6 @@ Begin with paramters:
         val_predictions   = np.maximum(val_predictions, 0)
         train_predictions = np.maximum(train_predictions, 0)
         test_predictions  = np.maximum(test_predictions, 0)
-        
-    print(f"""
-Finish:
-    F1: {f1}
-    F2: {f2}
-    One-hot encoding: {he}
-    Anomaly: {anomaly}
-    Split: {split}
-    Random state: {random_state}
-    N-splits: {n_splits}
-    Include climate: {include_climate}
-    Climate vars: {variable_groups_str}
-    Final Val R2:  {r2_score(y_train, val_predictions):0.4f} 
-    Final Test R2: {r2_score(y_test, test_predictions):0.4f}
-    Total time: {(time.time()-tic)/60:0.2f} minutes
-    """, flush=True)
 
     #########################################     DE-MEAN TRAIN R2    #########################################
     fold_list = []
@@ -1036,6 +1024,28 @@ Finish:
         demean_cv_r  = pearsonr(train_split.demean_log_yield, train_split.demean_oos_prediction)[0]
         demean_test_R2 = r2_score(test_split.demean_log_yield, test_split.demean_oos_prediction)
         demean_test_r  = pearsonr(test_split.demean_log_yield, test_split.demean_oos_prediction)[0]
+        
+    print(f"""
+Finish:
+    F1: {f1}
+    F2: {f2}
+    One-hot encoding: {he}
+    Anomaly: {anomaly}
+    Split: {split}
+    Random state: {random_state}
+    N-splits: {n_splits}
+    Include climate: {include_climate}
+    Climate vars: {variable_groups_str}
+    Final Val R2:  {val_R2:0.4f}
+    Final Val r2:  {val_r ** 2:0.4f}
+    Final Test R2: {test_R2:0.4f}
+    Final Test r2: {test_r ** 2:0.4f}
+    Demean Val R2:  {demean_cv_R2:0.4f}
+    Demean Val r2:  {demean_cv_r ** 2:0.4f}
+    Demean Test R2: {demean_test_R2:0.4f}
+    Demean Test r2: {demean_test_r ** 2:0.4f}
+    Total time: {(time.time()-tic)/60:0.2f} minutes
+    """, flush=True)
 
     #########################################     SAVE RESULTS    #########################################
     d = {
