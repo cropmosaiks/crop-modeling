@@ -2,16 +2,36 @@
 ## FIGURE 8 - BENCHMARK NDVI #############
 ##########################################
 
+if (!require(librarian,quietly = T)){
+  install.packages('librarian')
+}
 
-####################### R ENVIRONMENT #######################
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+librarian::shelf(
+  tidyverse,
+  here,
+  latex2exp,
+  ggExtra,
+  quiet = T
+)
 
-source(here::here('code', '4_explore_results', 'utility.R'))
+r2_general <-function(actual, predictions) { 
+  r2 <- 1 - sum((predictions - actual) ^ 2) / sum((actual - mean(actual))^2)
+  return(r2)
+}
+
+r2_pears <- function(actual, predictions) { 
+  r2 <- cor(actual, predictions) ^ 2
+  return(r2)
+}
+
+stderror <- function(x) { 
+  sd(x)/sqrt(length(x))
+}
 
 oos_preds <- here::here(
   "data",
   "results",
-  "climate_model_oos_predictions_10-splits_2023-07-01.csv"
+  "climate_model_oos_predictions_10-splits_2023-07-05.csv"
 ) |> 
   readr::read_csv() |> 
   dplyr::filter(
@@ -64,16 +84,17 @@ p1 <- ggplot() +
   )) +
   scale_x_continuous(limits = c(0, .82)) +
   scale_y_continuous(limits = c(0, 0.82)) +
-  theme(legend.position = leg_pos,
-        legend.background = element_rect(fill = alpha(.5))
+  theme_bw() +
+  theme(legend.position = leg_pos
+        , legend.background = element_rect(fill = alpha(.75))
   ) 
 
 p1 <- ggExtra::ggMarginal(
-  p1, type = "histogram",
+  p1, type = "histogram", 
   groupFill = T
-)
+) 
 
-p1
+
 
 
 
@@ -112,7 +133,7 @@ p2 <- ggplot() +
              aes(x = demean_log_yield, y = demean_oos_prediction, color = as.factor(year))) +
   geom_abline() +
   scale_color_viridis_d() +
-  labs(color = NULL, x = 'log(1+mt/ha)', y = 'Model estimate') +
+  labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = NULL) +
   geom_text(data = NULL, aes(x = -.2, y = .325), label = latex2exp::TeX(
     paste0(r'($R^2 = $)', test_demean_R2, r'( ()', test_demean_sem_R2, r'())')
   )) +
@@ -121,16 +142,15 @@ p2 <- ggplot() +
   )) +
   scale_x_continuous(limits = limits) +
   scale_y_continuous(limits = limits) +
+  theme_bw() +
   theme(legend.position = leg_pos
-        ,legend.background = element_rect(fill = alpha(.75))
+        , legend.background = element_rect(fill = alpha(.75))
   ) 
 
 p2 <- ggExtra::ggMarginal(
   p2, type = "histogram", 
   groupFill = T
 ) 
-
-p2
 
 
 
@@ -141,7 +161,7 @@ p2
 oos_anom_preds <- here::here(
   "data",
   "results",
-  "climate_model_oos_predictions_10-splits_2023-07-01.csv"
+  "climate_model_oos_predictions_10-splits_2023-07-05.csv"
 ) |> 
   readr::read_csv() |> 
   dplyr::filter(
@@ -186,7 +206,7 @@ p3 <- ggplot() +
              aes(x = demean_log_yield, y = oos_prediction, color = as.factor(year))) +
   geom_abline() +
   scale_color_viridis_d() +
-  labs(color = NULL, x = 'log(1+mt/ha)', y = 'Model estimate') +
+  labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = NULL) +
   geom_text(data = NULL, aes(x = -.2, y = .325), label = latex2exp::TeX(
     paste0(r'($R^2 = $)', test_anom_R2, r'( ()', test_anom_sem_R2, r'())')
   )) +
@@ -195,8 +215,9 @@ p3 <- ggplot() +
   )) +
   scale_x_continuous(limits = limits) +
   scale_y_continuous(limits = limits) +
+  theme_bw() +
   theme(legend.position = leg_pos
-        ,legend.background = element_rect(fill = alpha(.75))
+        , legend.background = element_rect(fill = alpha(.75))
   ) 
 
 p3 <- ggExtra::ggMarginal(
@@ -204,5 +225,14 @@ p3 <- ggExtra::ggMarginal(
   groupFill = T
 ) 
 
-p3
+p4 <- cowplot::plot_grid(p1, p2, p3, labels=c("(a)", "(b)", "(c)"), ncol = 3, nrow = 1)
 
+ggsave(
+  filename = "figure_08.jpeg"
+  , path = here("figures")
+  , plot = p4
+  , device ="jpeg"
+  , width = 15
+  , height = 5
+  , units = "in"
+)

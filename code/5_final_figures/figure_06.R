@@ -2,9 +2,31 @@
 #### FIGURE 6 - MAIZE YIELD ANOMALIES ####
 ##########################################
 
-####################### R ENVIRONMENT #######################
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+if (!require(librarian,quietly = T)){
+  install.packages('librarian')
+}
 
+librarian::shelf(
+  tidyverse,
+  here,
+  latex2exp,
+  ggExtra,
+  quiet = T
+)
+
+r2_general <-function(actual, predictions) { 
+  r2 <- 1 - sum((predictions - actual) ^ 2) / sum((actual - mean(actual))^2)
+  return(r2)
+}
+
+r2_pears <- function(actual, predictions) { 
+  r2 <- cor(actual, predictions) ^ 2
+  return(r2)
+}
+
+stderror <- function(x) { 
+  sd(x)/sqrt(length(x))
+}
 
 oos_anom_preds <- here::here(
   "data",
@@ -49,7 +71,7 @@ p1 <- ggplot() +
              aes(x = log_yield, y = oos_prediction, color = as.factor(year))) +
   geom_abline() +
   scale_color_viridis_d() +
-  labs(color = NULL, x = 'log(1+mt/ha)', y = 'Model estimate') +
+  labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = 'Model estimate') +
   geom_text(data = NULL, aes(x = -.2, y = .325), label = latex2exp::TeX(
     paste0(r'($R^2 = $)', test_anom_R2, r'( ()', test_anom_sem_R2, r'())')
   )) +
@@ -58,8 +80,9 @@ p1 <- ggplot() +
   )) +
   scale_x_continuous(limits = limits) +
   scale_y_continuous(limits = limits) +
+  theme_bw() +
   theme(legend.position = leg_pos
-        ,legend.background = element_rect(fill = alpha(.75))
+        , legend.background = element_rect(fill = alpha(.75))
   ) 
 
 p1 <- ggExtra::ggMarginal(
@@ -67,4 +90,12 @@ p1 <- ggExtra::ggMarginal(
   groupFill = T
 ) 
 
-p1
+ggsave(
+  filename = "figure_06.jpeg"
+  , path = here("figures")
+  , plot = p1
+  , device ="jpeg"
+  , width = 5
+  , height = 5
+  , units = "in"
+)

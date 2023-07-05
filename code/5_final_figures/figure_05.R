@@ -2,10 +2,32 @@
 #### FIGURE 5 - MAIZE YIELD DEMEANED #####
 ##########################################
 
-####################### R ENVIRONMENT #######################
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+if (!require(librarian,quietly = T)){
+  install.packages('librarian')
+}
 
-source(here::here('code', '4_explore_results', 'utility.R'))
+librarian::shelf(
+  tidyverse,
+  here,
+  latex2exp,
+  ggExtra,
+  quiet = T
+)
+
+r2_general <-function(actual, predictions) { 
+  r2 <- 1 - sum((predictions - actual) ^ 2) / sum((actual - mean(actual))^2)
+  return(r2)
+}
+
+r2_pears <- function(actual, predictions) { 
+  r2 <- cor(actual, predictions) ^ 2
+  return(r2)
+}
+
+stderror <- function(x) { 
+  sd(x)/sqrt(length(x))
+}
+
 oos_preds <- here::here(
   "data",
   "results",
@@ -49,17 +71,18 @@ p1 <- ggplot() +
              aes(x = demean_log_yield, y = demean_oos_prediction, color = as.factor(year))) +
   geom_abline() +
   scale_color_viridis_d() +
-  labs(color = NULL, x = 'log(1+mt/ha)', y = 'Model estimate') +
-  geom_text(data = NULL, aes(x = -.2, y = .325), label = latex2exp::TeX(
+  labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = 'Demeaned model estimate') +
+  geom_text(data = NULL, aes(x = -.24, y = .325), label = latex2exp::TeX(
     paste0(r'($R^2 = $)', test_demean_R2, r'( ()', test_demean_sem_R2, r'())')
   )) +
-  geom_text(data = NULL, aes(x = -.2, y = .275), label = latex2exp::TeX(
+  geom_text(data = NULL, aes(x = -.24, y = .275), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_demean_r2, r'( ()', test_demean_sem_r2, r'())')
   )) +
   scale_x_continuous(limits = limits) +
   scale_y_continuous(limits = limits) +
+  theme_bw() +
   theme(legend.position = leg_pos
-        ,legend.background = element_rect(fill = alpha(.75))
+        , legend.background = element_rect(fill = alpha(.75))
   ) 
 
 p1 <- ggExtra::ggMarginal(
@@ -67,4 +90,12 @@ p1 <- ggExtra::ggMarginal(
   groupFill = T
 ) 
 
-p1
+ggsave(
+  filename = "figure_05.jpeg"
+  , path = here("figures")
+  , plot = p1
+  , device ="jpeg"
+  , width = 5
+  , height = 5
+  , units = "in"
+)
