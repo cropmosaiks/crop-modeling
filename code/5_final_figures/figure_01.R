@@ -2,6 +2,28 @@
 ######## FIGURE 1 - MAP OF ZAMBIA ######## 
 ##########################################
 
+if (!require(librarian,quietly = T)){
+  install.packages('librarian')
+}
+
+librarian::shelf(
+  tidyverse,
+  here,
+  sf,
+  terra,
+  tidyterra,
+  cowplot,
+  rnaturalearth,
+  rnaturalearthdata,
+  quiet = T
+)
+
+country_shp <- here::here('data', 'geo_boundaries', 'gadm36_ZMB_2.shp') %>%
+  sf::read_sf()
+
+zmb_union <- terra::vect(country_shp) %>%
+  terra::buffer(0.1) %>%
+  terra::aggregate()
 
 africa <- ne_countries(scale = "medium", returnclass = "sf") %>% 
   dplyr::filter(continent == 'Africa')
@@ -36,8 +58,19 @@ main <- ggplot() +
   scale_x_continuous(breaks = xbreaks, labels = xlabs) +
   scale_y_continuous(breaks = ybreaks, labels = ylabs) +
   labs(x = NULL, y = NULL) +
+  theme_bw() +
   theme(legend.position = "right")
 
 ggdraw() +
   draw_plot(main) +
-  draw_plot(inset, x = 0.7, y = .06, width = .3, height = .3)
+  draw_plot(inset, x = 0.715, y = .065, width = .3, height = .3)
+
+ggsave(
+  filename = "figure_01.jpeg"
+  , path = here("figures")
+  , plot = ggplot2::last_plot()
+  , device ="jpeg"
+  , width = 8
+  , height = 7
+  , units = "in"
+)

@@ -2,10 +2,31 @@
 ##### FIGURE 4 - MAIZE YIELD LEVELS ######
 ##########################################
 
-####################### R ENVIRONMENT #######################
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+if (!require(librarian,quietly = T)){
+  install.packages('librarian')
+}
 
-source(here::here('code', '4_explore_results', 'utility.R'))
+librarian::shelf(
+  tidyverse,
+  here,
+  latex2exp,
+  ggExtra,
+  quiet = T
+)
+
+r2_general <-function(actual, predictions) { 
+  r2 <- 1 - sum((predictions - actual) ^ 2) / sum((actual - mean(actual))^2)
+  return(r2)
+}
+
+r2_pears <- function(actual, predictions) { 
+  r2 <- cor(actual, predictions) ^ 2
+  return(r2)
+}
+
+stderror <- function(x) { 
+  sd(x)/sqrt(length(x))
+}
 
 oos_preds <- here::here(
   "data",
@@ -58,6 +79,7 @@ p1 <- ggplot() +
   )) +
   scale_x_continuous(limits = c(0, .82)) +
   scale_y_continuous(limits = c(0, 0.82)) +
+  theme_bw() +
   theme(legend.position = leg_pos,
         legend.background = element_rect(fill = alpha(.5))
   ) 
@@ -67,4 +89,12 @@ p1 <- ggExtra::ggMarginal(
   groupFill = T
 )
 
-p1
+ggsave(
+  filename = "figure_04.jpeg"
+  , path = here("figures")
+  , plot = p1
+  , device ="jpeg"
+  , width = 5
+  , height = 5
+  , units = "in"
+)
