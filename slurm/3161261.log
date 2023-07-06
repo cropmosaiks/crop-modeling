@@ -1,0 +1,336 @@
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8080
+    Final Val r2:  0.8093
+    Final Test R2: 0.8034
+    Final Test r2: 0.8104
+    Demean Val R2:  0.1392
+    Demean Val r2:  0.2231
+    Demean Test R2: 0.5433
+    Demean Test r2: 0.5528
+    Total time: 36.74 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7967
+    Final Val r2:  0.7974
+    Final Test R2: 0.8609
+    Final Test r2: 0.8610
+    Demean Val R2:  0.1754
+    Demean Val r2:  0.2303
+    Demean Test R2: 0.3567
+    Demean Test r2: 0.3748
+    Total time: 36.74 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8031
+    Final Val r2:  0.8037
+    Final Test R2: 0.8452
+    Final Test r2: 0.8482
+    Demean Val R2:  0.2243
+    Demean Val r2:  0.2776
+    Demean Test R2: 0.3112
+    Demean Test r2: 0.3728
+    Total time: 39.46 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7839
+    Final Val r2:  0.7851
+    Final Test R2: 0.8832
+    Final Test r2: 0.8894
+    Demean Val R2:  0.1315
+    Demean Val r2:  0.2131
+    Demean Test R2: 0.5764
+    Demean Test r2: 0.5814
+    Total time: 39.48 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7928
+    Final Val r2:  0.7937
+    Final Test R2: 0.8773
+    Final Test r2: 0.8878
+    Demean Val R2:  0.1460
+    Demean Val r2:  0.2164
+    Demean Test R2: 0.4936
+    Demean Test r2: 0.5112
+    Total time: 43.79 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8258
+    Final Val r2:  0.8260
+    Final Test R2: 0.8111
+    Final Test r2: 0.8208
+    Demean Val R2:  0.2512
+    Demean Val r2:  0.2920
+    Demean Test R2: 0.3112
+    Demean Test r2: 0.4028
+    Total time: 43.79 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7972
+    Final Val r2:  0.7980
+    Final Test R2: 0.8034
+    Final Test r2: 0.8043
+    Demean Val R2:  0.1130
+    Demean Val r2:  0.1904
+    Demean Test R2: 0.5121
+    Demean Test r2: 0.5135
+    Total time: 43.81 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8138
+    Final Val r2:  0.8145
+    Final Test R2: 0.7923
+    Final Test r2: 0.7937
+    Demean Val R2:  0.2368
+    Demean Val r2:  0.2761
+    Demean Test R2: 0.2071
+    Demean Test r2: 0.2732
+    Total time: 71.82 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8187
+    Final Val r2:  0.8194
+    Final Test R2: 0.8018
+    Final Test r2: 0.8135
+    Demean Val R2:  0.1831
+    Demean Val r2:  0.2282
+    Demean Test R2: 0.4294
+    Demean Test r2: 0.4368
+    Total time: 75.17 minutes
+    
+
+Finish:
+    F1: landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7990
+    Final Val r2:  0.7993
+    Final Test R2: 0.8413
+    Final Test r2: 0.8461
+    Demean Val R2:  0.1293
+    Demean Val r2:  0.1910
+    Demean Test R2: 0.4833
+    Demean Test r2: 0.5040
+    Total time: 75.17 minutes
+    
+Saving results as: 2_sensor_top-mod_10-splits_2023-07-06_rcf_climate-False_anom-False.csv
+
+
+Saving results as: 2_sensor_top-mod_oos_predictions_10-splits_2023-07-06_rcf_climate-False_anom-False.csv
+
+

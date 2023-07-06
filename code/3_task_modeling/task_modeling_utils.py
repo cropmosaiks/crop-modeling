@@ -842,7 +842,11 @@ Begin with paramters:
     features = features[~features.isna().any(axis = 1)]
 
     features['log_yield'] = np.log10(features['yield_mt'] + 1)
-
+    
+    features["demean_log_yield"] = features.log_yield - features.groupby(
+        "district"
+    ).log_yield.transform("mean")
+    
     #########################################    JOIN CLIMATE VARS    #########################################
     if include_climate:
         keep_cols = []
@@ -861,6 +865,7 @@ Begin with paramters:
         features = features[features.year <= max(climate_df.year)]
 
     drop_cols.append('log_yield')
+    drop_cols.append('demean_log_yield')
 
     #########################################     CALCULATE ANOMALY   #########################################
     if anomaly:
@@ -904,7 +909,10 @@ Begin with paramters:
 
     #########################################     TRAIN/TEST SPLIT    #########################################
     x_all = features.drop(drop_cols, axis=1)
-    y_all = features.log_yield
+    if anomaly:
+        y_all = features.demean_log_yield
+    else:
+        y_all = features.log_yield
     x_train, x_test, y_train, y_test = train_test_split(
         x_all, y_all, test_size=0.2, random_state=random_state
     )
@@ -913,7 +921,7 @@ Begin with paramters:
     gc.collect()
 
     #########################################    STANDARDIZE FEATURES    #########################################
-    scaler = StandardScaler().fit(x_train)
+    scaler = StandardScaler().fit(x_all)
     x_train = pd.DataFrame(scaler.transform(x_train), columns=x_train.columns, index=x_train.index)
     x_test = pd.DataFrame(scaler.transform(x_test), columns=x_test.columns, index=x_test.index)
 
@@ -981,19 +989,17 @@ Begin with paramters:
     train_split = pd.DataFrame(
         np.repeat("train", len(x_train)), columns=["data_fold"], index=x_train.index
     )
-    train_split = train_split.join(
-        crop_yield.copy()[crop_yield.index.isin(x_train.index)]
-    )
+    train_split = train_split.join(crop_yield.copy()[crop_yield.index.isin(x_train.index)])
     train_split["oos_prediction"] = val_predictions
     train_split["val_fold"] = fold_list
-    train_split = demean_by_group(train_split, predicted="oos_prediction", group=["district"])
 
     #########################################     DE-MEAN TEST R2    #########################################
-    test_split = pd.DataFrame({"data_fold": np.repeat("test", len(x_test))}, index=x_test.index)
+    test_split = pd.DataFrame(
+        {"data_fold": np.repeat("test", len(x_test))}, index=x_test.index
+    )
     test_split = test_split.join(crop_yield.copy()[crop_yield.index.isin(x_test.index)])
     test_split["oos_prediction"] = test_predictions
     test_split["val_fold"] = n_splits + 1
-    test_split = demean_by_group(test_split, predicted="oos_prediction", group=["district"])
 
     #########################################     OUT OF SAMPLE PREDICTIONS    #########################################
     oos_preds = pd.concat([train_split, test_split])
@@ -1001,7 +1007,10 @@ Begin with paramters:
     oos_preds["variables"] = variable_groups_str
     oos_preds["anomaly"] = anomaly
     oos_preds["hot_encode"] = he
-    
+    oos_preds["demean_oos_prediction"] = oos_preds.oos_prediction - oos_preds.groupby(
+        "district"
+    ).oos_prediction.transform("mean")
+
     #########################################     SCORES    #########################################
     val_R2 = r2_score(y_train, val_predictions)
     val_r = pearsonr(val_predictions, y_train)[0]
@@ -1011,16 +1020,18 @@ Begin with paramters:
     test_r = pearsonr(test_predictions, y_test)[0]
 
     if anomaly:
-        demean_cv_R2   = np.nan
-        demean_cv_r    = np.nan
+        demean_cv_R2 = np.nan
+        demean_cv_r = np.nan
         demean_test_R2 = np.nan
-        demean_test_r  = np.nan
+        demean_test_r = np.nan
     else:
-        demean_cv_R2 = r2_score(train_split.demean_log_yield, train_split.demean_oos_prediction)
-        demean_cv_r  = pearsonr(train_split.demean_log_yield, train_split.demean_oos_prediction)[0]
-        demean_test_R2 = r2_score(test_split.demean_log_yield, test_split.demean_oos_prediction)
-        demean_test_r  = pearsonr(test_split.demean_log_yield, test_split.demean_oos_prediction)[0]
-        
+        test = oos_preds[oos_preds.data_fold == "test"]
+        train = oos_preds[oos_preds.data_fold == "train"]
+        demean_cv_R2 = r2_score(train.demean_log_yield, train.demean_oos_prediction)
+        demean_cv_r = pearsonr(train.demean_log_yield, train.demean_oos_prediction)[0]
+        demean_test_R2 = r2_score(test.demean_log_yield, test.demean_oos_prediction)
+        demean_test_r = pearsonr(test.demean_log_yield, test.demean_oos_prediction)[0]
+
     print(f"""
 Finish:
     F1: {f1}

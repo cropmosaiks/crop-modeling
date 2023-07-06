@@ -50,8 +50,9 @@ if __name__ == "__main__":
 
     chunked_kwarg_list = list(chunks(kwarg_list, 60))
 
-    # for i in range(12, len(chunked_kwarg_list)):
-    for i in range(9, 12):
+    for i in range(17, len(chunked_kwarg_list)):
+    # for i in range(9, 12):
+        print(f"Starting iteration {i+1} of {len(chunked_kwarg_list)}\n\n")
         chunk = chunked_kwarg_list[i]
         tic = time.time()
         with MPIPoolExecutor() as executor:

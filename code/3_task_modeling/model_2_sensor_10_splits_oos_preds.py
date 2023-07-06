@@ -11,11 +11,11 @@ if __name__ == "__main__":
     random.seed(42)
     random_seeds = [random.randint(0, 1_000_000) for _ in range(n_splits)]
 
-    # f1 = "landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather"
-    # f2 = "sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather"
+    f1 = "landsat-c2-l2_bands-r-g-b-nir-swir16-swir22_ZMB_20k-points_1024-features_yr-2009-2021_mn-4-9_lm-True_cm-True_wa-False_summary.feather"
+    f2 = "sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather"
 
-    f1 = "landsat-8-c2-l2_bands-1-2-3-4-5-6-7_ZMB_15k-points_1000-features_yr-2014-2021_mn-1-12_lm-False_cm-True_wa-False_summary.feather"
-    f2 = "sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather"
+    # f1 = "landsat-8-c2-l2_bands-1-2-3-4-5-6-7_ZMB_15k-points_1000-features_yr-2014-2021_mn-1-12_lm-False_cm-True_wa-False_summary.feather"
+    # f2 = "sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather"
 
     anom = True
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
         {
             "f1": f1,
             "f2": f2,
-            "he": False,
+            "he": True,
             "anomaly": anom,
             "split": split,
             "random_state": random_state,

@@ -1,0 +1,3976 @@
+Starting iteration 16 of 19
+
+
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7869
+    Final Val r2:  0.7887
+    Final Test R2: -11.0143
+    Final Test r2: 0.0070
+    Demean Val R2:  0.0172
+    Demean Val r2:  0.1195
+    Demean Test R2: -37.2772
+    Demean Test r2: 0.0548
+    Total time: 66.20 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7826
+    Final Val r2:  0.7830
+    Final Test R2: -73.6763
+    Final Test r2: 0.0009
+    Demean Val R2:  0.1346
+    Demean Val r2:  0.2305
+    Demean Test R2: -4.9313
+    Demean Test r2: 0.0471
+    Total time: 67.71 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7937
+    Final Val r2:  0.7967
+    Final Test R2: -551.6200
+    Final Test r2: 0.0220
+    Demean Val R2:  0.0794
+    Demean Val r2:  0.1819
+    Demean Test R2: -1141.7110
+    Demean Test r2: 0.0019
+    Total time: 68.58 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7756
+    Final Val r2:  0.7757
+    Final Test R2: 0.8258
+    Final Test r2: 0.8286
+    Demean Val R2:  0.0338
+    Demean Val r2:  0.0806
+    Demean Test R2: 0.4932
+    Demean Test r2: 0.5861
+    Total time: 70.57 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7985
+    Final Val r2:  0.7997
+    Final Test R2: -656.2313
+    Final Test r2: 0.0001
+    Demean Val R2:  0.1649
+    Demean Val r2:  0.2374
+    Demean Test R2: -3397.2213
+    Demean Test r2: 0.0205
+    Total time: 72.42 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7845
+    Final Val r2:  0.7877
+    Final Test R2: -9.8290
+    Final Test r2: 0.0169
+    Demean Val R2:  0.0746
+    Demean Val r2:  0.1718
+    Demean Test R2: -5.0470
+    Demean Test r2: 0.0527
+    Total time: 72.43 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8141
+    Final Val r2:  0.8150
+    Final Test R2: -7.6834
+    Final Test r2: 0.0058
+    Demean Val R2:  0.1926
+    Demean Val r2:  0.2353
+    Demean Test R2: -30.7664
+    Demean Test r2: 0.0002
+    Total time: 73.44 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7823
+    Final Val r2:  0.7827
+    Final Test R2: -148.4035
+    Final Test r2: 0.0035
+    Demean Val R2:  0.1301
+    Demean Val r2:  0.2261
+    Demean Test R2: -1.3789
+    Demean Test r2: 0.0124
+    Total time: 73.66 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7990
+    Final Val r2:  0.7991
+    Final Test R2: 0.7865
+    Final Test r2: 0.7984
+    Demean Val R2:  0.1570
+    Demean Val r2:  0.2078
+    Demean Test R2: 0.2188
+    Demean Test r2: 0.2664
+    Total time: 78.02 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7838
+    Final Val r2:  0.7840
+    Final Test R2: -88.8961
+    Final Test r2: 0.0023
+    Demean Val R2:  0.0996
+    Demean Val r2:  0.1812
+    Demean Test R2: -471.0624
+    Demean Test r2: 0.0922
+    Total time: 79.24 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7940
+    Final Val r2:  0.7956
+    Final Test R2: -110.0864
+    Final Test r2: 0.0018
+    Demean Val R2:  0.1142
+    Demean Val r2:  0.2030
+    Demean Test R2: -617.1511
+    Demean Test r2: 0.0886
+    Total time: 82.94 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7817
+    Final Val r2:  0.7850
+    Final Test R2: -7.4608
+    Final Test r2: 0.0290
+    Demean Val R2:  0.0649
+    Demean Val r2:  0.1656
+    Demean Test R2: -3.9254
+    Demean Test r2: 0.0512
+    Total time: 82.95 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7709
+    Final Val r2:  0.7733
+    Final Test R2: -13.2806
+    Final Test r2: 0.0103
+    Demean Val R2:  0.0232
+    Demean Val r2:  0.1195
+    Demean Test R2: -9.7955
+    Demean Test r2: 0.0246
+    Total time: 84.76 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8058
+    Final Val r2:  0.8070
+    Final Test R2: 0.7156
+    Final Test r2: 0.7250
+    Demean Val R2:  0.1733
+    Demean Val r2:  0.2373
+    Demean Test R2: 0.5242
+    Demean Test r2: 0.5386
+    Total time: 86.38 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7571
+    Final Val r2:  0.7574
+    Final Test R2: -6139.6757
+    Final Test r2: 0.0275
+    Demean Val R2:  0.0271
+    Demean Val r2:  0.1087
+    Demean Test R2: -42518.0601
+    Demean Test r2: 0.0562
+    Total time: 86.39 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7691
+    Final Val r2:  0.7715
+    Final Test R2: -2.6166
+    Final Test r2: 0.2383
+    Demean Val R2:  -0.0454
+    Demean Val r2:  0.0809
+    Demean Test R2: 0.0119
+    Demean Test r2: 0.2592
+    Total time: 86.39 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7962
+    Final Val r2:  0.7972
+    Final Test R2: -305.9398
+    Final Test r2: 0.0006
+    Demean Val R2:  0.1464
+    Demean Val r2:  0.2031
+    Demean Test R2: -1582.7498
+    Demean Test r2: 0.0213
+    Total time: 88.84 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7816
+    Final Val r2:  0.7823
+    Final Test R2: -195.2660
+    Final Test r2: 0.0042
+    Demean Val R2:  0.1249
+    Demean Val r2:  0.1982
+    Demean Test R2: -2.6753
+    Demean Test r2: 0.0000
+    Total time: 89.90 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7640
+    Final Val r2:  0.7665
+    Final Test R2: 0.6724
+    Final Test r2: 0.7116
+    Demean Val R2:  -0.0631
+    Demean Val r2:  0.0663
+    Demean Test R2: 0.4930
+    Demean Test r2: 0.5036
+    Total time: 89.90 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7953
+    Final Val r2:  0.7967
+    Final Test R2: -9.8885
+    Final Test r2: 0.0110
+    Demean Val R2:  0.0632
+    Demean Val r2:  0.1450
+    Demean Test R2: -33.4670
+    Demean Test r2: 0.0529
+    Total time: 89.93 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8044
+    Final Val r2:  0.8056
+    Final Test R2: 0.8018
+    Final Test r2: 0.8056
+    Demean Val R2:  0.1583
+    Demean Val r2:  0.2069
+    Demean Test R2: 0.5921
+    Demean Test r2: 0.6807
+    Total time: 89.93 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7286
+    Final Val r2:  0.7345
+    Final Test R2: -56031.9292
+    Final Test r2: 0.0067
+    Demean Val R2:  -0.0858
+    Demean Val r2:  0.1418
+    Demean Test R2: -388227.2619
+    Demean Test r2: 0.0100
+    Total time: 93.74 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7919
+    Final Val r2:  0.7924
+    Final Test R2: -167.7259
+    Final Test r2: 0.0028
+    Demean Val R2:  0.1389
+    Demean Val r2:  0.2028
+    Demean Test R2: -974.8074
+    Demean Test r2: 0.0885
+    Total time: 93.74 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7528
+    Final Val r2:  0.7533
+    Final Test R2: 0.7897
+    Final Test r2: 0.7898
+    Demean Val R2:  -0.0815
+    Demean Val r2:  0.0328
+    Demean Test R2: 0.2498
+    Demean Test r2: 0.2837
+    Total time: 96.18 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7470
+    Final Val r2:  0.7479
+    Final Test R2: -0.9336
+    Final Test r2: 0.2251
+    Demean Val R2:  -0.0221
+    Demean Val r2:  0.0526
+    Demean Test R2: -11.9418
+    Demean Test r2: 0.0555
+    Total time: 96.21 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7957
+    Final Val r2:  0.7966
+    Final Test R2: -270.5357
+    Final Test r2: 0.0008
+    Demean Val R2:  0.1433
+    Demean Val r2:  0.1993
+    Demean Test R2: -1399.6646
+    Demean Test r2: 0.0218
+    Total time: 100.05 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8140
+    Final Val r2:  0.8148
+    Final Test R2: -10.2277
+    Final Test r2: 0.0020
+    Demean Val R2:  0.1935
+    Demean Val r2:  0.2330
+    Demean Test R2: -40.4133
+    Demean Test r2: 0.0003
+    Total time: 100.27 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7889
+    Final Val r2:  0.7890
+    Final Test R2: 0.7863
+    Final Test r2: 0.7933
+    Demean Val R2:  0.1022
+    Demean Val r2:  0.1264
+    Demean Test R2: 0.1572
+    Demean Test r2: 0.1729
+    Total time: 106.56 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8028
+    Final Val r2:  0.8036
+    Final Test R2: -7.6052
+    Final Test r2: 0.0050
+    Demean Val R2:  0.1426
+    Demean Val r2:  0.1884
+    Demean Test R2: -30.5349
+    Demean Test r2: 0.0004
+    Total time: 113.12 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8003
+    Final Val r2:  0.8021
+    Final Test R2: -7.4774
+    Final Test r2: 0.1280
+    Demean Val R2:  0.1623
+    Demean Val r2:  0.2381
+    Demean Test R2: -1.3613
+    Demean Test r2: 0.1238
+    Total time: 66.44 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7817
+    Final Val r2:  0.7820
+    Final Test R2: -7.7491
+    Final Test r2: 0.0172
+    Demean Val R2:  0.1308
+    Demean Val r2:  0.2404
+    Demean Test R2: -1.8779
+    Demean Test r2: 0.0002
+    Total time: 67.75 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7386
+    Final Val r2:  0.7482
+    Final Test R2: 0.4757
+    Final Test r2: 0.6354
+    Demean Val R2:  -0.1662
+    Demean Val r2:  0.1242
+    Demean Test R2: -0.5053
+    Demean Test r2: 0.1070
+    Total time: 66.93 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7591
+    Final Val r2:  0.7592
+    Final Test R2: -245.1199
+    Final Test r2: 0.0137
+    Demean Val R2:  0.0251
+    Demean Val r2:  0.1289
+    Demean Test R2: -1705.3336
+    Demean Test r2: 0.0534
+    Total time: 70.67 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8057
+    Final Val r2:  0.8076
+    Final Test R2: 0.3503
+    Final Test r2: 0.4434
+    Demean Val R2:  0.1763
+    Demean Val r2:  0.2096
+    Demean Test R2: -1.2730
+    Demean Test r2: 0.0252
+    Total time: 73.30 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7910
+    Final Val r2:  0.7911
+    Final Test R2: -12.8830
+    Final Test r2: 0.0024
+    Demean Val R2:  0.1289
+    Demean Val r2:  0.2095
+    Demean Test R2: -1.6675
+    Demean Test r2: 0.0625
+    Total time: 79.17 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7906
+    Final Val r2:  0.7924
+    Final Test R2: -418.6347
+    Final Test r2: 0.0003
+    Demean Val R2:  0.1184
+    Demean Val r2:  0.1884
+    Demean Test R2: -2162.4722
+    Demean Test r2: 0.0209
+    Total time: 78.00 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7682
+    Final Val r2:  0.7686
+    Final Test R2: 0.7625
+    Final Test r2: 0.7677
+    Demean Val R2:  0.0470
+    Demean Val r2:  0.1434
+    Demean Test R2: 0.5591
+    Demean Test r2: 0.6194
+    Total time: 92.28 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7729
+    Final Val r2:  0.7762
+    Final Test R2: 0.8535
+    Final Test r2: 0.8542
+    Demean Val R2:  -0.0277
+    Demean Val r2:  0.1058
+    Demean Test R2: 0.4712
+    Demean Test r2: 0.4722
+    Total time: 92.78 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7938
+    Final Val r2:  0.7955
+    Final Test R2: 0.7213
+    Final Test r2: 0.7382
+    Demean Val R2:  0.1461
+    Demean Val r2:  0.2244
+    Demean Test R2: -0.0940
+    Demean Test r2: 0.1389
+    Total time: 82.80 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7860
+    Final Val r2:  0.7863
+    Final Test R2: 0.3853
+    Final Test r2: 0.4949
+    Demean Val R2:  0.1381
+    Demean Val r2:  0.2178
+    Demean Test R2: -3.2507
+    Demean Test r2: 0.0022
+    Total time: 82.80 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7573
+    Final Val r2:  0.7574
+    Final Test R2: -94.5878
+    Final Test r2: 0.0072
+    Demean Val R2:  0.0199
+    Demean Val r2:  0.1286
+    Demean Test R2: -660.9194
+    Demean Test r2: 0.0480
+    Total time: 80.33 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7315
+    Final Val r2:  0.7421
+    Final Test R2: 0.4431
+    Final Test r2: 0.6200
+    Demean Val R2:  -0.1959
+    Demean Val r2:  0.1060
+    Demean Test R2: -0.6057
+    Demean Test r2: 0.1015
+    Total time: 80.35 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7728
+    Final Val r2:  0.7740
+    Final Test R2: 0.7861
+    Final Test r2: 0.7875
+    Demean Val R2:  0.0335
+    Demean Val r2:  0.1325
+    Demean Test R2: 0.5607
+    Demean Test r2: 0.6232
+    Total time: 85.39 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7976
+    Final Val r2:  0.7989
+    Final Test R2: -7.6383
+    Final Test r2: 0.0047
+    Demean Val R2:  0.1148
+    Demean Val r2:  0.1762
+    Demean Test R2: -31.7377
+    Demean Test r2: 0.0010
+    Total time: 87.06 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7860
+    Final Val r2:  0.7891
+    Final Test R2: -4.6912
+    Final Test r2: 0.0345
+    Demean Val R2:  0.0797
+    Demean Val r2:  0.1684
+    Demean Test R2: -0.2262
+    Demean Test r2: 0.1017
+    Total time: 97.58 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7789
+    Final Val r2:  0.7808
+    Final Test R2: 0.7357
+    Final Test r2: 0.7519
+    Demean Val R2:  0.0774
+    Demean Val r2:  0.1698
+    Demean Test R2: -0.0398
+    Demean Test r2: 0.1281
+    Total time: 89.45 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7910
+    Final Val r2:  0.7930
+    Final Test R2: -66.7269
+    Final Test r2: 0.0066
+    Demean Val R2:  0.1220
+    Demean Val r2:  0.1931
+    Demean Test R2: -347.2085
+    Demean Test r2: 0.0256
+    Total time: 89.50 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7925
+    Final Val r2:  0.7926
+    Final Test R2: -8.4646
+    Final Test r2: 0.0089
+    Demean Val R2:  0.1339
+    Demean Val r2:  0.2134
+    Demean Test R2: -1.4958
+    Demean Test r2: 0.0632
+    Total time: 90.29 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7651
+    Final Val r2:  0.7664
+    Final Test R2: 0.8300
+    Final Test r2: 0.8356
+    Demean Val R2:  -0.0365
+    Demean Val r2:  0.0566
+    Demean Test R2: 0.4461
+    Demean Test r2: 0.4615
+    Total time: 95.48 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7715
+    Final Val r2:  0.7716
+    Final Test R2: -5.9656
+    Final Test r2: 0.0166
+    Demean Val R2:  0.0481
+    Demean Val r2:  0.1424
+    Demean Test R2: -0.3801
+    Demean Test r2: 0.0553
+    Total time: 54.56 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7811
+    Final Val r2:  0.7816
+    Final Test R2: 0.3938
+    Final Test r2: 0.4789
+    Demean Val R2:  0.1235
+    Demean Val r2:  0.2019
+    Demean Test R2: -1.6678
+    Demean Test r2: 0.0038
+    Total time: 93.85 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7814
+    Final Val r2:  0.7839
+    Final Test R2: -19.7775
+    Final Test r2: 0.0007
+    Demean Val R2:  -0.0085
+    Demean Val r2:  0.1064
+    Demean Test R2: -65.7565
+    Demean Test r2: 0.0450
+    Total time: 93.66 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7873
+    Final Val r2:  0.7908
+    Final Test R2: 0.2847
+    Final Test r2: 0.4491
+    Demean Val R2:  0.0856
+    Demean Val r2:  0.1791
+    Demean Test R2: -0.2556
+    Demean Test r2: 0.0990
+    Total time: 103.25 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7409
+    Final Val r2:  0.7445
+    Final Test R2: 0.8020
+    Final Test r2: 0.8026
+    Demean Val R2:  -0.1535
+    Demean Val r2:  0.0436
+    Demean Test R2: 0.4495
+    Demean Test r2: 0.4496
+    Total time: 100.83 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7397
+    Final Val r2:  0.7397
+    Final Test R2: 0.8218
+    Final Test r2: 0.8302
+    Demean Val R2:  -0.0326
+    Demean Val r2:  0.1006
+    Demean Test R2: 0.4497
+    Demean Test r2: 0.4830
+    Total time: 100.24 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7857
+    Final Val r2:  0.7858
+    Final Test R2: 0.7827
+    Final Test r2: 0.7898
+    Demean Val R2:  0.0902
+    Demean Val r2:  0.1178
+    Demean Test R2: 0.1739
+    Demean Test r2: 0.1871
+    Total time: 66.87 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7979
+    Final Val r2:  0.7989
+    Final Test R2: -12.0062
+    Final Test r2: 0.0003
+    Demean Val R2:  0.1155
+    Demean Val r2:  0.1719
+    Demean Test R2: -48.5084
+    Demean Test r2: 0.0014
+    Total time: 102.63 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7930
+    Final Val r2:  0.7954
+    Final Test R2: -1.2057
+    Final Test r2: 0.1289
+    Demean Val R2:  0.1252
+    Demean Val r2:  0.1465
+    Demean Test R2: 0.0475
+    Demean Test r2: 0.1255
+    Total time: 98.66 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7901
+    Final Val r2:  0.7920
+    Final Test R2: -106.4101
+    Final Test r2: 0.0031
+    Demean Val R2:  0.1165
+    Demean Val r2:  0.1900
+    Demean Test R2: -551.4735
+    Demean Test r2: 0.0240
+    Total time: 95.72 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7710
+    Final Val r2:  0.7728
+    Final Test R2: 0.8020
+    Final Test r2: 0.8031
+    Demean Val R2:  0.0245
+    Demean Val r2:  0.1260
+    Demean Test R2: 0.5501
+    Demean Test r2: 0.5665
+    Total time: 127.95 minutes
+    
+Saving results as: 2_sensor_10-splits_2023-07-03_16_rcf_climate-False_anom-False.csv
+
+
+Elapsed time for iteration 16: 13312.889755010605 seconds
+
+
+Starting iteration 17 of 19
+
+
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7817
+    Final Val r2:  0.7819
+    Final Test R2: -0.9505
+    Final Test r2: 0.2607
+    Demean Val R2:  0.1153
+    Demean Val r2:  0.1930
+    Demean Test R2: -16.7451
+    Demean Test r2: 0.0007
+    Total time: 62.18 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7694
+    Final Val r2:  0.7718
+    Final Test R2: -3.8911
+    Final Test r2: 0.1934
+    Demean Val R2:  -0.0426
+    Demean Val r2:  0.0820
+    Demean Test R2: 0.0771
+    Demean Test r2: 0.2809
+    Total time: 66.59 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7930
+    Final Val r2:  0.7934
+    Final Test R2: -21.6802
+    Final Test r2: 0.0000
+    Demean Val R2:  0.1480
+    Demean Val r2:  0.2143
+    Demean Test R2: -1.9801
+    Demean Test r2: 0.0598
+    Total time: 67.70 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7923
+    Final Val r2:  0.7954
+    Final Test R2: -678.3464
+    Final Test r2: 0.0190
+    Demean Val R2:  0.0716
+    Demean Val r2:  0.1716
+    Demean Test R2: -1330.2343
+    Demean Test r2: 0.0025
+    Total time: 67.73 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7847
+    Final Val r2:  0.7873
+    Final Test R2: -7.5749
+    Final Test r2: 0.0170
+    Demean Val R2:  0.0754
+    Demean Val r2:  0.1687
+    Demean Test R2: -0.3730
+    Demean Test r2: 0.0805
+    Total time: 72.10 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7547
+    Final Val r2:  0.7549
+    Final Test R2: 0.6982
+    Final Test r2: 0.7348
+    Demean Val R2:  0.0214
+    Demean Val r2:  0.1180
+    Demean Test R2: -0.1973
+    Demean Test r2: 0.2953
+    Total time: 73.11 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7942
+    Final Val r2:  0.7952
+    Final Test R2: -5791.6784
+    Final Test r2: 0.0002
+    Demean Val R2:  0.1370
+    Demean Val r2:  0.1960
+    Demean Test R2: -29893.1356
+    Demean Test r2: 0.0189
+    Total time: 77.17 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7768
+    Final Val r2:  0.7772
+    Final Test R2: 0.1142
+    Final Test r2: 0.4219
+    Demean Val R2:  0.1182
+    Demean Val r2:  0.2248
+    Demean Test R2: -6.0731
+    Demean Test r2: 0.0447
+    Total time: 77.31 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7356
+    Final Val r2:  0.7356
+    Final Test R2: 0.8224
+    Final Test r2: 0.8300
+    Demean Val R2:  -0.0481
+    Demean Val r2:  0.0944
+    Demean Test R2: 0.4523
+    Demean Test r2: 0.4822
+    Total time: 78.31 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7962
+    Final Val r2:  0.7977
+    Final Test R2: -6002.2801
+    Final Test r2: 0.0002
+    Demean Val R2:  0.1554
+    Demean Val r2:  0.2307
+    Demean Test R2: -31001.3905
+    Demean Test r2: 0.0190
+    Total time: 79.28 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7982
+    Final Val r2:  0.7987
+    Final Test R2: -23.8003
+    Final Test r2: 0.0000
+    Demean Val R2:  0.1687
+    Demean Val r2:  0.2283
+    Demean Test R2: -2.4166
+    Demean Test r2: 0.0559
+    Total time: 82.99 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7839
+    Final Val r2:  0.7867
+    Final Test R2: -12.0551
+    Final Test r2: 0.0043
+    Demean Val R2:  0.0672
+    Demean Val r2:  0.1655
+    Demean Test R2: -0.2999
+    Demean Test r2: 0.0916
+    Total time: 83.73 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7637
+    Final Val r2:  0.7639
+    Final Test R2: -50.1239
+    Final Test r2: 0.0025
+    Demean Val R2:  0.0529
+    Demean Val r2:  0.1346
+    Demean Test R2: -354.5105
+    Demean Test r2: 0.0474
+    Total time: 83.90 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8036
+    Final Val r2:  0.8046
+    Final Test R2: -16.4565
+    Final Test r2: 0.0000
+    Demean Val R2:  0.1429
+    Demean Val r2:  0.1988
+    Demean Test R2: -65.1094
+    Demean Test r2: 0.0012
+    Total time: 84.74 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8026
+    Final Val r2:  0.8039
+    Final Test R2: 0.1080
+    Final Test r2: 0.3544
+    Demean Val R2:  0.1392
+    Demean Val r2:  0.1994
+    Demean Test R2: -2.2953
+    Demean Test r2: 0.0070
+    Total time: 84.76 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7990
+    Final Val r2:  0.8019
+    Final Test R2: 0.7770
+    Final Test r2: 0.7775
+    Demean Val R2:  0.1418
+    Demean Val r2:  0.2161
+    Demean Test R2: 0.5895
+    Demean Test r2: 0.6447
+    Total time: 85.95 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7897
+    Final Val r2:  0.7911
+    Final Test R2: 0.6886
+    Final Test r2: 0.7286
+    Demean Val R2:  0.1191
+    Demean Val r2:  0.1920
+    Demean Test R2: 0.0238
+    Demean Test r2: 0.2234
+    Total time: 89.58 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7951
+    Final Val r2:  0.7959
+    Final Test R2: -7231.9348
+    Final Test r2: 0.0002
+    Demean Val R2:  0.1410
+    Demean Val r2:  0.1963
+    Demean Test R2: -37328.0204
+    Demean Test r2: 0.0189
+    Total time: 89.81 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7705
+    Final Val r2:  0.7705
+    Final Test R2: -5.5650
+    Final Test r2: 0.0189
+    Demean Val R2:  0.0440
+    Demean Val r2:  0.1402
+    Demean Test R2: -0.3826
+    Demean Test r2: 0.0546
+    Total time: 90.59 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7804
+    Final Val r2:  0.7808
+    Final Test R2: 0.1700
+    Final Test r2: 0.3769
+    Demean Val R2:  0.1212
+    Demean Val r2:  0.2007
+    Demean Test R2: -1.6164
+    Demean Test r2: 0.0039
+    Total time: 93.70 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7920
+    Final Val r2:  0.7944
+    Final Test R2: -1.1825
+    Final Test r2: 0.1300
+    Demean Val R2:  0.1207
+    Demean Val r2:  0.1435
+    Demean Test R2: 0.0433
+    Demean Test r2: 0.1215
+    Total time: 96.96 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7648
+    Final Val r2:  0.7673
+    Final Test R2: 0.6740
+    Final Test r2: 0.7111
+    Demean Val R2:  -0.0583
+    Demean Val r2:  0.0682
+    Demean Test R2: 0.5659
+    Demean Test r2: 0.5662
+    Total time: 97.01 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7802
+    Final Val r2:  0.7827
+    Final Test R2: -18.8394
+    Final Test r2: 0.0009
+    Demean Val R2:  -0.0142
+    Demean Val r2:  0.1037
+    Demean Test R2: -62.7288
+    Demean Test r2: 0.0455
+    Total time: 100.40 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7420
+    Final Val r2:  0.7457
+    Final Test R2: 0.8060
+    Final Test r2: 0.8067
+    Demean Val R2:  -0.1490
+    Demean Val r2:  0.0460
+    Demean Test R2: 0.4612
+    Demean Test r2: 0.4612
+    Total time: 106.77 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7843
+    Final Val r2:  0.7844
+    Final Test R2: 0.7820
+    Final Test r2: 0.7889
+    Demean Val R2:  0.0841
+    Demean Val r2:  0.1141
+    Demean Test R2: 0.1674
+    Demean Test r2: 0.1817
+    Total time: 107.04 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8026
+    Final Val r2:  0.8043
+    Final Test R2: 0.7470
+    Final Test r2: 0.7503
+    Demean Val R2:  0.1590
+    Demean Val r2:  0.2278
+    Demean Test R2: 0.5203
+    Demean Test r2: 0.5369
+    Total time: 112.59 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7945
+    Final Val r2:  0.7988
+    Final Test R2: -25.4385
+    Final Test r2: 0.0011
+    Demean Val R2:  0.0765
+    Demean Val r2:  0.1765
+    Demean Test R2: -84.2503
+    Demean Test r2: 0.0426
+    Total time: 113.39 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7979
+    Final Val r2:  0.7980
+    Final Test R2: 0.6986
+    Final Test r2: 0.6995
+    Demean Val R2:  0.1826
+    Demean Val r2:  0.2554
+    Demean Test R2: -0.2255
+    Demean Test r2: 0.0932
+    Total time: 61.84 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_4k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7976
+    Final Val r2:  0.7985
+    Final Test R2: -2.4440
+    Final Test r2: 0.2371
+    Demean Val R2:  0.1456
+    Demean Val r2:  0.2072
+    Demean Test R2: -5.8218
+    Demean Test r2: 0.0501
+    Total time: 66.30 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7923
+    Final Val r2:  0.7927
+    Final Test R2: -4.8999
+    Final Test r2: 0.0116
+    Demean Val R2:  0.1253
+    Demean Val r2:  0.1848
+    Demean Test R2: -21.1426
+    Demean Test r2: 0.0003
+    Total time: 132.98 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7854
+    Final Val r2:  0.7870
+    Final Test R2: 0.8335
+    Final Test r2: 0.8337
+    Demean Val R2:  0.0765
+    Demean Val r2:  0.1773
+    Demean Test R2: 0.6516
+    Demean Test r2: 0.7120
+    Total time: 72.46 minutes
+    
+
+Begin with paramters:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7595
+    Final Val r2:  0.7602
+    Final Test R2: 0.8510
+    Final Test r2: 0.8564
+    Demean Val R2:  0.0248
+    Demean Val r2:  0.1079
+    Demean Test R2: 0.6342
+    Demean Test r2: 0.6502
+    Total time: 73.78 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7953
+    Final Val r2:  0.7959
+    Final Test R2: 0.8218
+    Final Test r2: 0.8241
+    Demean Val R2:  0.0425
+    Demean Val r2:  0.1154
+    Demean Test R2: 0.4585
+    Demean Test r2: 0.4924
+    Total time: 77.63 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8037
+    Final Val r2:  0.8041
+    Final Test R2: 0.7880
+    Final Test r2: 0.7886
+    Demean Val R2:  0.1788
+    Demean Val r2:  0.2570
+    Demean Test R2: 0.3638
+    Demean Test r2: 0.3648
+    Total time: 72.57 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8018
+    Final Val r2:  0.8033
+    Final Test R2: 0.8316
+    Final Test r2: 0.8330
+    Demean Val R2:  0.1541
+    Demean Val r2:  0.2291
+    Demean Test R2: 0.5105
+    Demean Test r2: 0.5147
+    Total time: 72.11 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7608
+    Final Val r2:  0.7615
+    Final Test R2: 0.8359
+    Final Test r2: 0.8429
+    Demean Val R2:  0.0347
+    Demean Val r2:  0.1142
+    Demean Test R2: 0.6129
+    Demean Test r2: 0.6252
+    Total time: 67.48 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7975
+    Final Val r2:  0.7993
+    Final Test R2: 0.8091
+    Final Test r2: 0.8102
+    Demean Val R2:  0.1151
+    Demean Val r2:  0.1845
+    Demean Test R2: 0.3961
+    Demean Test r2: 0.3968
+    Total time: 83.90 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7651
+    Final Val r2:  0.7664
+    Final Test R2: 0.8300
+    Final Test r2: 0.8356
+    Demean Val R2:  -0.0365
+    Demean Val r2:  0.0566
+    Demean Test R2: 0.4461
+    Demean Test r2: 0.4615
+    Total time: 96.43 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7656
+    Final Val r2:  0.7662
+    Final Test R2: 0.8388
+    Final Test r2: 0.8421
+    Demean Val R2:  -0.0256
+    Demean Val r2:  0.0748
+    Demean Test R2: 0.4732
+    Demean Test r2: 0.4797
+    Total time: 82.84 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4-8_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7695
+    Final Val r2:  0.7715
+    Final Test R2: 0.7995
+    Final Test r2: 0.8008
+    Demean Val R2:  0.0183
+    Demean Val r2:  0.1236
+    Demean Test R2: 0.5447
+    Demean Test r2: 0.5603
+    Total time: 172.58 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7965
+    Final Val r2:  0.7999
+    Final Test R2: 0.7177
+    Final Test r2: 0.7198
+    Demean Val R2:  0.1455
+    Demean Val r2:  0.2228
+    Demean Test R2: -0.1350
+    Demean Test r2: 0.0755
+    Total time: 89.38 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7850
+    Final Val r2:  0.7853
+    Final Test R2: 0.7900
+    Final Test r2: 0.7936
+    Demean Val R2:  -0.0063
+    Demean Val r2:  0.0601
+    Demean Test R2: 0.4109
+    Demean Test r2: 0.4575
+    Total time: 89.45 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8019
+    Final Val r2:  0.8047
+    Final Test R2: 0.7990
+    Final Test r2: 0.8009
+    Demean Val R2:  0.1343
+    Demean Val r2:  0.2349
+    Demean Test R2: 0.3427
+    Demean Test r2: 0.3452
+    Total time: 87.76 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7783
+    Final Val r2:  0.7787
+    Final Test R2: 0.8304
+    Final Test r2: 0.8305
+    Demean Val R2:  0.0434
+    Demean Val r2:  0.1188
+    Demean Test R2: 0.5724
+    Demean Test r2: 0.6557
+    Total time: 95.86 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7917
+    Final Val r2:  0.7920
+    Final Test R2: 0.8170
+    Final Test r2: 0.8175
+    Demean Val R2:  0.0828
+    Demean Val r2:  0.1378
+    Demean Test R2: 0.4330
+    Demean Test r2: 0.4444
+    Total time: 94.45 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7941
+    Final Val r2:  0.7964
+    Final Test R2: 0.8247
+    Final Test r2: 0.8256
+    Demean Val R2:  0.1315
+    Demean Val r2:  0.2110
+    Demean Test R2: 0.4358
+    Demean Test r2: 0.4395
+    Total time: 97.54 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 0
+    Random state: 670487
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7944
+    Final Val r2:  0.7980
+    Final Test R2: 0.7170
+    Final Test r2: 0.7194
+    Demean Val R2:  0.1365
+    Demean Val r2:  0.2173
+    Demean Test R2: -0.1626
+    Demean Test r2: 0.0672
+    Total time: 96.09 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7718
+    Final Val r2:  0.7749
+    Final Test R2: 0.8183
+    Final Test r2: 0.8188
+    Demean Val R2:  0.0058
+    Demean Val r2:  0.1323
+    Demean Test R2: 0.3557
+    Demean Test r2: 0.3710
+    Total time: 100.60 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 5
+    Random state: 256787
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8019
+    Final Val r2:  0.8048
+    Final Test R2: 0.7983
+    Final Test r2: 0.8002
+    Demean Val R2:  0.1346
+    Demean Val r2:  0.2351
+    Demean Test R2: 0.3412
+    Demean Test r2: 0.3438
+    Total time: 81.19 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 7
+    Random state: 146316
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7929
+    Final Val r2:  0.7952
+    Final Test R2: 0.8254
+    Final Test r2: 0.8265
+    Demean Val R2:  0.1257
+    Demean Val r2:  0.2065
+    Demean Test R2: 0.4292
+    Demean Test r2: 0.4326
+    Total time: 66.35 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7965
+    Final Val r2:  0.7969
+    Final Test R2: 0.7982
+    Final Test r2: 0.8049
+    Demean Val R2:  0.1365
+    Demean Val r2:  0.1730
+    Demean Test R2: 0.2279
+    Demean Test r2: 0.2389
+    Total time: 99.77 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7906
+    Final Val r2:  0.7909
+    Final Test R2: 0.8162
+    Final Test r2: 0.8167
+    Demean Val R2:  0.0778
+    Demean Val r2:  0.1350
+    Demean Test R2: 0.4303
+    Demean Test r2: 0.4423
+    Total time: 69.68 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 2
+    Random state: 26225
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7646
+    Final Val r2:  0.7653
+    Final Test R2: 0.8378
+    Final Test r2: 0.8413
+    Demean Val R2:  -0.0296
+    Demean Val r2:  0.0730
+    Demean Test R2: 0.4724
+    Demean Test r2: 0.4791
+    Total time: 91.96 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 6
+    Random state: 234053
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8020
+    Final Val r2:  0.8032
+    Final Test R2: 0.7963
+    Final Test r2: 0.7976
+    Demean Val R2:  0.1354
+    Demean Val r2:  0.2105
+    Demean Test R2: 0.3176
+    Demean Test r2: 0.3185
+    Total time: 124.43 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 4
+    Random state: 288389
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7587
+    Final Val r2:  0.7594
+    Final Test R2: 0.8368
+    Final Test r2: 0.8436
+    Demean Val R2:  0.0267
+    Demean Val r2:  0.1102
+    Demean Test R2: 0.6095
+    Demean Test r2: 0.6222
+    Total time: 90.11 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7957
+    Final Val r2:  0.7961
+    Final Test R2: 0.7974
+    Final Test r2: 0.8040
+    Demean Val R2:  0.1330
+    Demean Val r2:  0.1706
+    Demean Test R2: 0.2182
+    Demean Test r2: 0.2315
+    Total time: 63.29 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 1
+    Random state: 116739
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7775
+    Final Val r2:  0.7780
+    Final Test R2: 0.8295
+    Final Test r2: 0.8296
+    Demean Val R2:  0.0404
+    Demean Val r2:  0.1173
+    Demean Test R2: 0.5733
+    Demean Test r2: 0.6556
+    Total time: 104.14 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 9
+    Random state: 107473
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.8020
+    Final Val r2:  0.8034
+    Final Test R2: 0.7931
+    Final Test r2: 0.7975
+    Demean Val R2:  0.1717
+    Demean Val r2:  0.2306
+    Demean Test R2: 0.1177
+    Demean Test r2: 0.2361
+    Total time: 122.20 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 8
+    Random state: 772246
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7706
+    Final Val r2:  0.7737
+    Final Test R2: 0.8178
+    Final Test r2: 0.8185
+    Demean Val R2:  -0.0002
+    Demean Val r2:  0.1285
+    Demean Test R2: 0.3629
+    Demean Test r2: 0.3765
+    Total time: 80.40 minutes
+    
+
+Finish:
+    F1: sentinel-2-l2a_bands-2-3-4_ZMB_15k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-False_summary.feather
+    F2: sentinel-2-l2a_bands-2-3-4_ZMB_20k-points_1000-features_yr-2016-2022_mn-1-12_lm-False_cm-True_wa-True_summary.feather
+    One-hot encoding: True
+    Anomaly: False
+    Split: 3
+    Random state: 777572
+    N-splits: 5
+    Include climate: False
+    Climate vars: rcf
+    Final Val R2:  0.7913
+    Final Val r2:  0.7934
+    Final Test R2: 0.8200
+    Final Test r2: 0.8296
+    Demean Val R2:  0.0359
+    Demean Val r2:  0.1302
+    Demean Test R2: 0.5668
+    Demean Test r2: 0.5673
+    Total time: 108.83 minutes
+    
+Saving results as: 2_sensor_10-splits_2023-07-03_17_rcf_climate-False_anom-False.csv
+
+
+Elapsed time for iteration 17: 12957.198659658432 seconds
