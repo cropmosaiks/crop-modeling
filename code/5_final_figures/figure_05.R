@@ -31,7 +31,7 @@ stderror <- function(x) {
 oos_preds <- here::here(
   "data",
   "results",
-  "2_sensor_top-mod_oos_predictions_10-splits_2023-05-24_rcf_climate-False_anom-False.csv"
+  "2_sensor_top-mod_oos_predictions_10-splits_2023-07-06_rcf_climate-False_anom-False.csv"
 ) |> 
   readr::read_csv() |> 
   dplyr::filter(data_fold == "test") 
