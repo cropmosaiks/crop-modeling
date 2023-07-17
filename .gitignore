@@ -229,4 +229,4 @@ dask-worker-space/
 
 slurm/*.out
 slurm/*.err
-# slurm/*.log
+slurm/*.log
