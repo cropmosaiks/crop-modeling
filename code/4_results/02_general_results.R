@@ -27,13 +27,7 @@ levels_summary <- model_results |>
   dplyr::group_by(variables) |> 
   dplyr::summarise(
     test_R2 = mean(test_R2),
-    test_r2 = mean(test_r2)
-  ) 
-
-demean_summary <- model_results |> 
-  dplyr::filter(anomaly == FALSE) |> 
-  dplyr::group_by(variables) |> 
-  dplyr::summarise(
+    test_r2 = mean(test_r2),
     demean_test_R2 = mean(demean_test_R2),
     demean_test_r2 = mean(demean_test_r2)
   ) 
@@ -48,13 +42,16 @@ anomaly_summary <- model_results |>
   ) 
 
 
-benchmark_summary <- levels_summary |> 
-  dplyr::left_join(demean_summary) |> 
+main_summary <- levels_summary |> 
   dplyr::left_join(anomaly_summary) |> 
-  dplyr::arrange(desc(test_R2)) 
+  dplyr::arrange(desc(test_R2)) |> 
+  dplyr::select(
+    variables, test_R2, demean_test_R2, anomaly_test_R2,
+    test_r2, demean_test_r2, anomaly_test_r2,
+  )
 
 readr::write_csv(
-  benchmark_summary,
+  main_summary,
   here::here("data", "results", "02_model_results", "main_summary.csv")
 )
 

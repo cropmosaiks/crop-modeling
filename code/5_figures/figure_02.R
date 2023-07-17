@@ -1,5 +1,5 @@
 ##########################################
-##### FIGURE 2 - ZAMBIA PRECIPITATION ####
+# ----------- ZAMBIA PRECIPITATION -------
 ##########################################
 
 if (!require(librarian,quietly = T)){

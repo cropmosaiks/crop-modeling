@@ -12,27 +12,19 @@ librarian::shelf(
   quiet = T
 )
 
-files <- list.files(
-  path = here("data", "results", "00_benchmark_models"), 
-  pattern = "climate_model_10",
-  full.names = TRUE
-)
-
-model_results <- readr::read_csv(files) 
+model_results <- here(
+  "data", 
+  "results",
+  "00_benchmark_models", 
+  "climate_model_oos_predictions_10-splits_2023-07-05.csv") |> 
+  readr::read_csv() 
 
 levels_summary <- model_results |> 
   dplyr::filter(anomaly == FALSE, hot_encode == TRUE) |> 
   dplyr::group_by(variables) |> 
   dplyr::summarise(
     test_R2 = mean(test_R2),
-    test_r2 = mean(test_r2)
-  ) 
-
-
-demean_summary <- model_results |> 
-  dplyr::filter(anomaly == FALSE, hot_encode == TRUE) |> 
-  dplyr::group_by(variables) |> 
-  dplyr::summarise(
+    test_r2 = mean(test_r2),
     demean_test_R2 = mean(demean_test_R2),
     demean_test_r2 = mean(demean_test_r2)
   ) 
@@ -48,7 +40,6 @@ anomaly_summary <- model_results |>
 
 
 benchmark_summary <- levels_summary |> 
-  dplyr::left_join(demean_summary) |> 
   dplyr::left_join(anomaly_summary) |> 
   dplyr::arrange(desc(test_R2)) 
 
