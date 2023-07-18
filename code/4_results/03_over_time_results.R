@@ -16,7 +16,7 @@ source(here::here("code", "4_results", "utility.R"))
 
 files <- list.files(
   path = here("data", "results", "02_model_results"), 
-  pattern = "top-ot-mod_10-splits_2023-07-17",
+  pattern = "top-ot-mod",
   full.names = TRUE
 )
 

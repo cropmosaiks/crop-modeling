@@ -20,7 +20,7 @@ oos_anom_preds <- here::here(
   "data",
   "results",
   "03_model_predictions", 
-  "2_sensor_top-ot-mod_oos_predictions_10-splits_2023-06-30_rcf_climate-False_anom-True.csv"
+  "2_sensor_top-ot-mod_oos_predictions_10-splits_2023-07-17_rcf_climate-False_anom-True.csv"
 ) |> 
   readr::read_csv() |> 
   dplyr::filter(data_fold == "test") 
