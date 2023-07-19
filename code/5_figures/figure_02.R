@@ -20,7 +20,7 @@ zmb_precip_summary <- here::here('data', 'climate', 'precipitation_monthly_mean.
   mutate(month = factor(month, levels = custom_months))
 
 
-ggplot(data = zmb_precip_summary) +
+precip_plot <- ggplot(data = zmb_precip_summary) +
   aes(x = month, y = precipitation) +
   labs(x = "Month", y = "Precipitation (mm)") + 
   geom_col(fill = "dodgerblue3", color = "black", width = 0.80) +
@@ -52,7 +52,25 @@ ggplot(data = zmb_precip_summary) +
                lineend = 'round', linewidth = 2) +
   geom_label(x = "May",
              y = 25, label = "Harvest", 
-             hjust = 0.5, vjust = 0.5, size = 3) 
+             hjust = 0.5, vjust = 0.5, size = 3) +
+  ### HARVEST  TO JULY
+  geom_segment(x = "Jun", xend = "Jul", y = 25, yend = 25, 
+             lineend = 'round', linewidth = 1, linetype="dotted") +
+ 
+  ### SENTINEL SATELLITE IMAGERY
+  geom_segment(x = "Oct", xend = "Sep", y = 140, yend = 140,
+               lineend = 'round', linewidth = 2) +
+  geom_text(aes(x = "Jul", y = 150, label = "Full month range"),
+            angle = 0,
+            size = 3,
+            color = "black") +
+  ### LANDSAT SATELLITE IMAGERY
+  geom_segment(x = "Apr", xend = "Sep", y = 110, yend = 110,
+               lineend = 'round', linewidth = 2) +
+  geom_text(aes(x = "Jul", y = 120, label = "Limited month range"),
+            angle = 0,
+            size = 3,
+            color = "black") 
 
   # ### WET
   # geom_segment(x = "Nov", xend = "Apr", y = 110, yend = 110,
@@ -73,27 +91,14 @@ ggplot(data = zmb_precip_summary) +
   #            y = 110, label = "Cool & Dry", 
   #            hjust = 1.05, vjust = .5, size = 3)
 
-  # ### SENTINEL SATELLITE IMAGERY
-  # geom_segment(x = "Oct", xend = "Sep", y = 140, yend = 140,
-  #              lineend = 'round', linewidth = 2) +
-  # geom_text(aes(x = "Jul", y = 150, label = "Sentinel Satellite Imagery 2016-2021"), 
-  #           angle = 0, 
-  #           size = 3,
-  #           color = "black") +
-  # ### LANDSAT SATELLITE IMAGERY
-  # geom_segment(x = "Apr", xend = "Sep", y = 110, yend = 110,
-  #              lineend = 'round', linewidth = 2) +
-  # geom_text(aes(x = "Jul", y = 120, label = "Landsat Satellite Imagery 2016-2021"), 
-  #           angle = 0, 
-  #           size = 3,
-  #           color = "black") +
-
 ggsave(
   filename = "figure_02.jpeg"
   , path = here("figures")
-  , plot = ggplot2::last_plot()
+  , plot = precip_plot
   , device ="jpeg"
   , width = 6
   , height = 4
   , units = "in"
 )
+
+  

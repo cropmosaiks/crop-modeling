@@ -69,9 +69,9 @@ inset <- ggplot() +
 main <- ggplot() +
   tidyterra::geom_spatraster(data = crop_land) +
   scale_fill_viridis_c(na.value = NA, guide = guide_colorbar(title.position = "top", barwidth = 7.5)) +
-  geom_sf(data = country_shp, linewidth = .5, color = 'grey60', fill = NA) +
-  geom_sf(data = provinces, linewidth = 1, color = 'black', fill = NA) +
-  geom_sf_label(data = provinces, aes(label = province) )+
+  geom_sf(data = country_shp, linewidth = .25, color = 'grey60', fill = NA) +
+  geom_sf(data = provinces, linewidth = .5, color = 'black', fill = NA) +
+  # geom_sf_label(data = provinces, aes(label = province) )+
   scale_size_identity() + 
   scale_x_continuous(breaks = xbreaks, labels = xlabs) +
   scale_y_continuous(breaks = ybreaks, labels = ylabs) +
