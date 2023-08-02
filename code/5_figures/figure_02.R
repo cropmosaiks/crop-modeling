@@ -54,19 +54,19 @@ precip_plot <- ggplot(data = zmb_precip_summary) +
              y = 25, label = "Harvest", 
              hjust = 0.5, vjust = 0.5, size = 3) +
   ### HARVEST  TO JULY
-  geom_segment(x = "Jun", xend = "Jul", y = 25, yend = 25, 
+  geom_segment(x = "Jun", xend = "Aug", y = 25, yend = 25, 
              lineend = 'round', linewidth = 1, linetype="dotted") +
  
-  ### SENTINEL SATELLITE IMAGERY
+  ### FULL MONTH RANGE
   geom_segment(x = "Oct", xend = "Sep", y = 140, yend = 140,
-               lineend = 'round', linewidth = 2) +
+               lineend = 'round', linewidth = 2, color = "grey50") +
   geom_text(aes(x = "Jul", y = 150, label = "Full month range"),
             angle = 0,
             size = 3,
             color = "black") +
-  ### LANDSAT SATELLITE IMAGERY
+  ### LIMITED MONTH RANGE
   geom_segment(x = "Apr", xend = "Sep", y = 110, yend = 110,
-               lineend = 'round', linewidth = 2) +
+               lineend = 'round', linewidth = 2, color = "grey50") +
   geom_text(aes(x = "Jul", y = 120, label = "Limited month range"),
             angle = 0,
             size = 3,

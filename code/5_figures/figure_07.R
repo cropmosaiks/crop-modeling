@@ -60,9 +60,9 @@ test_sem_r2  <- dplyr::pull(summary_stats, sem_r2)
 leg_pos <- c(.89, .25)
 
 p1 <- ggplot() +
+  geom_abline() +
   geom_point(data = test_pred,
              aes(x = log_yield, y = oos_prediction, color = as.factor(year))) +
-  geom_abline() +
   scale_color_viridis_d() +
   labs(color = NULL, x = 'log(1+mt/ha)', y = 'Model estimate') +
   geom_text(data = NULL, aes(x = .15, y = .8), label = latex2exp::TeX(
@@ -118,9 +118,9 @@ leg_pos <- c(.89, .25)
 limits <- c(-0.36, 0.36)
 
 p2 <- ggplot() +
+  geom_abline() +
   geom_point(data = test_pred,
              aes(x = demean_log_yield, y = demean_oos_prediction, color = as.factor(year))) +
-  geom_abline() +
   scale_color_viridis_d() +
   labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = NULL) +
   geom_text(data = NULL, aes(x = -.2, y = .325), label = latex2exp::TeX(
@@ -191,9 +191,9 @@ leg_pos <- c(.89, .25)
 limits <- c(-0.36, 0.36)
 
 p3 <- ggplot() +
+  geom_abline() +
   geom_point(data = test_anom_pred,
              aes(x = demean_log_yield, y = oos_prediction, color = as.factor(year))) +
-  geom_abline() +
   scale_color_viridis_d() +
   labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = NULL) +
   geom_text(data = NULL, aes(x = -.2, y = .325), label = latex2exp::TeX(

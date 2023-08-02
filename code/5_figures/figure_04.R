@@ -14,6 +14,8 @@ librarian::shelf(
   quiet = T
 )
 
+mod = "loess"
+
 source(here::here("code", "4_results", "utility.R"))
 
 oos_preds <- here::here(
@@ -55,9 +57,9 @@ test_sem_r2  <- dplyr::pull(summary_stats, sem_r2)
 leg_pos <- c(.89, .25)
 
 p1 <- ggplot() +
+  geom_abline() +
   geom_point(data = test_pred,
              aes(x = log_yield, y = oos_prediction, color = as.factor(year))) +
-  geom_abline() +
   scale_color_viridis_d() +
   labs(color = NULL, x = 'log(1+mt/ha)', y = 'Model estimate') +
   geom_text(data = NULL, aes(x = .15, y = .8), label = latex2exp::TeX(
@@ -66,6 +68,13 @@ p1 <- ggplot() +
   geom_text(data = NULL, aes(x = .15, y = .75), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_r2, r'( ()', test_sem_r2, r'())')
   )) +
+  geom_smooth(data = test_pred, linewidth = .5,
+              aes(x = log_yield, y = oos_prediction
+                  # , color = as.factor(year)
+              ),
+              method = mod,  formula = 'y ~ x'
+              # , se=F
+  ) +
   scale_x_continuous(limits = c(0, .82)) +
   scale_y_continuous(limits = c(0, 0.82)) +
   theme_bw() +
@@ -134,10 +143,10 @@ test_sem_r2  <- dplyr::pull(summary_stats, sem_r2)
 leg_pos <- c(.89, .25)
 
 p2 <- ggplot() +
+  geom_abline() +
   geom_point(data = test_pred,
              aes(x = log_yield, y = oos_prediction, color = as.factor(year))) +
-  geom_abline() +
-  scale_color_viridis_d() +
+  scale_color_viridis_d(option="cividis") +
   labs(color = NULL, x = 'log(1+mt/ha)', y = NULL) +
   geom_text(data = NULL, aes(x = .15, y = .8), label = latex2exp::TeX(
     paste0(r'($R^2 = $)', test_R2, r'( ()', test_sem_R2, r'())')
@@ -145,6 +154,13 @@ p2 <- ggplot() +
   geom_text(data = NULL, aes(x = .15, y = .75), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_r2, r'( ()', test_sem_r2, r'())')
   )) +
+  geom_smooth(data = test_pred, linewidth = .5,
+              aes(x = log_yield, y = oos_prediction
+                  # , color = as.factor(year)
+              ),
+              method = mod,  formula = 'y ~ x'
+              # , se=F
+  ) +
   scale_x_continuous(limits = c(0, .82)) +
   scale_y_continuous(limits = c(0, 0.82)) +
   theme_bw() +
@@ -160,9 +176,9 @@ p2 <- ggExtra::ggMarginal(
 
 p3 <- cowplot::plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
 
-
+p3
 ggsave(
-  filename = "figure_04.jpeg"
+  filename = "figure_04_alt.jpeg"
   , path = here("figures")
   , plot = p3
   , device ="jpeg"

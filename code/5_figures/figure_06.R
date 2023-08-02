@@ -14,6 +14,8 @@ librarian::shelf(
   quiet = T
 )
 
+mod = "loess"
+
 source(here::here("code", "4_results", "utility.R"))
 
 oos_anom_preds <- here::here(
@@ -25,7 +27,7 @@ oos_anom_preds <- here::here(
   readr::read_csv() |> 
   dplyr::filter(data_fold == "test") 
 
-test_anom_pred <- oos_anom_preds |> 
+test_pred <- oos_anom_preds |> 
   dplyr::group_by(data_fold, district, year) |> 
   dplyr::summarise(
     log_yield = mean(log_yield),
@@ -56,9 +58,9 @@ leg_pos <- c(.89, .25)
 limits <- c(-0.36, 0.36)
 
 p1 <- ggplot() +
-  geom_point(data = test_anom_pred,
-             aes(x = log_yield, y = oos_prediction, color = as.factor(year))) +
   geom_abline() +
+  geom_point(data = test_pred,
+             aes(x = log_yield, y = oos_prediction, color = as.factor(year))) +
   scale_color_viridis_d() +
   labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = 'Model estimate') +
   geom_text(data = NULL, aes(x = -.2, y = .325), label = latex2exp::TeX(
@@ -67,6 +69,13 @@ p1 <- ggplot() +
   geom_text(data = NULL, aes(x = -.2, y = .275), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_anom_r2, r'( ()', test_anom_sem_r2, r'())')
   )) +
+  geom_smooth(data = test_pred, linewidth = .5,
+              aes(x = log_yield, y = oos_prediction
+                  # , color = as.factor(year)
+                  ),
+              method = mod,  formula = 'y ~ x'
+              # , se=F
+              ) +
   scale_x_continuous(limits = limits) +
   scale_y_continuous(limits = limits) +
   theme_bw() +
@@ -104,18 +113,18 @@ oos_anom_preds <- here::here(
     , variables == "ndvi"
   )
 
-test_anom_pred <- oos_anom_preds |> 
+test_pred <- oos_anom_preds |> 
   dplyr::group_by(district, year) |> 
   dplyr::summarise(
     demean_log_yield = mean(demean_log_yield),
-    demean_oos_prediction = mean(demean_oos_prediction)
+    oos_prediction = mean(oos_prediction)
   )
 
 summary_anom_stats <- oos_anom_preds |> 
   dplyr::group_by(split, random_state) |> 
   dplyr::summarise(
-    R2 = r2_general(demean_log_yield, demean_oos_prediction),
-    r2 = r2_pears(demean_log_yield, demean_oos_prediction)
+    R2 = r2_general(demean_log_yield, oos_prediction),
+    r2 = r2_pears(demean_log_yield, oos_prediction)
   ) |> 
   dplyr::ungroup() |> 
   dplyr::summarise(
@@ -134,10 +143,10 @@ leg_pos <- c(.89, .25)
 limits <- c(-0.36, 0.36)
 
 p2 <- ggplot() +
-  geom_point(data = test_anom_pred,
-             aes(x = demean_log_yield, y = demean_oos_prediction, color = as.factor(year))) +
   geom_abline() +
-  scale_color_viridis_d() +
+  geom_point(data = test_pred,
+             aes(x = demean_log_yield, y = oos_prediction, color = as.factor(year))) +
+  scale_color_viridis_d(option = "cividis") +
   labs(color = NULL, x = 'log(1+mt/ha) - mean(log(1+mt/ha))', y = NULL) +
   geom_text(data = NULL, aes(x = -.2, y = .325), label = latex2exp::TeX(
     paste0(r'($R^2 = $)', test_anom_R2, r'( ()', test_anom_sem_R2, r'())')
@@ -145,6 +154,13 @@ p2 <- ggplot() +
   geom_text(data = NULL, aes(x = -.2, y = .275), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_anom_r2, r'( ()', test_anom_sem_r2, r'())')
   )) +
+  geom_smooth(data = test_pred, linewidth = .5,
+              aes(x = demean_log_yield, y = oos_prediction
+                  # , color = as.factor(year)
+                  ),
+              method = mod,  formula = 'y ~ x'
+              # , se=F
+              ) +
   scale_x_continuous(limits = limits) +
   scale_y_continuous(limits = limits) +
   theme_bw() +
@@ -158,9 +174,9 @@ p2 <- ggExtra::ggMarginal(
 ) 
 
 p3 <- cowplot::plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
-
+p3
 ggsave(
-  filename = "figure_06.jpeg"
+  filename = "figure_06_alt.jpeg"
   , path = here("figures")
   , plot = p3
   , device ="jpeg"
