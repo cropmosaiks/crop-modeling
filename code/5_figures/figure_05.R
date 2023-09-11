@@ -43,10 +43,10 @@ summary_stats <- oos_preds |>
   dplyr::ungroup() |> 
   dplyr::group_by(data_fold) |> 
   dplyr::summarise(
-    mean_demean_R2 = mean(demean_R2) |> round(3), 
-    mean_demean_r2 = mean(demean_r2) |> round(3), 
-    sem_demean_R2 = (stderror(demean_R2) * 2) |> round(3),
-    sem_demean_r2 = (stderror(demean_r2) * 2) |> round(3)
+    mean_demean_R2 = mean(demean_R2) |> round(2), 
+    mean_demean_r2 = mean(demean_r2) |> round(2), 
+    sem_demean_R2 = (stderror(demean_R2) * 2) |> round(2),
+    sem_demean_r2 = (stderror(demean_r2) * 2) |> round(2)
   ) 
 
 test_demean_R2 <- dplyr::pull(summary_stats, mean_demean_R2)
@@ -69,11 +69,11 @@ p1 <- ggplot() +
   geom_text(data = NULL, aes(x = -.24, y = .275), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_demean_r2, r'( ()', test_demean_sem_r2, r'())')
   )) +
-  geom_smooth(data = test_pred, linewidth = .5,
-              aes(x = demean_log_yield, y = demean_oos_prediction
-                  # , color = as.factor(year)
-                  ),
-              method = mod,  formula = 'y ~ x', se=T) +
+  # geom_smooth(data = test_pred, linewidth = .5,
+  #             aes(x = demean_log_yield, y = demean_oos_prediction
+  #                 # , color = as.factor(year)
+  #                 ),
+  #             method = mod,  formula = 'y ~ x', se=T) +
   scale_x_continuous(limits = limits) +
   scale_y_continuous(limits = limits) +
   theme_bw() +
@@ -127,10 +127,10 @@ summary_stats <- oos_preds |>
   dplyr::ungroup() |>
   dplyr::group_by(data_fold) |>
   dplyr::summarise(
-    mean_demean_R2 = mean(demean_R2) |> round(3),
-    mean_demean_r2 = mean(demean_r2) |> round(3),
-    sem_demean_R2 = (stderror(demean_R2) * 2) |> round(3),
-    sem_demean_r2 = (stderror(demean_r2) * 2) |> round(3)
+    mean_demean_R2 = mean(demean_R2) |> round(2),
+    mean_demean_r2 = mean(demean_r2) |> round(2),
+    sem_demean_R2 = (stderror(demean_R2) * 2) |> round(2),
+    sem_demean_r2 = (stderror(demean_r2) * 2) |> round(2)
   )
 
 test_demean_R2 <- dplyr::pull(summary_stats, mean_demean_R2)
@@ -153,11 +153,11 @@ p2 <- ggplot() +
   geom_text(data = NULL, aes(x = -.2, y = .275), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_demean_r2, r'( ()', test_demean_sem_r2, r'())')
   )) +
-  geom_smooth(data = test_pred, linewidth = .5,
-              aes(x = demean_log_yield, y = demean_oos_prediction
-                  # , color = as.factor(year)
-                  ),
-              method = mod,  formula = 'y ~ x', se=T) +
+  # geom_smooth(data = test_pred, linewidth = .5,
+  #             aes(x = demean_log_yield, y = demean_oos_prediction
+  #                 # , color = as.factor(year)
+  #                 ),
+  #             method = mod,  formula = 'y ~ x', se=T) +
   scale_x_continuous(limits = limits) +
   scale_y_continuous(limits = limits) +
   theme_bw() +
@@ -175,7 +175,7 @@ p3 <- cowplot::plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
 
 p3
 ggsave(
-  filename = "figure_05_alt.jpeg"
+  filename = "figure_05.jpeg"
   , path = here("figures")
   , plot = p3
   , device ="jpeg"

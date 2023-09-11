@@ -43,10 +43,10 @@ summary_stats <- oos_preds |>
   dplyr::ungroup() |> 
   dplyr::group_by(data_fold) |> 
   dplyr::summarise(
-    mean_R2 = mean(R2) |> round(3), 
-    mean_r2 = mean(r2) |> round(3), 
-    sem_R2 = (stderror(R2) * 2) |> round(3),
-    sem_r2 = (stderror(r2) * 2) |> round(3)
+    mean_R2 = mean(R2) |> round(2), 
+    mean_r2 = mean(r2) |> round(2), 
+    sem_R2 = (stderror(R2) * 2) |> round(2),
+    sem_r2 = (stderror(r2) * 2) |> round(2)
   ) 
 
 test_R2 <- dplyr::pull(summary_stats, mean_R2)
@@ -68,13 +68,13 @@ p1 <- ggplot() +
   geom_text(data = NULL, aes(x = .15, y = .75), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_r2, r'( ()', test_sem_r2, r'())')
   )) +
-  geom_smooth(data = test_pred, linewidth = .5,
-              aes(x = log_yield, y = oos_prediction
-                  # , color = as.factor(year)
-              ),
-              method = mod,  formula = 'y ~ x'
-              # , se=F
-  ) +
+  # geom_smooth(data = test_pred, linewidth = .5,
+  #             aes(x = log_yield, y = oos_prediction
+  #                 # , color = as.factor(year)
+  #             ),
+  #             method = mod,  formula = 'y ~ x'
+  #             # , se=F
+  # ) +
   scale_x_continuous(limits = c(0, .82)) +
   scale_y_continuous(limits = c(0, 0.82)) +
   theme_bw() +
@@ -129,10 +129,10 @@ summary_stats <- oos_preds |>
   dplyr::ungroup() |>
   dplyr::group_by(data_fold) |>
   dplyr::summarise(
-    mean_R2 = mean(R2) |> round(3),
-    mean_r2 = mean(r2) |> round(3),
-    sem_R2 = (stderror(R2) * 2) |> round(3),
-    sem_r2 = (stderror(r2) * 2) |> round(3)
+    mean_R2 = mean(R2) |> round(2),
+    mean_r2 = mean(r2) |> round(2),
+    sem_R2 = (stderror(R2) * 2) |> round(2),
+    sem_r2 = (stderror(r2) * 2) |> round(2)
   )
 
 test_R2 <- dplyr::pull(summary_stats, mean_R2)
@@ -154,13 +154,13 @@ p2 <- ggplot() +
   geom_text(data = NULL, aes(x = .15, y = .75), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_r2, r'( ()', test_sem_r2, r'())')
   )) +
-  geom_smooth(data = test_pred, linewidth = .5,
-              aes(x = log_yield, y = oos_prediction
-                  # , color = as.factor(year)
-              ),
-              method = mod,  formula = 'y ~ x'
-              # , se=F
-  ) +
+  # geom_smooth(data = test_pred, linewidth = .5,
+  #             aes(x = log_yield, y = oos_prediction
+  #                 # , color = as.factor(year)
+  #             ),
+  #             method = mod,  formula = 'y ~ x'
+  #             # , se=F
+  # ) +
   scale_x_continuous(limits = c(0, .82)) +
   scale_y_continuous(limits = c(0, 0.82)) +
   theme_bw() +
@@ -178,7 +178,7 @@ p3 <- cowplot::plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
 
 p3
 ggsave(
-  filename = "figure_04_alt.jpeg"
+  filename = "figure_04.jpeg"
   , path = here("figures")
   , plot = p3
   , device ="jpeg"

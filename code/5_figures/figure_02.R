@@ -34,7 +34,7 @@ precip_plot <- ggplot(data = zmb_precip_summary) +
                lineend = 'round', linewidth = 2) +
   geom_label(x = "Dec",
              y = 80, label = "Sowing",
-             hjust = 1.65, vjust = .5, size = 3) +
+             hjust = 1.5, vjust = .5, size = 3) +
   ### GROWING
   geom_segment(x = "Nov", xend = "May", y = 65, yend = 65,
                lineend = 'round', linewidth = 2) +
@@ -46,7 +46,7 @@ precip_plot <- ggplot(data = zmb_precip_summary) +
                lineend = 'round', linewidth = 2) +
   geom_label(x = "Apr",
              y = 45, label = "CFS ", 
-             hjust = 1.05, vjust = .5, size = 3) +
+             hjust = 1.06, vjust = .5, size = 3) +
   ### HARVEST  
   geom_segment(x = "Apr", xend = "Jun", y = 25, yend = 25, 
                lineend = 'round', linewidth = 2) +
@@ -60,16 +60,16 @@ precip_plot <- ggplot(data = zmb_precip_summary) +
   ### FULL MONTH RANGE
   geom_segment(x = "Oct", xend = "Sep", y = 140, yend = 140,
                lineend = 'round', linewidth = 2, color = "grey50") +
-  geom_text(aes(x = "Jul", y = 150, label = "Full month range"),
+  geom_text(aes(x = "Jul", y = 150, label = "Satellite imagery full month range"),
             angle = 0,
-            size = 3,
+            size = 3, hjust = 0.6,
             color = "black") +
   ### LIMITED MONTH RANGE
   geom_segment(x = "Apr", xend = "Sep", y = 110, yend = 110,
                lineend = 'round', linewidth = 2, color = "grey50") +
-  geom_text(aes(x = "Jul", y = 120, label = "Limited month range"),
+  geom_text(aes(x = "Jul", y = 120, label = "Satellite imagery limited month range"),
             angle = 0,
-            size = 3,
+            size = 3, hjust = 0.6,
             color = "black") 
 
   # ### WET
