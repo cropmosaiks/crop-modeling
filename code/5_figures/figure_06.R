@@ -43,10 +43,10 @@ summary_anom_stats <- oos_anom_preds |>
   dplyr::ungroup() |> 
   dplyr::group_by(data_fold) |> 
   dplyr::summarise(
-    mean_R2 = mean(R2) |> round(3), 
-    mean_r2 = mean(r2) |> round(3), 
-    sem_R2 = (stderror(R2) * 2) |> round(3),
-    sem_r2 = (stderror(r2) * 2) |> round(3)
+    mean_R2 = mean(R2) |> round(2), 
+    mean_r2 = mean(r2) |> round(2), 
+    sem_R2 = (stderror(R2) * 2) |> round(2),
+    sem_r2 = (stderror(r2) * 2) |> round(2)
   )
 
 test_anom_R2 <- dplyr::pull(summary_anom_stats, mean_R2)
@@ -69,13 +69,13 @@ p1 <- ggplot() +
   geom_text(data = NULL, aes(x = -.2, y = .275), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_anom_r2, r'( ()', test_anom_sem_r2, r'())')
   )) +
-  geom_smooth(data = test_pred, linewidth = .5,
-              aes(x = log_yield, y = oos_prediction
-                  # , color = as.factor(year)
-                  ),
-              method = mod,  formula = 'y ~ x'
-              # , se=F
-              ) +
+  # geom_smooth(data = test_pred, linewidth = .5,
+  #             aes(x = log_yield, y = oos_prediction
+  #                 # , color = as.factor(year)
+  #                 ),
+  #             method = mod,  formula = 'y ~ x'
+  #             # , se=F
+  #             ) +
   scale_x_continuous(limits = limits) +
   scale_y_continuous(limits = limits) +
   theme_bw() +
@@ -128,10 +128,10 @@ summary_anom_stats <- oos_anom_preds |>
   ) |> 
   dplyr::ungroup() |> 
   dplyr::summarise(
-    mean_R2 = mean(R2) |> round(3), 
-    mean_r2 = mean(r2) |> round(3), 
-    sem_R2 = (stderror(R2) * 2) |> round(3),
-    sem_r2 = (stderror(r2) * 2) |> round(3)
+    mean_R2 = mean(R2) |> round(2), 
+    mean_r2 = mean(r2) |> round(2), 
+    sem_R2 = (stderror(R2) * 2) |> round(2),
+    sem_r2 = (stderror(r2) * 2) |> round(2)
   )
 
 test_anom_R2 <- dplyr::pull(summary_anom_stats, mean_R2)
@@ -154,13 +154,13 @@ p2 <- ggplot() +
   geom_text(data = NULL, aes(x = -.2, y = .275), label = latex2exp::TeX(
     paste0(r'( $r^2 = $)', test_anom_r2, r'( ()', test_anom_sem_r2, r'())')
   )) +
-  geom_smooth(data = test_pred, linewidth = .5,
-              aes(x = demean_log_yield, y = oos_prediction
-                  # , color = as.factor(year)
-                  ),
-              method = mod,  formula = 'y ~ x'
-              # , se=F
-              ) +
+  # geom_smooth(data = test_pred, linewidth = .5,
+  #             aes(x = demean_log_yield, y = oos_prediction
+  #                 # , color = as.factor(year)
+  #                 ),
+  #             method = mod,  formula = 'y ~ x'
+  #             # , se=F
+  #             ) +
   scale_x_continuous(limits = limits) +
   scale_y_continuous(limits = limits) +
   theme_bw() +
@@ -176,7 +176,7 @@ p2 <- ggExtra::ggMarginal(
 p3 <- cowplot::plot_grid(p1, p2, labels=c("(a)", "(b)"), ncol = 2, nrow = 1)
 p3
 ggsave(
-  filename = "figure_06_alt.jpeg"
+  filename = "figure_06.jpeg"
   , path = here("figures")
   , plot = p3
   , device ="jpeg"
