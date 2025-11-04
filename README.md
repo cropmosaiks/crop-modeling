@@ -1,6 +1,6 @@
 # CropMOSAIKS Crop Modeling
 
-This repository contains the complete workflow for predicting crop yields in Zambia using Random Convolutional Features (RCFs) extracted from satellite imagery. It is part of the [CropMOSAIKS project](https://github.com/cropmosaiks), which extends the [MOSAIKS approach](https://www.nature.com/articles/s41467-021-24638-z) to agricultural applications.
+This repository contains the complete workflow for predicting crop yields in Zambia using Random Convolutional Features (RCFs) extracted from satellite imagery. It is part of the [CropMOSAIKS project](https://github.com/cropmosaiks), which extends the [MOSAIKS approach](https://www.nature.com/articles/s41467-021-24638-z) to agricultural applications and over time.
 
 ## Overview
 
@@ -154,15 +154,7 @@ conda activate mosaiks-env
 # Launch Jupyter Lab
 jupyter lab
 ```
-
-### Option 2: Microsoft Planetary Computer Hub
-
-1. Sign up for [MPC Hub](https://planetarycomputer.microsoft.com/docs/overview/environment/) (approval may take 24+ hours)
-2. Select the **GPU - PyTorch** environment option
-3. Clone this repository into your MPC Hub workspace
-4. Open and run the notebooks
-
-### Option 3: HPC/SLURM Systems
+### Option 2: HPC/SLURM Systems
 
 For large-scale processing on HPC systems:
 
@@ -225,23 +217,9 @@ These metrics indicate strong predictive performance for temporal crop yield pre
 - **Model Predictions**: Crop yield predictions at district level
 - **Visualizations**: Maps of predicted vs. actual yields, residuals, and temporal trends
 
-## Computing Constraints
-
-### Microsoft Planetary Computer
-
-- **Storage**: 15 GB persistent + ~200 GB temporary per session
-- **Memory**: Can be limiting for large-scale processing
-- **GPU Access**: Shared nodes (first-come, first-served)
-
-### Recommendations
-
-- Download and delete output files regularly to avoid storage limits
-- Implement aggressive memory management for large datasets
-- Consider alternative compute options for extensive processing (see [MPC compute docs](https://planetarycomputer.microsoft.com/docs/concepts/computing/))
-
 ## Contributing
 
-This project was completed in June 2022 by the CropMOSAIKS team. Suggestions for improvements are welcome through:
+This project was completed in Nov 2025 by the CropMOSAIKS team. Suggestions for improvements are welcome through:
 
 - **Issues**: Report bugs or suggest enhancements
 - **Pull Requests**: Contribute code improvements or new features
@@ -257,16 +235,13 @@ This project was completed in June 2022 by the CropMOSAIKS team. Suggestions for
 
 For contributing features to the [MOSAIKS API](https://nadar.gspp.berkeley.edu/home/index/?next=/portal/index/), see the [mosaiks-api repository](https://github.com/calebrob6/mosaiks-api).
 
-## Related Repositories
-
-This repository is part of a larger project ecosystem:
-
-- **[Featurization](https://github.com/cropmosaiks/Featurization)**: Detailed featurization workflow (legacy/reference)
-- **[Modeling](https://github.com/cropmosaiks/Modeling)**: Additional modeling documentation (legacy/reference)
-
 ## Citation
 
 If you use this code or approach in your research, please cite:
+
+Molitor, Cullen, Juliet Cohen, Grace Lewin, Steven Cognac, Protensia Hadunka, Jonathan Proctor, and Tamma Carleton. 2025. "Monitoring Maize Yield Variability over Space and Time with Unsupervised Satellite Imagery Features" Remote Sensing 17, no. 21: 3641. https://doi.org/10.3390/rs17213641
+
+and 
 
 Rolf, E., Proctor, J., Carleton, T. et al. A generalizable and accessible approach to machine learning with global satellite imagery. *Nat Commun* **12**, 4392 (2021). https://doi.org/10.1038/s41467-021-24638-z
 
