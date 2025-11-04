@@ -195,7 +195,7 @@ The workflow is designed to be task-agnostic. To apply it to your own prediction
 ## Model Performance
 
 The best-performing model achieves:
-- **Demeaned R** = 0.61
+- **Demeaned R (correlation coefficient)** = 0.61
 - **Demeaned R²** = 0.27 (explains ~27% of variance in crop yield predictions)
 
 These metrics indicate strong predictive performance for temporal crop yield prediction, though there is room for improvement through:
