@@ -255,7 +255,7 @@ This project was completed in June 2022 by the CropMOSAIKS team. Suggestions for
 - Correlate predictions with climate anomalies
 - Apply to other prediction tasks (forest cover, population, etc.)
 
-For contributing features to the [MOSAIKS API](https://siml.berkeley.edu), see the [mosaiks-api repository](https://github.com/calebrob6/mosaiks-api).
+For contributing features to the [MOSAIKS API](https://nadar.gspp.berkeley.edu/home/index/?next=/portal/index/), see the [mosaiks-api repository](https://github.com/calebrob6/mosaiks-api).
 
 ## Related Repositories
 
